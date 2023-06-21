@@ -14,7 +14,7 @@ app.use(express.json());
 //available routes
 
 app.use('/api/auth', require('./routes/auth'));
-app.use('/api/notes', require('./routes/notes'));
+//app.use('/api/notes', require('./routes/notes'));
 
 
 app.get('/', (req, res) => {
@@ -22,6 +22,9 @@ app.get('/', (req, res) => {
 })
 
 
+
+
+
 app.listen(port, () => {
-    console.log(`iNotenook app listening on port http://localhost:${port}`)
+    console.log(`Hotel-backend app listening on port http://localhost:${port}`)
 })
