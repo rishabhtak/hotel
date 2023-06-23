@@ -27,11 +27,13 @@ router.post('/createbooking', bookingmiddle,
                 return res.status(400).json({ message: "Validation Error", error: errors.array() })
             }
             let saveBooking;
+            //if user is not logged in or not have account
             if (!req.user) {
                 const booking = new Booking({ name, email, phone, specialrequest, roomsId, startdate, enddate })
                 saveBooking = await booking.save();
             }
             else {
+                // if user already has account
                 const booking = new Booking({ name, email, phone, specialrequest, roomsId, startdate, enddate, user: req.user.id })
                 saveBooking = await booking.save();
             }

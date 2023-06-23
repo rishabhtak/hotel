@@ -1,9 +1,9 @@
 const express = require('express');
 const Room = require('../models/Room');
+const Booking = require('../models/Booking');
 const router = express.Router();
 const { body, validationResult } = require('express-validator');
 const adminmiddle = require('../middleware/adminmiddle');
-
 
 //Route 1:add a room using:POST "/api/rooms" .admin login reqired
 router.post('/addroom', adminmiddle,
@@ -36,9 +36,9 @@ router.post('/addroom', adminmiddle,
 
     })
 
-//Route 2: get all rooms using GET '/room/getrooms' .no login required
+//Route 2: get all rooms using GET '/room/getallrooms' .no login required
 
-router.get('/getrooms', async (req, res) => {
+router.get('/getallrooms', async (req, res) => {
     try {
         let success = false;
         const rooms = await Room.find();
@@ -51,7 +51,41 @@ router.get('/getrooms', async (req, res) => {
     }
 })
 
-//Route 3: update room details using PUT '/api/room/updateroom' Admin Login required
+//Route 3: get available room using POST '/api/room/getavailableroom/' No Login required
+
+router.post('/getavailableroom', async (req, res) => {
+    try {
+        let success = false;
+        const { from, to } = req.body;
+        let bookedRooms = await Booking.find({
+            $or: [
+                { startdate: { $gte: from, $lte: to } },
+                { enddate: { $gte: from, $lte: to } }
+            ],
+        })
+        if (bookedRooms.length === 0) {
+            const rooms = await Room.find();
+            success = true;
+            res.json({ success, rooms })
+        }
+        else {
+            let bookedRoomsId = bookedRooms.map((room) => {
+                return room.roomsId.join(',');
+            })
+            let str = bookedRoomsId.toString();
+            let roomIdArray = str.split(',');
+            const availableRooms = await Room.find({ '_id': { $nin: roomIdArray } });
+            success = true;
+            res.json({ success, availableRooms });
+        }
+
+    }
+    catch (error) {
+        res.status(500).send("Internal server error");
+    }
+})
+
+//Route 4: update room details using PUT '/api/room/updateroom' Admin Login required
 
 router.put('/updateroom/:id', adminmiddle, [
     body('type', "Enter a valid type").isLength({ min: 3 }),
@@ -93,7 +127,7 @@ router.put('/updateroom/:id', adminmiddle, [
 
     })
 
-//Route 3: delete notes using DELETE '/api/notes/deletenote' Login required
+//Route 5: delete notes using DELETE '/api/notes/deletenote' Login required
 
 router.delete('/deleteroom/:id', adminmiddle,
     async (req, res) => {
