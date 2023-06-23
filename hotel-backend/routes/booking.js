@@ -21,6 +21,7 @@ router.post('/createbooking', bookingmiddle,
         try {
 
             const { name, email, phone, specialrequest, roomsId, startdate, enddate } = req.body;
+            //validation result
             const errors = validationResult(req);
             if (!errors.isEmpty()) {
 

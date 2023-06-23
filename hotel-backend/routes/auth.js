@@ -21,6 +21,7 @@ router.post('/createuser',
         let success = false;
 
         try {
+            //validation result
             const errors = validationResult(req);
             if (!errors.isEmpty()) {
                 return res.status(400).json({ message: "Validation Error", error: errors.array() })
@@ -82,19 +83,18 @@ router.post('/login',
             if (!user) {
                 return res.status(400).json({ success, error: 'Please try to login with correct credentials' });
             }
-
             const passwordCompare = await bcrypt.compare(password, user.password);
             if (!passwordCompare) {
                 return res.status(400).json({ success, error: 'Please try to login with correct credentials' });
             }
-
+            // add user id
             const data = {
                 user: {
                     id: user.id
                 }
             }
+            // add jwt token with user id
             const authToken = jwt.sign(data, process.env.JWT_SECRET);
-            // res.json(user);
             success = true;
             res.json({ success, authToken })
         }
@@ -105,7 +105,7 @@ router.post('/login',
 
 //Route 3: get loggedin user details. User Login required /api/auth/getuser
 
-router.get('/getuser', getuser, 
+router.get('/getuser', getuser,
     async (req, res) => {
         let success = false;
         try {

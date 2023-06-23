@@ -17,20 +17,20 @@ router.post('/addroom', adminmiddle,
     async (req, res) => {
         let success = false;
         try {
-
             const { type, price, size, capacity, description } = req.body;
+             //validation result
             const errors = validationResult(req);
             if (!errors.isEmpty()) {
 
                 return res.status(400).json({ message: "Validation Error", error: errors.array() })
             }
+            //add room
             const rooms = new Room({ type, price, size, capacity, description })
             const saveRoom = await rooms.save();
             success = true;
             res.json({ success, saveRoom })
         }
         catch (error) {
-            console.log(error)
             res.status(500).send("Internal server error");
         }
 
@@ -57,23 +57,27 @@ router.post('/getavailableroom', async (req, res) => {
     try {
         let success = false;
         const { from, to } = req.body;
+        //find all booked rooms
         let bookedRooms = await Booking.find({
             $or: [
                 { startdate: { $gte: from, $lte: to } },
                 { enddate: { $gte: from, $lte: to } }
             ],
         })
+        //if no rooms booked then we send all rooms details
         if (bookedRooms.length === 0) {
             const rooms = await Room.find();
             success = true;
             res.json({ success, rooms })
         }
         else {
+            //if rooms booked then we take ids from booked rooms and insert in new array "roomIdArray"
             let bookedRoomsId = bookedRooms.map((room) => {
                 return room.roomsId.join(',');
             })
             let str = bookedRoomsId.toString();
             let roomIdArray = str.split(',');
+            //find which rooms available by id and send to response
             const availableRooms = await Room.find({ '_id': { $nin: roomIdArray } });
             success = true;
             res.json({ success, availableRooms });
@@ -98,6 +102,7 @@ router.put('/updateroom/:id', adminmiddle, [
         try {
             let success = false;
             const { type, price, size, capacity, description } = req.body;
+            //validation result
             const errors = validationResult(req);
             if (!errors.isEmpty()) {
                 return res.status(400).json({ error: errors.array() })

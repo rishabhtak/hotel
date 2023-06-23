@@ -42,12 +42,13 @@ router.post('/createadmin',
                 password: secPass,
             });
 
-            // add jwt token
+            //admin id
             const data = {
                 admin: {
                     id: admin.id
                 }
             }
+            // add jwt token with admin id
             const authToken = jwt.sign(data, process.env.JWT_SECRET);
             success = true;
             res.json({ success, authToken })
@@ -60,7 +61,7 @@ router.post('/createadmin',
 
 //Route 2: login admin  with password /api/admin/login
 
-router.post('/login', 
+router.post('/login',
     [
         body('email', "Enter a valid email").isEmail(),
         body('password', "Password cannot be blank").exists()
@@ -85,12 +86,13 @@ router.post('/login',
             if (!passwordCompare) {
                 return res.status(400).json({ success, error: 'Please try to login with correct credentials' });
             }
-
+            //admin id
             const data = {
                 admin: {
                     id: admin.id
                 }
             }
+            // add jwt token with admin id
             const authToken = jwt.sign(data, process.env.JWT_SECRET);
             success = true;
             res.json({ success, authToken })
@@ -103,23 +105,25 @@ router.post('/login',
 //Route 3: get all user details. login admin required /api/admin/getallusers
 
 router.get('/getallusers', adminmiddle,
-async (req, res) => {
-    let success = false;
-    try {
-        const adminId = req.admin.id;
-        let users;
-        if (adminId) {
-            users = await User.find({}).select("-password");
-            success = true;
-            res.send({ success, users })
+    async (req, res) => {
+        let success = false;
+        try {
+            //admin id
+            const adminId = req.admin.id;
+            let users;
+            //id admin id found then fetch all user without password
+            if (adminId) {
+                users = await User.find({}).select("-password");
+                success = true;
+                res.send({ success, users })
+            }
         }
-    }
-    catch (error) {
-        console.log("error", error);
-        res.status(500).send("Internal server error");
-    }
+        catch (error) {
+            console.log("error", error);
+            res.status(500).send("Internal server error");
+        }
 
-})
+    })
 
 //Route 4: get all bookings using GET '/admin/getallbooking'
 
