@@ -60,7 +60,7 @@ router.post('/createuser',
 
     })
 
-//Route 2: authenticate user. No login reqired
+//Route 2: authenticate user. No login reqired  /api/auth/login
 
 router.post('/login',
     [
@@ -103,9 +103,9 @@ router.post('/login',
         }
     })
 
-//Route 3: get loggedin user details. Login required
+//Route 3: get loggedin user details. User Login required /api/auth/getuser
 
-router.get('/getuser', getuser,
+router.get('/getuser', getuser, 
     async (req, res) => {
         let success = false;
         try {

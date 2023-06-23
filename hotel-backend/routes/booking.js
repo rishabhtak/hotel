@@ -6,18 +6,21 @@ const bookingmiddle = require('../middleware/bookingmiddle');
 
 
 //Route 1:create a booking using:POST "/api/booking" .no login reqired
-router.post('/booking', bookingmiddle,
+router.post('/createbooking', bookingmiddle,
     [
         body('name', "Enter a valid name").isLength({ min: 3 }),
         body('email', "Enter a valid email").isEmail(),
         body('phone', "Enter vaild phone number").isInt(),
-        body('specialrequest')
+        body('specialrequest'),
+        body('roomsId').not().isEmpty(),
+        body('startdate').not().isEmpty(),
+        body('enddate').not().isEmpty(),
     ],
     async (req, res) => {
         let success = false;
         try {
 
-            const { name, email, phone, specialrequest } = req.body;
+            const { name, email, phone, specialrequest, roomsId, startdate, enddate } = req.body;
             const errors = validationResult(req);
             if (!errors.isEmpty()) {
 
@@ -25,11 +28,11 @@ router.post('/booking', bookingmiddle,
             }
             let saveBooking;
             if (!req.user) {
-                const booking = new Booking({ name, email, phone, specialrequest })
+                const booking = new Booking({ name, email, phone, specialrequest, roomsId, startdate, enddate })
                 saveBooking = await booking.save();
             }
             else {
-                const booking = new Booking({ name, email, phone, specialrequest, user: req.user.id })
+                const booking = new Booking({ name, email, phone, specialrequest, roomsId, startdate, enddate, user: req.user.id })
                 saveBooking = await booking.save();
             }
 
@@ -43,9 +46,9 @@ router.post('/booking', bookingmiddle,
 
     })
 
-//Route 2: get user booking using GET '/admin/getallbooking'
+//Route 2: get user room booking history if he have account using GET '/api/booking/getuserbooking'
 
-router.get('/booking', bookingmiddle,
+router.get('/getuserbooking', bookingmiddle,
     async (req, res) => {
         try {
             let success = false;

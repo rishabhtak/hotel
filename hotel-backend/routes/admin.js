@@ -10,7 +10,7 @@ const adminmiddle = require('../middleware/adminmiddle');
 const Booking = require('../models/Booking');
 
 
-//Route 1:create a admin using:POST "/api/admin" .no login reqired
+//Route 1:create a admin using:POST "/api/admin/createadmin" .login reqired
 router.post('/createadmin',
     [
         body('name', "Enter a valid name").isLength({ min: 3 }),
@@ -58,9 +58,9 @@ router.post('/createadmin',
 
     })
 
-//Route 2: login admin  with password
+//Route 2: login admin  with password /api/admin/login
 
-router.post('/login',
+router.post('/login', 
     [
         body('email', "Enter a valid email").isEmail(),
         body('password', "Password cannot be blank").exists()
@@ -100,7 +100,7 @@ router.post('/login',
         }
     })
 
-//Route 3: get all user details.
+//Route 3: get all user details. login admin required /api/admin/getallusers
 
 router.get('/getallusers', adminmiddle,
 async (req, res) => {

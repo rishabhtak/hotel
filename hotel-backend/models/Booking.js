@@ -21,6 +21,19 @@ const BookingSchema = new Schema({
     specialrequest: {
         type: String,
     },
+    roomsId: {
+        type: Array,
+        required: true
+
+    },
+    startdate: {
+        type: String,
+        required: true
+    },
+    enddate: {
+        type: String,
+        required: true
+    },
     date: {
         type: Date,
         default: Date.now
