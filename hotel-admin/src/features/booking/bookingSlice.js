@@ -3,14 +3,15 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
 
 const initialState = {
-    booking: [],
+    bookings: [],
     loading: false,
     error: false
 }
 
-export const getBooking = createAsyncThunk(
-    'getBooking',
+export const getBookings = createAsyncThunk(
+    'getBookings',
     async () => {
+
 
         const response = await fetch(`http://localhost:5000/api/booking/getuserbooking`, {
             method: 'GET',
@@ -19,31 +20,33 @@ export const getBooking = createAsyncThunk(
                 "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjQ5MzBkZmZmOWQ2NmU3OWJhMjYzNDkwIn0sImlhdCI6MTY4NzM3NzM5Mn0.TPJANmY0SDDN_Eto5hrh_vkdGwPgCgQ80noiYinwGEk"
             },
         });
-        const allBooking = await response.json();
-        return allBooking;
+        const allBookings = await response.json();
+        // console.log("getbooking",allBooking)
+        return allBookings;
 
     }
 )
 
 export const bookingSlice = createSlice({
-    name: 'booking',
+    name: 'bookings',
     initialState,
     reducers: {
 
     },
     extraReducers: {
-        [getBooking.pending]: (state) => {
+        [getBookings.pending]: (state) => {
             state.loading = true
         },
-        [getBooking.fulfilled]: (state, { payload }) => {
-            state.loading = false
-            state.booking = payload
+        [getBookings.fulfilled]: (state, { payload }) => {
+           // console.log(payload.bookings)
+            state.loading = payload.success
+            state.bookings = payload.bookings
         },
-        [getBooking.rejected]: (state,) => {
+        [getBookings.rejected]: (state,) => {
             state.loading = false
             state.error = true
         },
-       
+
     },
 })
 

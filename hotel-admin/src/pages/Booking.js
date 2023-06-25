@@ -1,6 +1,8 @@
 import { Helmet } from 'react-helmet-async';
 import { filter } from 'lodash';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+
 
 
 // @mui
@@ -20,6 +22,7 @@ import {
     TableContainer,
     TablePagination,
 } from '@mui/material';
+import { getBookings } from '../features/booking/bookingSlice';
 
 // components
 import Iconify from '../components/iconify';
@@ -27,7 +30,6 @@ import Scrollbar from '../components/scrollbar';
 // sections
 import { BookingListHead, BookingListToolbar, BookingListBody } from '../sections/@dashboard/booking';
 // mock
-import BOOKINGLIST from '../_mock/booking';
 
 // ----------------------------------------------------------------------
 
@@ -76,6 +78,12 @@ function applySortFilter(array, comparator, query) {
 
 
 export default function BookingPage() {
+    const dispatch = useDispatch();
+    const { bookings, loading, error } = useSelector(state => state.bookings);
+    useEffect(() => {
+        dispatch(getBookings());
+    }, []);
+
     const [open, setOpen] = useState(null);
     const [page, setPage] = useState(0);
     const [order, setOrder] = useState('asc');
@@ -100,14 +108,14 @@ export default function BookingPage() {
 
     const handleSelectAllClick = (event) => {
         if (event.target.checked) {
-            const newSelecteds = BOOKINGLIST.map((n) => n.name);
+            const newSelecteds = bookings.map((n) => n.name);
             setSelected(newSelecteds);
             return;
         }
         setSelected([]);
     };
 
-    
+
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -123,9 +131,10 @@ export default function BookingPage() {
         setFilterName(event.target.value);
     };
 
-    const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - BOOKINGLIST.length) : 0;
+    const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - bookings.length) : 0;
 
-    const filteredBooking = applySortFilter(BOOKINGLIST, getComparator(order, orderBy), filterName);
+    const filteredBooking = applySortFilter(bookings, getComparator(order, orderBy), filterName);
+    console.log(filteredBooking)
 
     const isNotFound = !filteredBooking.length && !!filterName;
 
@@ -162,7 +171,7 @@ export default function BookingPage() {
                                         //  const SelectedBooking = selected.indexOf(name) !== -1;
 
                                         return (
-                                            <BookingListBody row={row} handleOpenMenu={handleOpenMenu} />
+                                            <BookingListBody row={row} key={row._id} handleOpenMenu={handleOpenMenu} />
                                         );
                                     })}
                                     {emptyRows > 0 && (
@@ -202,7 +211,7 @@ export default function BookingPage() {
                     <TablePagination
                         rowsPerPageOptions={[5, 10, 25]}
                         component="div"
-                        count={BOOKINGLIST.length}
+                        count={bookings.length}
                         rowsPerPage={rowsPerPage}
                         page={page}
                         onPageChange={handleChangePage}

@@ -4,7 +4,7 @@ import BookingReducer from '../features/booking/bookingSlice'
 
 export const store = configureStore({
     reducer: {
-        booking: BookingReducer,
+        bookings: BookingReducer,
 
     },
 

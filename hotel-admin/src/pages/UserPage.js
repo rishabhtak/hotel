@@ -143,6 +143,7 @@ export default function UserPage() {
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - USERLIST.length) : 0;
 
   const filteredUsers = applySortFilter(USERLIST, getComparator(order, orderBy), filterName);
+  console.log(filteredUsers)
 
   const isNotFound = !filteredUsers.length && !!filterName;
 

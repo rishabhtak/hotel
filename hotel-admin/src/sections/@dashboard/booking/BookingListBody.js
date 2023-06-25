@@ -9,6 +9,7 @@ import {
     Collapse,
     Box,
     TableHead,
+    TableBody,
     TableRow,
     TableCell,
     Typography,
@@ -27,20 +28,23 @@ const TABLE_COLLAPSIBLE = [
     { id: 'roomtype', label: 'Room Type', alignRight: false },
     { id: 'totalperson', label: 'Total Person', alignRight: false },
     { id: 'totalroom', label: 'Total Room', alignRight: false },
-    { id: 'specialrequest', label: 'Special Reauest', alignRight: false },
+    { id: 'specialrequest', label: 'Special Request', alignRight: false },
     { id: 'totalprice', label: 'Total Price', alignRight: false },
 
 ];
 
 BookingListBody.propTypes = {
-    id: PropTypes.string,
+    _id: PropTypes.string,
     name: PropTypes.string,
-    headLabel: PropTypes.array,
-    collapse: PropTypes.array,
-    openCollapse: PropTypes.bool,
-    numSelected: PropTypes.number,
-    onRequestSort: PropTypes.func,
-    onSelectAllClick: PropTypes.func,
+    email: PropTypes.string,
+    phone: PropTypes.number,
+    startdate: PropTypes.string,
+    enddate: PropTypes.string,
+    roomtype: PropTypes.string,
+    totalperson: PropTypes.number,
+    totalroom: PropTypes.number,
+    specialrequest: PropTypes.string,
+    totalprice: PropTypes.number,
 };
 
 export default function BookingListBody({ row, handleOpenMenu }) {
@@ -48,10 +52,10 @@ export default function BookingListBody({ row, handleOpenMenu }) {
     const [openCollapse, setOpenCollapse] = useState(false);
 
     if (row) {
-        const { id, name, role, status, company, isVerified } = row;
+        const { _id, name, email, phone, startdate, enddate, roomtype, totalperson, totalroom, specialrequest, totalprice } = row;
         return (
             <>
-                <TableRow hover key={id} tabIndex={-1} sx={{ '& > *': { borderBottom: 'unset' } }}>
+                <TableRow tabIndex={-1} sx={{ '& > *': { borderBottom: 'unset' } }}>
                     <TableCell>
                         <IconButton
                             aria-label="expand row"
@@ -63,21 +67,18 @@ export default function BookingListBody({ row, handleOpenMenu }) {
                     </TableCell>
                     <TableCell component="th" scope="row" padding="none">
                         <Stack direction="row" alignItems="center" spacing={2}>
-                            <Typography variant="subtitle2" noWrap>
+                            <Typography variant="subtitle2" style={{ textTransform: 'capitalize' }} noWrap>
                                 {name}
                             </Typography>
                         </Stack>
                     </TableCell>
 
-                    <TableCell align="left">{company}</TableCell>
+                    <TableCell align="left">{email}</TableCell>
 
-                    <TableCell align="left">{role}</TableCell>
+                    <TableCell align="left">{phone}</TableCell>
 
-                    <TableCell align="left">{isVerified ? 'Yes' : 'No'}</TableCell>
-
-                    <TableCell align="left">
-                        <Label color={(status === 'banned' && 'error') || 'success'}>{sentenceCase(status)}</Label>
-                    </TableCell>
+                    <TableCell align="left">{startdate}</TableCell>
+                    <TableCell align="left">{enddate}</TableCell>
 
                     <TableCell align="right">
                         <IconButton size="large" color="inherit" onClick={handleOpenMenu}>
@@ -91,6 +92,7 @@ export default function BookingListBody({ row, handleOpenMenu }) {
                             <Box sx={{ margin: 1 }}>
                                 <Table size="small" aria-label="purchases">
                                     <TableHead>
+
                                         <TableRow>
                                             {TABLE_COLLAPSIBLE.map((tableCollasibleHead) => (
 
@@ -100,7 +102,15 @@ export default function BookingListBody({ row, handleOpenMenu }) {
                                             ))}
                                         </TableRow>
                                     </TableHead>
-
+                                    <TableBody>
+                                        <TableRow>
+                                            <TableCell align="right" style={{ textTransform: 'capitalize' }}>{roomtype}</TableCell>
+                                            <TableCell align="right">{totalperson}</TableCell>
+                                            <TableCell align="right">{totalroom}</TableCell>
+                                            <TableCell align="center">{specialrequest}</TableCell>
+                                            <TableCell align="right">{totalprice}</TableCell>
+                                        </TableRow>
+                                    </TableBody>
                                 </Table>
                             </Box>
                         </Collapse>
