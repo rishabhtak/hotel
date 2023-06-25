@@ -1,8 +1,7 @@
 import { Helmet } from 'react-helmet-async';
 import { filter } from 'lodash';
-import { useState, useEffect } from 'react';
+import { useState, useEffect,useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-
 
 
 // @mui
@@ -21,6 +20,14 @@ import {
     Typography,
     TableContainer,
     TablePagination,
+    Dialog,
+    CardHeader,
+    CardContent,
+    Box,
+    Unstable_Grid2 as Grid,
+    Divider,
+    CardActions,
+    TextField
 } from '@mui/material';
 import { getBookings } from '../features/booking/bookingSlice';
 
@@ -28,7 +35,7 @@ import { getBookings } from '../features/booking/bookingSlice';
 import Iconify from '../components/iconify';
 import Scrollbar from '../components/scrollbar';
 // sections
-import { BookingListHead, BookingListToolbar, BookingListBody } from '../sections/@dashboard/booking';
+import { BookingListHead, BookingListToolbar, BookingListBody, AddBooking } from '../sections/@dashboard/booking';
 // mock
 
 // ----------------------------------------------------------------------
@@ -92,6 +99,9 @@ export default function BookingPage() {
     const [filterName, setFilterName] = useState('');
     const [rowsPerPage, setRowsPerPage] = useState(5);
 
+    const [modelAddBooking, setModelAddBooking] = useState(false);
+
+ console.log("Booking")
     const handleOpenMenu = (event) => {
         setOpen(event.currentTarget);
     };
@@ -131,17 +141,18 @@ export default function BookingPage() {
         setFilterName(event.target.value);
     };
 
+
     const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - bookings.length) : 0;
 
     const filteredBooking = applySortFilter(bookings, getComparator(order, orderBy), filterName);
-    console.log(filteredBooking)
 
     const isNotFound = !filteredBooking.length && !!filterName;
 
+    const handleToggle = useCallback(() => setModelAddBooking(prevShow => !prevShow), [])
     return (
         <>
             <Helmet>
-                <title> Booking</title>
+                <title>Booking</title>
             </Helmet>
 
             <Container>
@@ -149,11 +160,11 @@ export default function BookingPage() {
                     <Typography variant="h4" gutterBottom>
                         Booking
                     </Typography>
-                    <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
+                    <Button variant="contained" onClick={handleToggle} startIcon={<Iconify icon="eva:plus-fill" />}>
                         New Booking
                     </Button>
                 </Stack>
-
+                <AddBooking open={modelAddBooking} close={handleToggle} />
                 <Card>
                     <BookingListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} />
 

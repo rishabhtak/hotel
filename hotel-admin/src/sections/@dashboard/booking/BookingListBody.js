@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
-import { sentenceCase } from 'change-case';
 
 // @mui
 import {
@@ -17,8 +16,6 @@ import {
 } from '@mui/material';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import Label from '../../../components/label';
-
 import Iconify from '../../../components/iconify';
 
 
@@ -34,17 +31,20 @@ const TABLE_COLLAPSIBLE = [
 ];
 
 BookingListBody.propTypes = {
-    _id: PropTypes.string,
-    name: PropTypes.string,
-    email: PropTypes.string,
-    phone: PropTypes.number,
-    startdate: PropTypes.string,
-    enddate: PropTypes.string,
-    roomtype: PropTypes.string,
-    totalperson: PropTypes.number,
-    totalroom: PropTypes.number,
-    specialrequest: PropTypes.string,
-    totalprice: PropTypes.number,
+    row: PropTypes.shape({
+        _id: PropTypes.string,
+        name: PropTypes.string,
+        email: PropTypes.string,
+        phone: PropTypes.number,
+        startdate: PropTypes.string,
+        enddate: PropTypes.string,
+        roomtype: PropTypes.string,
+        totalperson: PropTypes.number,
+        totalroom: PropTypes.number,
+        specialrequest: PropTypes.string,
+        totalprice: PropTypes.number,
+    }),
+    handleOpenMenu: PropTypes.func,
 };
 
 export default function BookingListBody({ row, handleOpenMenu }) {
