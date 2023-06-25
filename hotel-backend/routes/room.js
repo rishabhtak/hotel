@@ -73,7 +73,7 @@ router.post('/getavailableroom', async (req, res) => {
         else {
             //if rooms booked then we take ids from booked rooms and insert in new array "roomIdArray"
             let bookedRoomsId = bookedRooms.map((room) => {
-                return room.roomsId.join(',');
+                return room.roomsid.join(',');
             })
             let str = bookedRoomsId.toString();
             let roomIdArray = str.split(',');
@@ -85,6 +85,7 @@ router.post('/getavailableroom', async (req, res) => {
 
     }
     catch (error) {
+        console.log(error);
         res.status(500).send("Internal server error");
     }
 })

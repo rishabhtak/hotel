@@ -21,7 +21,7 @@ const BookingSchema = new Schema({
     specialrequest: {
         type: String,
     },
-    roomsId: {
+    roomsid: {
         type: Array,
         required: true
 
@@ -32,6 +32,22 @@ const BookingSchema = new Schema({
     },
     enddate: {
         type: String,
+        required: true
+    },
+    totalperson: {
+        type: Number,
+        required: true
+    },
+    roomtype: {
+        type: String,
+        required: true
+    },
+    totalroom: {
+        type: Number,
+        required: true
+    },
+    totalprice: {
+        type: Number,
         required: true
     },
     date: {
