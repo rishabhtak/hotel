@@ -1,6 +1,5 @@
 import { Helmet } from 'react-helmet-async';
 import { filter } from 'lodash';
-import { sentenceCase } from 'change-case';
 import { useState } from 'react';
 
 
@@ -10,42 +9,33 @@ import {
     Table,
     Stack,
     Paper,
-    Avatar,
-    Collapse,
-    Box,
-    TableHead,
     Button,
     Popover,
-    Checkbox,
     TableRow,
     MenuItem,
     TableBody,
     TableCell,
     Container,
     Typography,
-    IconButton,
     TableContainer,
     TablePagination,
 } from '@mui/material';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+
 // components
-import Label from '../components/label';
 import Iconify from '../components/iconify';
 import Scrollbar from '../components/scrollbar';
 // sections
 import { BookingListHead, BookingListToolbar, BookingListBody } from '../sections/@dashboard/booking';
 // mock
-import USERLIST from '../_mock/booking';
+import BOOKINGLIST from '../_mock/booking';
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
     { id: 'name', label: 'Name', alignRight: false },
-    { id: 'startdate', label: 'Start Date', alignRight: false },
     { id: 'email', label: 'Email', alignRight: false },
     { id: 'phone', label: 'Phone', alignRight: false },
-    
+    { id: 'startdate', label: 'Start Date', alignRight: false },
     { id: 'enddate', label: 'End Date', alignRight: false },
     { id: 'status', label: 'Status', alignRight: false },
 ];
@@ -78,29 +68,20 @@ function applySortFilter(array, comparator, query) {
         return a[1] - b[1];
     });
     if (query) {
-        return filter(array, (_user) => _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
+        return filter(array, (_booking) => _booking.name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
     }
     return stabilizedThis.map((el) => el[0]);
 }
 
 
 
-export default function UserPage() {
+export default function BookingPage() {
     const [open, setOpen] = useState(null);
-
-    const [openCollapse, setOpenCollapse] = useState(false);
-
-
     const [page, setPage] = useState(0);
-
     const [order, setOrder] = useState('asc');
-
     const [selected, setSelected] = useState([]);
-
     const [orderBy, setOrderBy] = useState('name');
-
     const [filterName, setFilterName] = useState('');
-
     const [rowsPerPage, setRowsPerPage] = useState(5);
 
     const handleOpenMenu = (event) => {
@@ -119,27 +100,14 @@ export default function UserPage() {
 
     const handleSelectAllClick = (event) => {
         if (event.target.checked) {
-            const newSelecteds = USERLIST.map((n) => n.name);
+            const newSelecteds = BOOKINGLIST.map((n) => n.name);
             setSelected(newSelecteds);
             return;
         }
         setSelected([]);
     };
 
-    const handleClick = (event, name) => {
-        const selectedIndex = selected.indexOf(name);
-        let newSelected = [];
-        if (selectedIndex === -1) {
-            newSelected = newSelected.concat(selected, name);
-        } else if (selectedIndex === 0) {
-            newSelected = newSelected.concat(selected.slice(1));
-        } else if (selectedIndex === selected.length - 1) {
-            newSelected = newSelected.concat(selected.slice(0, -1));
-        } else if (selectedIndex > 0) {
-            newSelected = newSelected.concat(selected.slice(0, selectedIndex), selected.slice(selectedIndex + 1));
-        }
-        setSelected(newSelected);
-    };
+    
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -155,11 +123,11 @@ export default function UserPage() {
         setFilterName(event.target.value);
     };
 
-    const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - USERLIST.length) : 0;
+    const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - BOOKINGLIST.length) : 0;
 
-    const filteredUsers = applySortFilter(USERLIST, getComparator(order, orderBy), filterName);
+    const filteredBooking = applySortFilter(BOOKINGLIST, getComparator(order, orderBy), filterName);
 
-    const isNotFound = !filteredUsers.length && !!filterName;
+    const isNotFound = !filteredBooking.length && !!filterName;
 
     return (
         <>
@@ -187,18 +155,14 @@ export default function UserPage() {
                                     order={order}
                                     orderBy={orderBy}
                                     headLabel={TABLE_HEAD}
-                                    rowCount={USERLIST.length}
-                                    numSelected={selected.length}
                                     onRequestSort={handleRequestSort}
-                                    onSelectAllClick={handleSelectAllClick}
                                 />
                                 <TableBody>
-                                    {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                                        const { name} = row;
-                                      //  const selectedUser = selected.indexOf(name) !== -1;
+                                    {filteredBooking.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
+                                        //  const SelectedBooking = selected.indexOf(name) !== -1;
 
                                         return (
-                                            <BookingListBody row={row} handleOpenMenu={handleOpenMenu}/>
+                                            <BookingListBody row={row} handleOpenMenu={handleOpenMenu} />
                                         );
                                     })}
                                     {emptyRows > 0 && (
@@ -208,8 +172,6 @@ export default function UserPage() {
                                     )}
 
                                 </TableBody>
-                                <BookingListBody />
-
                                 {isNotFound && (
                                     <TableBody>
                                         <TableRow>
@@ -240,7 +202,7 @@ export default function UserPage() {
                     <TablePagination
                         rowsPerPageOptions={[5, 10, 25]}
                         component="div"
-                        count={USERLIST.length}
+                        count={BOOKINGLIST.length}
                         rowsPerPage={rowsPerPage}
                         page={page}
                         onPageChange={handleChangePage}

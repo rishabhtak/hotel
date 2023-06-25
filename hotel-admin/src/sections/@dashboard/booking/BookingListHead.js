@@ -1,9 +1,10 @@
 import PropTypes from 'prop-types';
 // @mui
-import { Box, Collapse, Table, TableRow, TableCell, TableHead, TableSortLabel, Typography } from '@mui/material';
+import { Box, TableRow, TableCell, TableHead, TableSortLabel } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
+// css 
 const visuallyHidden = {
   border: 0,
   margin: -1,
@@ -16,28 +17,19 @@ const visuallyHidden = {
   clip: 'rect(0 0 0 0)',
 };
 
-UserListHead.propTypes = {
+// proptypes for data types
+BookingListHead.propTypes = {
   order: PropTypes.oneOf(['asc', 'desc']),
   orderBy: PropTypes.string,
-  rowCount: PropTypes.number,
   headLabel: PropTypes.array,
-  collapse: PropTypes.array,
-  openCollapse: PropTypes.bool,
-  numSelected: PropTypes.number,
   onRequestSort: PropTypes.func,
-  onSelectAllClick: PropTypes.func,
 };
 
-export default function UserListHead({
+export default function BookingListHead({
   order,
   orderBy,
-  rowCount,
   headLabel,
-  openCollapse,
-  numSelected,
   onRequestSort,
-  onSelectAllClick,
-  collapse
 }) {
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
@@ -60,7 +52,7 @@ export default function UserListHead({
                 direction={orderBy === headCell.id ? order : 'asc'}
                 onClick={createSortHandler(headCell.id)}
               >
-                {headCell.label}
+                {headCell.label} 
                 {orderBy === headCell.id ? (
                   <Box sx={{ ...visuallyHidden }}>{order === 'desc' ? 'sorted descending' : 'sorted ascending'}</Box>
                 ) : null}
@@ -69,31 +61,6 @@ export default function UserListHead({
           ))}
         </TableRow>
       </TableHead>
-      {/*
-      <TableHead>
-      <TableRow>
-          {collapse.map((collapseCell) => (
-            <TableCell
-              key={collapseCell.id}
-              style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}
-              align={collapseCell.alignRight ? 'right' : 'left'}
-            >
-              <Collapse in={openCollapse} timeout="auto" unmountOnExit>
-                <Box sx={{ margin: 1 }}>
-                  <Table size="small" aria-label="purchases">
-                    <TableHead>
-                      <TableRow>
-                        <TableCell>{collapseCell.label}</TableCell>
-                      </TableRow>
-                    </TableHead>
-                  </Table>
-                </Box>
-              </Collapse>
-            </TableCell>
-          ))}
-        </TableRow>
-      </TableHead>
-      */}
     </>
   );
 }

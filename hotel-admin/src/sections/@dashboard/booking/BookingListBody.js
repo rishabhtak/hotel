@@ -2,29 +2,17 @@ import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { sentenceCase } from 'change-case';
 
-import { filter } from 'lodash';
 // @mui
 import {
-    Card,
     Table,
     Stack,
-    Paper,
-    Avatar,
     Collapse,
     Box,
     TableHead,
-    Button,
-    Popover,
-    Checkbox,
     TableRow,
-    MenuItem,
-    TableBody,
     TableCell,
-    Container,
     Typography,
     IconButton,
-    TableContainer,
-    TablePagination,
 } from '@mui/material';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
@@ -37,17 +25,30 @@ import Iconify from '../../../components/iconify';
 // ----------------------------------------------------------------------
 const TABLE_COLLAPSIBLE = [
     { id: 'roomtype', label: 'Room Type', alignRight: false },
-    { id: 'persons', label: 'Person', alignRight: false },
-    { id: 'totalrooms', label: 'Total Rooms', alignRight: false },
+    { id: 'totalperson', label: 'Total Person', alignRight: false },
+    { id: 'totalroom', label: 'Total Room', alignRight: false },
     { id: 'specialrequest', label: 'Special Reauest', alignRight: false },
+    { id: 'totalprice', label: 'Total Price', alignRight: false },
+
 ];
 
-export default function BookingListBody({row,handleOpenMenu}) {
+BookingListBody.propTypes = {
+    id: PropTypes.string,
+    name: PropTypes.string,
+    headLabel: PropTypes.array,
+    collapse: PropTypes.array,
+    openCollapse: PropTypes.bool,
+    numSelected: PropTypes.number,
+    onRequestSort: PropTypes.func,
+    onSelectAllClick: PropTypes.func,
+};
+
+export default function BookingListBody({ row, handleOpenMenu }) {
 
     const [openCollapse, setOpenCollapse] = useState(false);
 
     if (row) {
-         const { id, name, role, status, company, isVerified } = row;
+        const { id, name, role, status, company, isVerified } = row;
         return (
             <>
                 <TableRow hover key={id} tabIndex={-1} sx={{ '& > *': { borderBottom: 'unset' } }}>
@@ -91,10 +92,12 @@ export default function BookingListBody({row,handleOpenMenu}) {
                                 <Table size="small" aria-label="purchases">
                                     <TableHead>
                                         <TableRow>
-                                            <TableCell>Date</TableCell>
-                                            <TableCell>Customer</TableCell>
-                                            <TableCell align="right">Amount</TableCell>
-                                            <TableCell align="right">Total price ($)</TableCell>
+                                            {TABLE_COLLAPSIBLE.map((tableCollasibleHead) => (
+
+                                                <TableCell key={tableCollasibleHead.id} align={tableCollasibleHead.alignRight ? 'left' : 'right'}>
+                                                    {tableCollasibleHead.label}
+                                                </TableCell>
+                                            ))}
                                         </TableRow>
                                     </TableHead>
 
