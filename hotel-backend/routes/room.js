@@ -12,7 +12,7 @@ router.post('/addroom', adminmiddle,
         body('price', "Enter a valid price").isInt(),
         body('size'),
         body('capacity', "Enter a valid capacity").isInt(),
-        body('description').isLength({ min: 50 }),
+        body('description').isLength({ min: 5 }),
     ],
     async (req, res) => {
         let success = false;

@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 import { filter } from 'lodash';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 
@@ -20,25 +20,26 @@ import {
     Typography,
     TableContainer,
     TablePagination,
-    CircularProgress
 } from '@mui/material';
-import { getBookings } from '../features/booking/bookingSlice';
+import { getRooms } from '../features/room/roomSlice';
 
 // components
 import Iconify from '../components/iconify';
 import Scrollbar from '../components/scrollbar';
 // sections
-import { BookingListHead, BookingListToolbar, BookingListBody, AddBooking } from '../sections/@dashboard/booking';
+import { AddRoom, RoomListToolbar, RoomListHead, RoomListBody } from '../sections/@dashboard/room';
+
 // mock
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-    { id: 'name', label: 'Name', alignRight: false },
-    { id: 'email', label: 'Email', alignRight: false },
-    { id: 'phone', label: 'Phone', alignRight: false },
-    { id: 'startdate', label: 'Start Date', alignRight: false },
-    { id: 'enddate', label: 'End Date', alignRight: false },
+    { id: 'sno', label: 'S.No.', alignRight: false },
+    { id: 'type', label: 'Room Type', alignRight: false },
+    { id: 'size', label: 'Size', alignRight: false },
+    { id: 'capacity', label: 'Capacity', alignRight: false },
+    { id: 'price', label: 'Price', alignRight: false },
+    { id: 'description', label: 'Description', alignRight: false },
     { id: '' },
 ];
 
@@ -70,36 +71,50 @@ function applySortFilter(array, comparator, query) {
         return a[1] - b[1];
     });
     if (query) {
-        return filter(array, (_booking) => _booking.name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
+        return filter(array, (_room) => _room.type.toLowerCase().indexOf(query.toLowerCase()) !== -1);
     }
     return stabilizedThis.map((el) => el[0]);
 }
 
 
 
-export default function BookingPage() {
+export default function RoomPage() {
     const dispatch = useDispatch();
-    const { bookings, loading, error } = useSelector(state => state.bookings);
+    const { rooms, loading, error } = useSelector(state => state.rooms);
 
     useEffect(() => {
-        dispatch(getBookings());
+        dispatch(getRooms());
         // eslint-disable-next-line
     }, []);
 
-    const [open, setOpen] = useState(false);
+    // const [open, setOpen] = useState(false);
     const [page, setPage] = useState(0);
     const [order, setOrder] = useState('asc');
     const [selected, setSelected] = useState([]);
     const [orderBy, setOrderBy] = useState('name');
     const [filterName, setFilterName] = useState('');
     const [rowsPerPage, setRowsPerPage] = useState(5);
+    const [actionType, setActionType] = useState("");
+    const [currentRoom, setCurrentRoom] = useState(null)
+    const [modelAddRoom, setModelAddRoom] = useState(false);
 
-    const [modelAddBooking, setModelAddBooking] = useState(false);
 
-    const handleCloseMenu = () => {
-        setOpen(false);
-    };
 
+
+    const handleAddRoom = () => {
+        console.log("add")
+        setActionType("Add")
+        setCurrentRoom(null)
+        handleModelToggle()
+    }
+
+    const handleEdit = (room) => {
+        console.log(room)
+        setActionType("Update")
+        setCurrentRoom(room)
+        handleModelToggle()
+
+    }
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -111,17 +126,18 @@ export default function BookingPage() {
     };
 
 
-    // const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - bookings.length) : 0;
+    const filteredRoom = applySortFilter(rooms, getComparator(order, orderBy), filterName);
 
-    const filteredBooking = applySortFilter(bookings, getComparator(order, orderBy), filterName);
+    const isNotFound = !filteredRoom.length && !!filterName;
 
-    const isNotFound = !filteredBooking.length && !!filterName;
+    const handleModelToggle = useCallback(() => setModelAddRoom(prevShow => !prevShow), [modelAddRoom]);
 
-    const handleModelToggle = useCallback(() => setModelAddBooking(prevShow => !prevShow), [modelAddBooking]);
 
-    const handleOpenMenu = useCallback((event) => setOpen(event.currentTarget), [open])
+
+
 
     const handleRequestSort = useCallback((event, property) => {
+        console.log(property)
         const isAsc = orderBy === property && order === 'asc';
         setOrder(isAsc ? 'desc' : 'asc');
         setOrderBy(property);
@@ -133,43 +149,47 @@ export default function BookingPage() {
     }, [page, filterName]);
 
 
+
+
     return (
         <>
             <Helmet>
-                <title>Booking</title>
+                <title>Room</title>
             </Helmet>
 
             <Container>
                 <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
                     <Typography variant="h4" gutterBottom>
-                        Booking
+                        Room
                     </Typography>
-                    <Button variant="contained" onClick={handleModelToggle} startIcon={<Iconify icon="eva:plus-fill" />}>
-                        New Booking
+                    <Button variant="contained" onClick={handleAddRoom}
+                        startIcon={<Iconify icon="eva:plus-fill" />}>
+                        Add Room
                     </Button>
                 </Stack>
-                <AddBooking open={modelAddBooking} close={handleModelToggle} />
+                <AddRoom open={modelAddRoom} close={handleModelToggle} actionType={actionType} currentRoom={currentRoom} />
                 <Card>
-                    <BookingListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} />
+                    <RoomListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} />
 
                     <Scrollbar>
                         <TableContainer sx={{ minWidth: 800 }} component={Paper}>
                             <Table aria-label="collapsible table">
-                                <BookingListHead
+                                <RoomListHead
                                     order={order}
                                     orderBy={orderBy}
                                     headLabel={TABLE_HEAD}
                                     onRequestSort={handleRequestSort}
                                 />
                                 <TableBody>
-                                    {bookings.length === 0 ? (
+                                    {rooms.length === 0 ? (
                                         <TableRow style={{ height: 53 }}>
                                             <TableCell colSpan={7} align='center'>No Data Available</TableCell>
                                         </TableRow>
                                     ) :
-                                        filteredBooking.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
+                                        filteredRoom.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => {
+
                                             return (
-                                                <BookingListBody row={row} key={row._id} handleOpenMenu={handleOpenMenu} />
+                                                <RoomListBody row={row} sno={index + 1} key={row._id} handleEdit={handleEdit} />
                                             );
                                         })
                                     }
@@ -206,7 +226,7 @@ export default function BookingPage() {
                     <TablePagination
                         rowsPerPageOptions={[5, 10, 25]}
                         component="div"
-                        count={bookings.length}
+                        count={rooms.length}
                         rowsPerPage={rowsPerPage}
                         page={page}
                         onPageChange={handleChangePage}
@@ -215,34 +235,7 @@ export default function BookingPage() {
                 </Card>
             </Container >
 
-            <Popover
-                open={Boolean(open)}
-                anchorEl={open}
-                onClose={handleCloseMenu}
-                anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
-                transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-                PaperProps={{
-                    sx: {
-                        p: 1,
-                        width: 140,
-                        '& .MuiMenuItem-root': {
-                            px: 1,
-                            typography: 'body2',
-                            borderRadius: 0.75,
-                        },
-                    },
-                }}
-            >
-                <MenuItem>
-                    <Iconify icon={'eva:edit-fill'} sx={{ mr: 2 }} />
-                    Edit
-                </MenuItem>
 
-                <MenuItem sx={{ color: 'error.main' }}>
-                    <Iconify icon={'eva:trash-2-outline'} sx={{ mr: 2 }} />
-                    Delete
-                </MenuItem>
-            </Popover>
         </>
     );
 }

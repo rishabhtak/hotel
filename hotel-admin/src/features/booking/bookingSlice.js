@@ -33,19 +33,19 @@ export const bookingSlice = createSlice({
     reducers: {
 
     },
-    extraReducers: {
-        [getBookings.pending]: (state) => {
-            state.loading = true
-        },
-        [getBookings.fulfilled]: (state, { payload }) => {
-           // console.log(payload.bookings)
-            state.loading = payload.success
-            state.bookings = payload.bookings
-        },
-        [getBookings.rejected]: (state,) => {
-            state.loading = false
-            state.error = true
-        },
+    extraReducers: (builder) => {
+        builder
+            .addCase(getBookings.pending, (state) => {
+                state.loading = true
+            })
+            .addCase(getBookings.fulfilled, (state, { payload }) => {
+                state.loading = false
+                state.bookings = payload.bookings
+            })
+            .addCase(getBookings.rejected, (state) => {
+                state.loading = false
+                state.error = true
+            })
 
     },
 })
