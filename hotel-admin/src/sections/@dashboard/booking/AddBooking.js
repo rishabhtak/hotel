@@ -1,5 +1,7 @@
+
 // @mui
 import { memo } from "react";
+import PropTypes from 'prop-types';
 import {
     Card,
     Dialog,
@@ -13,11 +15,15 @@ import {
     Button
 } from '@mui/material';
 
-const AddBooking = (props) => {
-    console.log("addBooking")
 
-    const { open, close } = props;
+AddBooking.propTypes = {
+    open: PropTypes.bool.isRequired,
+    close: PropTypes.func.isRequired
+}
 
+
+
+function AddBooking({ open, close }) {
     return (
         <Dialog open={open} onClose={close}>
             <form
@@ -196,3 +202,4 @@ const AddBooking = (props) => {
 }
 
 export default memo(AddBooking)
+

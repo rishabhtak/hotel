@@ -1,4 +1,6 @@
 import PropTypes from 'prop-types';
+import { memo } from "react";
+
 // @mui
 import { styled, alpha } from '@mui/material/styles';
 import { Toolbar, Tooltip, IconButton, Typography, OutlinedInput, InputAdornment } from '@mui/material';
@@ -32,13 +34,13 @@ const StyledSearch = styled(OutlinedInput)(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-UserListToolbar.propTypes = {
+BookingListToolbar.propTypes = {
   numSelected: PropTypes.number,
   filterName: PropTypes.string,
   onFilterName: PropTypes.func,
 };
 
-export default function UserListToolbar({ numSelected, filterName, onFilterName }) {
+function BookingListToolbar({ numSelected, filterName, onFilterName }) {
   return (
     <StyledRoot
       sx={{
@@ -81,3 +83,5 @@ export default function UserListToolbar({ numSelected, filterName, onFilterName 
     </StyledRoot>
   );
 }
+
+export default memo(BookingListToolbar)

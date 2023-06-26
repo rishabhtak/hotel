@@ -1,4 +1,6 @@
 import PropTypes from 'prop-types';
+import { memo } from "react";
+
 // @mui
 import { Box, TableRow, TableCell, TableHead, TableSortLabel } from '@mui/material';
 
@@ -25,16 +27,17 @@ BookingListHead.propTypes = {
   onRequestSort: PropTypes.func,
 };
 
-export default function BookingListHead({
+function BookingListHead({
   order,
   orderBy,
   headLabel,
   onRequestSort,
 }) {
+
   const createSortHandler = (property) => (event) => {
+
     onRequestSort(event, property);
   };
-
   return (
     <>
       <TableHead>
@@ -52,7 +55,7 @@ export default function BookingListHead({
                 direction={orderBy === headCell.id ? order : 'asc'}
                 onClick={createSortHandler(headCell.id)}
               >
-                {headCell.label} 
+                {headCell.label}
                 {orderBy === headCell.id ? (
                   <Box sx={{ ...visuallyHidden }}>{order === 'desc' ? 'sorted descending' : 'sorted ascending'}</Box>
                 ) : null}
@@ -64,3 +67,5 @@ export default function BookingListHead({
     </>
   );
 }
+
+export default memo(BookingListHead)

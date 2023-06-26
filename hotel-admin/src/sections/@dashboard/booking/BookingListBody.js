@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, memo } from 'react';
 import PropTypes from 'prop-types';
 
 // @mui
@@ -13,6 +13,7 @@ import {
     TableCell,
     Typography,
     IconButton,
+    
 } from '@mui/material';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
@@ -47,8 +48,7 @@ BookingListBody.propTypes = {
     handleOpenMenu: PropTypes.func,
 };
 
-export default function BookingListBody({ row, handleOpenMenu }) {
-
+function BookingListBody({ row, handleOpenMenu }) {
     const [openCollapse, setOpenCollapse] = useState(false);
 
     if (row) {
@@ -120,5 +120,7 @@ export default function BookingListBody({ row, handleOpenMenu }) {
         )
     }
 }
+
+export default memo(BookingListBody)
 
 

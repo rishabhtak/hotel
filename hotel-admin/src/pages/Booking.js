@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 import { filter } from 'lodash';
-import { useState, useEffect,useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 
@@ -20,14 +20,7 @@ import {
     Typography,
     TableContainer,
     TablePagination,
-    Dialog,
-    CardHeader,
-    CardContent,
-    Box,
-    Unstable_Grid2 as Grid,
-    Divider,
-    CardActions,
-    TextField
+    CircularProgress
 } from '@mui/material';
 import { getBookings } from '../features/booking/bookingSlice';
 
@@ -87,11 +80,13 @@ function applySortFilter(array, comparator, query) {
 export default function BookingPage() {
     const dispatch = useDispatch();
     const { bookings, loading, error } = useSelector(state => state.bookings);
+
     useEffect(() => {
         dispatch(getBookings());
+        // eslint-disable-next-line
     }, []);
 
-    const [open, setOpen] = useState(null);
+    const [open, setOpen] = useState(false);
     const [page, setPage] = useState(0);
     const [order, setOrder] = useState('asc');
     const [selected, setSelected] = useState([]);
@@ -101,30 +96,9 @@ export default function BookingPage() {
 
     const [modelAddBooking, setModelAddBooking] = useState(false);
 
- console.log("Booking")
-    const handleOpenMenu = (event) => {
-        setOpen(event.currentTarget);
-    };
-
     const handleCloseMenu = () => {
-        setOpen(null);
+        setOpen(false);
     };
-
-    const handleRequestSort = (event, property) => {
-        const isAsc = orderBy === property && order === 'asc';
-        setOrder(isAsc ? 'desc' : 'asc');
-        setOrderBy(property);
-    };
-
-    const handleSelectAllClick = (event) => {
-        if (event.target.checked) {
-            const newSelecteds = bookings.map((n) => n.name);
-            setSelected(newSelecteds);
-            return;
-        }
-        setSelected([]);
-    };
-
 
 
     const handleChangePage = (event, newPage) => {
@@ -136,19 +110,29 @@ export default function BookingPage() {
         setRowsPerPage(parseInt(event.target.value, 10));
     };
 
-    const handleFilterByName = (event) => {
-        setPage(0);
-        setFilterName(event.target.value);
-    };
 
-
-    const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - bookings.length) : 0;
+    // const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - bookings.length) : 0;
 
     const filteredBooking = applySortFilter(bookings, getComparator(order, orderBy), filterName);
 
     const isNotFound = !filteredBooking.length && !!filterName;
 
-    const handleToggle = useCallback(() => setModelAddBooking(prevShow => !prevShow), [])
+    const handleModelToggle = useCallback(() => setModelAddBooking(prevShow => !prevShow), [modelAddBooking]);
+
+    const handleOpenMenu = useCallback((event) => setOpen(event.currentTarget), [open])
+
+    const handleRequestSort = useCallback((event, property) => {
+        const isAsc = orderBy === property && order === 'asc';
+        setOrder(isAsc ? 'desc' : 'asc');
+        setOrderBy(property);
+    }, [order, orderBy]);
+
+    const handleFilterByName = useCallback((event) => {
+        setPage(0);
+        setFilterName(event.target.value);
+    }, [page, filterName]);
+
+
     return (
         <>
             <Helmet>
@@ -160,11 +144,11 @@ export default function BookingPage() {
                     <Typography variant="h4" gutterBottom>
                         Booking
                     </Typography>
-                    <Button variant="contained" onClick={handleToggle} startIcon={<Iconify icon="eva:plus-fill" />}>
+                    <Button variant="contained" onClick={handleModelToggle} startIcon={<Iconify icon="eva:plus-fill" />}>
                         New Booking
                     </Button>
                 </Stack>
-                <AddBooking open={modelAddBooking} close={handleToggle} />
+                <AddBooking open={modelAddBooking} close={handleModelToggle} />
                 <Card>
                     <BookingListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} />
 
@@ -178,18 +162,20 @@ export default function BookingPage() {
                                     onRequestSort={handleRequestSort}
                                 />
                                 <TableBody>
-                                    {filteredBooking.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                                        //  const SelectedBooking = selected.indexOf(name) !== -1;
-
-                                        return (
-                                            <BookingListBody row={row} key={row._id} handleOpenMenu={handleOpenMenu} />
-                                        );
-                                    })}
-                                    {emptyRows > 0 && (
-                                        <TableRow style={{ height: 53 * emptyRows }}>
-                                            <TableCell colSpan={6} />
+                                    {bookings.length === 0 ? (
+                                        <TableRow style={{ height: 53 }}>
+                                            <TableCell colSpan={7} align='center'>No Data Available</TableCell>
                                         </TableRow>
-                                    )}
+                                    ) :
+                                        filteredBooking.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
+                                            //  const SelectedBooking = selected.indexOf(name) !== -1;
+
+                                            return (
+                                                <BookingListBody row={row} key={row._id} handleOpenMenu={handleOpenMenu} />
+                                            );
+                                        })
+                                    }
+
 
                                 </TableBody>
                                 {isNotFound && (
