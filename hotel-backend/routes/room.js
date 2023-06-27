@@ -97,7 +97,7 @@ router.put('/updateroom/:id', adminmiddle, [
     body('price', "Enter a valid price").isInt(),
     body('size'),
     body('capacity', "Enter a valid capacity").isInt(),
-    body('description').isLength({ min: 50 }),
+    body('description').isLength({ min: 5 }),
 ],
     async (req, res) => {
         try {
@@ -120,6 +120,7 @@ router.put('/updateroom/:id', adminmiddle, [
 
             //find the room
             let room = await Room.findById(req.params.id);
+            console.log(room)
             if (!room) { return res.status(404).send("Not Found") }
 
             //update room
