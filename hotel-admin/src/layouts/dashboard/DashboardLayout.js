@@ -1,10 +1,14 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Outlet } from 'react-router-dom';
 // @mui
 import { styled } from '@mui/material/styles';
 //
+import { useSelector } from 'react-redux';
+
 import Header from './header';
 import Nav from './nav';
+import AlertBox from '../../utils/Alertbox';
+
 
 // ----------------------------------------------------------------------
 
@@ -34,6 +38,9 @@ const Main = styled('div')(({ theme }) => ({
 
 export default function DashboardLayout() {
   const [open, setOpen] = useState(false);
+  const alertMessage = useSelector(state => state.rooms.alertMessage);
+
+
 
   return (
     <StyledRoot>
@@ -41,7 +48,9 @@ export default function DashboardLayout() {
 
       <Nav openNav={open} onCloseNav={() => setOpen(false)} />
 
+
       <Main>
+        <AlertBox alert={alertMessage} />
         <Outlet />
       </Main>
     </StyledRoot>

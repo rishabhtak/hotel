@@ -1,7 +1,10 @@
 import { Helmet } from 'react-helmet-async';
+import { PuffLoader } from 'react-spinners'
+
 import { filter } from 'lodash';
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+
 
 
 // @mui
@@ -20,6 +23,7 @@ import {
     TableContainer,
     TablePagination,
 } from '@mui/material';
+
 import { getRooms } from '../features/room/roomSlice';
 
 // components
@@ -78,6 +82,14 @@ function applySortFilter(array, comparator, query) {
 
 
 export default function RoomPage() {
+    const override = {
+        position: "fixed",
+        zIndex: 1031,
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%, -50%)"
+    }
+
     const dispatch = useDispatch();
     const { rooms, loading, error } = useSelector(state => state.rooms);
 
@@ -86,7 +98,6 @@ export default function RoomPage() {
         // eslint-disable-next-line
     }, []);
 
-    const [open, setOpen] = useState(false);
     const [page, setPage] = useState(0);
     const [order, setOrder] = useState('asc');
     const [selected, setSelected] = useState([]);
@@ -139,15 +150,13 @@ export default function RoomPage() {
     }, [page, filterName]);
 
 
-
-
     return (
         <>
             <Helmet>
                 <title>Room</title>
             </Helmet>
-
             <Container>
+
                 <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
                     <Typography variant="h4" gutterBottom>
                         Room
@@ -157,72 +166,76 @@ export default function RoomPage() {
                         Add Room
                     </Button>
                 </Stack>
-                <RoomModel open={modelAddRoom} close={handleModelToggle} actionType={actionType} currentRoom={currentRoom} />
-                <Card>
-                    <RoomListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} />
+                {loading ? <PuffLoader cssOverride={override} /> : <><RoomModel open={modelAddRoom} close={handleModelToggle} actionType={actionType} currentRoom={currentRoom} />
+                    <Card>
+                        <RoomListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} />
 
-                    <Scrollbar>
-                        <TableContainer sx={{ minWidth: 800 }} component={Paper}>
-                            <Table aria-label="collapsible table">
-                                <RoomListHead
-                                    order={order}
-                                    orderBy={orderBy}
-                                    headLabel={TABLE_HEAD}
-                                    onRequestSort={handleRequestSort}
-                                />
-                                <TableBody>
-                                    {rooms.length === 0 ? (
-                                        <TableRow style={{ height: 53 }}>
-                                            <TableCell colSpan={7} align='center'>No Data Available</TableCell>
-                                        </TableRow>
-                                    ) :
-                                        filteredRoom.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((room, index) => {
-
-                                            return (
-                                                <RoomListBody room={room} sno={index + 1} key={room._id} handleEdit={handleEdit} />
-                                            );
-                                        })
-                                    }
-
-
-                                </TableBody>
-                                {isNotFound && (
+                        <Scrollbar>
+                            <TableContainer sx={{ minWidth: 800 }} component={Paper}>
+                                <Table aria-label="collapsible table">
+                                    <RoomListHead
+                                        order={order}
+                                        orderBy={orderBy}
+                                        headLabel={TABLE_HEAD}
+                                        onRequestSort={handleRequestSort}
+                                    />
                                     <TableBody>
-                                        <TableRow>
-                                            <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
-                                                <Paper
-                                                    sx={{
-                                                        textAlign: 'center',
-                                                    }}
-                                                >
-                                                    <Typography variant="h6" paragraph>
-                                                        Not found
-                                                    </Typography>
+                                        {error ? <TableRow style={{ height: 53 }}>
+                                            <TableCell colSpan={7} align='center'>Sorry, Some Error Occurred Please Try after Some Time</TableCell>
+                                        </TableRow> : rooms.length === 0 ? (
+                                            <TableRow style={{ height: 53 }}>
+                                                <TableCell colSpan={7} align='center'>No Data Available</TableCell>
+                                            </TableRow>
+                                        ) :
+                                            filteredRoom.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((room, index) => {
 
-                                                    <Typography variant="body2">
-                                                        No results found for &nbsp;
-                                                        <strong>&quot;{filterName}&quot;</strong>.
-                                                        <br /> Try checking for typos or using complete words.
-                                                    </Typography>
-                                                </Paper>
-                                            </TableCell>
-                                        </TableRow>
+                                                return (
+                                                    <RoomListBody room={room} sno={index + 1} key={room._id} handleEdit={handleEdit} />
+                                                );
+                                            })
+                                        }
+
+
+
                                     </TableBody>
-                                )}
-                            </Table>
-                        </TableContainer>
-                    </Scrollbar>
+                                    {isNotFound && (
+                                        <TableBody>
+                                            <TableRow>
+                                                <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
+                                                    <Paper
+                                                        sx={{
+                                                            textAlign: 'center',
+                                                        }}
+                                                    >
+                                                        <Typography variant="h6" paragraph>
+                                                            Not found
+                                                        </Typography>
 
-                    <TablePagination
-                        rowsPerPageOptions={[5, 10, 25]}
-                        component="div"
-                        count={rooms.length}
-                        rowsPerPage={rowsPerPage}
-                        page={page}
-                        onPageChange={handleChangePage}
-                        onRowsPerPageChange={handleChangeRowsPerPage}
-                    />
-                </Card>
+                                                        <Typography variant="body2">
+                                                            No results found for &nbsp;
+                                                            <strong>&quot;{filterName}&quot;</strong>.
+                                                            <br /> Try checking for typos or using complete words.
+                                                        </Typography>
+                                                    </Paper>
+                                                </TableCell>
+                                            </TableRow>
+                                        </TableBody>
+                                    )}
+                                </Table>
+                            </TableContainer>
+                        </Scrollbar>
+
+                        <TablePagination
+                            rowsPerPageOptions={[5, 10, 25]}
+                            component="div"
+                            count={rooms.length}
+                            rowsPerPage={rowsPerPage}
+                            page={page}
+                            onPageChange={handleChangePage}
+                            onRowsPerPageChange={handleChangeRowsPerPage}
+                        />
+                    </Card></>}
+
             </Container >
 
 

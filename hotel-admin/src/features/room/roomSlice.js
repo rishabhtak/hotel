@@ -4,8 +4,10 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
 const initialState = {
     rooms: [],
-    loading: false,
-    error: false
+    loading: true,
+    error: false,
+    alertMessage: null
+
 }
 
 export const getRooms = createAsyncThunk(
@@ -24,17 +26,14 @@ export const getRooms = createAsyncThunk(
             const allRooms = await response.json();
             return allRooms;
         } catch (error) {
-            return Promise.reject(error)
+            return error.response.json()
         }
-
-
-
     }
 )
 
 export const addRoom = createAsyncThunk(
     'addRoom',
-    async (room) => {
+    async (room, thunkAPI) => {
         try {
             // api to add Room
             const response = await fetch(`http://localhost:5000/api/room/addroom`, {
@@ -50,9 +49,13 @@ export const addRoom = createAsyncThunk(
             });
 
             const roomAdd = await response.json();
+            thunkAPI.dispatch(sendMessage("room successfully added"))
+            thunkAPI.dispatch(deleteAlert(null));
             return roomAdd;
         } catch (error) {
-            return Promise.reject(error)
+            thunkAPI.dispatch(sendMessage("Something went wrong"))
+            thunkAPI.dispatch(deleteAlert(null));
+            return error.response.json()
         }
 
 
@@ -61,7 +64,7 @@ export const addRoom = createAsyncThunk(
 
 export const updateRoom = createAsyncThunk(
     'updateRoom',
-    async (room) => {
+    async (room, thunkAPI) => {
         try {
             // api to update Room
             const response = await fetch(`http://localhost:5000/api/room/updateroom/${room.id}`, {
@@ -77,9 +80,13 @@ export const updateRoom = createAsyncThunk(
             });
 
             const roomUpdate = await response.json();
+            thunkAPI.dispatch(sendMessage("room successfully updated"))
+            thunkAPI.dispatch(deleteAlert(null));
             return roomUpdate;
         } catch (error) {
-            return Promise.reject(error)
+            thunkAPI.dispatch(sendMessage("Something went wrong"))
+            thunkAPI.dispatch(deleteAlert(null));
+            return error.response.json()
         }
 
 
@@ -88,7 +95,7 @@ export const updateRoom = createAsyncThunk(
 
 export const deleteRoom = createAsyncThunk(
     'deleteRoom',
-    async (id) => {
+    async (id, thunkAPI) => {
         try {
             // api to delete room
             const response = await fetch(`http://localhost:5000/api/room/deleteroom/${id}`, {
@@ -99,11 +106,14 @@ export const deleteRoom = createAsyncThunk(
                 },
             });
             const roomDelete = await response.json();
+            thunkAPI.dispatch(sendMessage("room successfully deleted"))
+            thunkAPI.dispatch(deleteAlert(null));
             return roomDelete;
         } catch (error) {
-            return Promise.reject(error)
+            thunkAPI.dispatch(sendMessage("Something went wrong"))
+            thunkAPI.dispatch(deleteAlert(null));
+            return error.response.json()
         }
-
     }
 )
 
@@ -111,7 +121,9 @@ export const roomSlice = createSlice({
     name: 'rooms',
     initialState,
     reducers: {
-
+        sendMessage: (state, { payload }) => {
+            state.alertMessage = payload
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -177,6 +189,16 @@ export const roomSlice = createSlice({
 
     },
 })
+
+export const { sendMessage } = roomSlice.actions
+
+
+export const deleteAlert = (v) => (dispatch) => {
+
+    setTimeout(() => {
+        dispatch(sendMessage(v))
+    }, 3000)
+}
 
 
 export default roomSlice.reducer

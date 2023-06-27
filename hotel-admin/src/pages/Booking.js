@@ -1,4 +1,6 @@
 import { Helmet } from 'react-helmet-async';
+import { PuffLoader } from 'react-spinners'
+
 import { filter } from 'lodash';
 import { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -78,6 +80,14 @@ function applySortFilter(array, comparator, query) {
 
 
 export default function BookingPage() {
+    const override = {
+        position: "fixed",
+        zIndex: 1031,
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%, -50%)"
+
+    }
     const dispatch = useDispatch();
     const { bookings, loading, error } = useSelector(state => state.bookings);
 
@@ -148,71 +158,75 @@ export default function BookingPage() {
                         New Booking
                     </Button>
                 </Stack>
-                <AddBooking open={modelAddBooking} close={handleModelToggle} />
-                <Card>
-                    <BookingListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} />
 
-                    <Scrollbar>
-                        <TableContainer sx={{ minWidth: 800 }} component={Paper}>
-                            <Table aria-label="collapsible table">
-                                <BookingListHead
-                                    order={order}
-                                    orderBy={orderBy}
-                                    headLabel={TABLE_HEAD}
-                                    onRequestSort={handleRequestSort}
-                                />
-                                <TableBody>
-                                    {bookings.length === 0 ? (
-                                        <TableRow style={{ height: 53 }}>
-                                            <TableCell colSpan={7} align='center'>No Data Available</TableCell>
-                                        </TableRow>
-                                    ) :
-                                        filteredBooking.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                                            return (
-                                                <BookingListBody row={row} key={row._id} handleOpenMenu={handleOpenMenu} />
-                                            );
-                                        })
-                                    }
+                {loading ? <PuffLoader cssOverride={override} /> : <>
+                    <AddBooking open={modelAddBooking} close={handleModelToggle} /><Card>
+                        <BookingListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} />
 
-
-                                </TableBody>
-                                {isNotFound && (
+                        <Scrollbar>
+                            <TableContainer sx={{ minWidth: 800 }} component={Paper}>
+                                <Table aria-label="collapsible table">
+                                    <BookingListHead
+                                        order={order}
+                                        orderBy={orderBy}
+                                        headLabel={TABLE_HEAD}
+                                        onRequestSort={handleRequestSort}
+                                    />
                                     <TableBody>
-                                        <TableRow>
-                                            <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
-                                                <Paper
-                                                    sx={{
-                                                        textAlign: 'center',
-                                                    }}
-                                                >
-                                                    <Typography variant="h6" paragraph>
-                                                        Not found
-                                                    </Typography>
+                                        {error ? <TableRow style={{ height: 53 }}>
+                                            <TableCell colSpan={7} align='center'>Sorry, Some Error Occurred Please Try after Some Time</TableCell>
+                                        </TableRow> :
+                                            bookings.length === 0 ? (
+                                                <TableRow style={{ height: 53 }}>
+                                                    <TableCell colSpan={7} align='center'>No Data Available</TableCell>
+                                                </TableRow>
+                                            ) :
+                                                filteredBooking.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
+                                                    return (
+                                                        <BookingListBody row={row} key={row._id} handleOpenMenu={handleOpenMenu} />
+                                                    );
+                                                })
 
-                                                    <Typography variant="body2">
-                                                        No results found for &nbsp;
-                                                        <strong>&quot;{filterName}&quot;</strong>.
-                                                        <br /> Try checking for typos or using complete words.
-                                                    </Typography>
-                                                </Paper>
-                                            </TableCell>
-                                        </TableRow>
+                                        }
                                     </TableBody>
-                                )}
-                            </Table>
-                        </TableContainer>
-                    </Scrollbar>
+                                    {isNotFound && (
+                                        <TableBody>
+                                            <TableRow>
+                                                <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
+                                                    <Paper
+                                                        sx={{
+                                                            textAlign: 'center',
+                                                        }}
+                                                    >
+                                                        <Typography variant="h6" paragraph>
+                                                            Not found
+                                                        </Typography>
 
-                    <TablePagination
-                        rowsPerPageOptions={[5, 10, 25]}
-                        component="div"
-                        count={bookings.length}
-                        rowsPerPage={rowsPerPage}
-                        page={page}
-                        onPageChange={handleChangePage}
-                        onRowsPerPageChange={handleChangeRowsPerPage}
-                    />
-                </Card>
+                                                        <Typography variant="body2">
+                                                            No results found for &nbsp;
+                                                            <strong>&quot;{filterName}&quot;</strong>.
+                                                            <br /> Try checking for typos or using complete words.
+                                                        </Typography>
+                                                    </Paper>
+                                                </TableCell>
+                                            </TableRow>
+                                        </TableBody>
+                                    )}
+                                </Table>
+                            </TableContainer>
+                        </Scrollbar>
+
+                        <TablePagination
+                            rowsPerPageOptions={[5, 10, 25]}
+                            component="div"
+                            count={bookings.length}
+                            rowsPerPage={rowsPerPage}
+                            page={page}
+                            onPageChange={handleChangePage}
+                            onRowsPerPageChange={handleChangeRowsPerPage}
+                        />
+                    </Card></>}
+
             </Container >
 
             <Popover
