@@ -52,7 +52,6 @@ export const addRoom = createAsyncThunk(
             const roomAdd = await response.json();
             return roomAdd;
         } catch (error) {
-            console.log(error)
             return Promise.reject(error)
         }
 
@@ -65,8 +64,8 @@ export const updateRoom = createAsyncThunk(
     async (room) => {
         try {
             // api to update Room
-            const response = await fetch(`http://localhost:5000/api/room/updateroom${room.id}`, {
-                method: 'POST',
+            const response = await fetch(`http://localhost:5000/api/room/updateroom/${room.id}`, {
+                method: 'PUT',
                 headers: {
                     "Content-Type": "application/json",
                     "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjQ5MzBkZmZmOWQ2NmU3OWJhMjYzNDkwIn0sImlhdCI6MTY4NzM3NzM5Mn0.TPJANmY0SDDN_Eto5hrh_vkdGwPgCgQ80noiYinwGEk"
@@ -80,10 +79,30 @@ export const updateRoom = createAsyncThunk(
             const roomUpdate = await response.json();
             return roomUpdate;
         } catch (error) {
-            console.log(error)
             return Promise.reject(error)
         }
 
+
+    }
+)
+
+export const deleteRoom = createAsyncThunk(
+    'deleteRoom',
+    async (id) => {
+        try {
+            // api to delete room
+            const response = await fetch(`http://localhost:5000/api/room/deleteroom/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    "Content-Type": "application/json",
+                    "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjQ5MzBkZmZmOWQ2NmU3OWJhMjYzNDkwIn0sImlhdCI6MTY4NzM3NzM5Mn0.TPJANmY0SDDN_Eto5hrh_vkdGwPgCgQ80noiYinwGEk"
+                },
+            });
+            const roomDelete = await response.json();
+            return roomDelete;
+        } catch (error) {
+            return Promise.reject(error)
+        }
 
     }
 )
@@ -123,21 +142,35 @@ export const roomSlice = createSlice({
             })
             .addCase(updateRoom.fulfilled, (state, { payload }) => {
                 state.loading = false
-                const updateRoom = state.rooms
-                for (let index = 0; index < updateRoom.length; index+=1) {
-                    const element = updateRoom[index];
-                    if (element._id === payload._id) {
-                        updateRoom[index].type = payload.type;
-                        updateRoom[index].description = payload.description;
-                        updateRoom[index].price = payload.price;
-                        updateRoom[index].size = payload.size;
-                        updateRoom[index].capacity = payload.capacity;
+                const newRoom = state.rooms
+                for (let index = 0; index < newRoom.length; index += 1) {
+                    const element = newRoom[index];
+                    if (element._id === payload.room._id) {
+                        newRoom[index].type = payload.room.type;
+                        newRoom[index].description = payload.room.description;
+                        newRoom[index].price = payload.room.price;
+                        newRoom[index].size = payload.room.size;
+                        newRoom[index].capacity = payload.room.capacity;
                         break;
                     }
                 }
-                state.rooms = updateRoom;
+                state.rooms = newRoom;
             })
+
             .addCase(updateRoom.rejected, (state) => {
+                state.loading = false
+                state.error = true
+            })
+            .addCase(deleteRoom.pending, (state) => {
+                state.loading = true
+            })
+            .addCase(deleteRoom.fulfilled, (state, { payload }) => {
+                state.loading = false
+                state.rooms = state.rooms.filter((room) => {
+                    return room._id !== payload.room._id
+                })
+            })
+            .addCase(deleteRoom.rejected, (state) => {
                 state.loading = false
                 state.error = true
             })

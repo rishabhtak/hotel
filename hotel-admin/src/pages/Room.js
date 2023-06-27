@@ -13,7 +13,6 @@ import {
     Button,
     Popover,
     TableRow,
-    MenuItem,
     TableBody,
     TableCell,
     Container,
@@ -27,7 +26,7 @@ import { getRooms } from '../features/room/roomSlice';
 import Iconify from '../components/iconify';
 import Scrollbar from '../components/scrollbar';
 // sections
-import { AddRoom, RoomListToolbar, RoomListHead, RoomListBody } from '../sections/@dashboard/room';
+import { RoomModel, RoomListToolbar, RoomListHead, RoomListBody } from '../sections/@dashboard/room';
 
 // mock
 
@@ -87,7 +86,7 @@ export default function RoomPage() {
         // eslint-disable-next-line
     }, []);
 
-    // const [open, setOpen] = useState(false);
+    const [open, setOpen] = useState(false);
     const [page, setPage] = useState(0);
     const [order, setOrder] = useState('asc');
     const [selected, setSelected] = useState([]);
@@ -97,24 +96,6 @@ export default function RoomPage() {
     const [actionType, setActionType] = useState("");
     const [currentRoom, setCurrentRoom] = useState(null)
     const [modelAddRoom, setModelAddRoom] = useState(false);
-
-
-
-
-    const handleAddRoom = () => {
-        console.log("add")
-        setActionType("Add")
-        setCurrentRoom(null)
-        handleModelToggle()
-    }
-
-    const handleEdit = (room) => {
-        console.log(room)
-        setActionType("Update")
-        setCurrentRoom(room)
-        handleModelToggle()
-
-    }
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -132,12 +113,21 @@ export default function RoomPage() {
 
     const handleModelToggle = useCallback(() => setModelAddRoom(prevShow => !prevShow), [modelAddRoom]);
 
+    const handleEdit = useCallback((room) => {
+        setActionType("Update")
+        setCurrentRoom(room)
+        handleModelToggle()
+
+    }, [])
 
 
-
+    const handleAddRoom = useCallback(() => {
+        setActionType("Add")
+        setCurrentRoom(null)
+        handleModelToggle()
+    }, [])
 
     const handleRequestSort = useCallback((event, property) => {
-        console.log(property)
         const isAsc = orderBy === property && order === 'asc';
         setOrder(isAsc ? 'desc' : 'asc');
         setOrderBy(property);
@@ -167,7 +157,7 @@ export default function RoomPage() {
                         Add Room
                     </Button>
                 </Stack>
-                <AddRoom open={modelAddRoom} close={handleModelToggle} actionType={actionType} currentRoom={currentRoom} />
+                <RoomModel open={modelAddRoom} close={handleModelToggle} actionType={actionType} currentRoom={currentRoom} />
                 <Card>
                     <RoomListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} />
 
@@ -186,10 +176,10 @@ export default function RoomPage() {
                                             <TableCell colSpan={7} align='center'>No Data Available</TableCell>
                                         </TableRow>
                                     ) :
-                                        filteredRoom.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => {
+                                        filteredRoom.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((room, index) => {
 
                                             return (
-                                                <RoomListBody row={row} sno={index + 1} key={row._id} handleEdit={handleEdit} />
+                                                <RoomListBody room={room} sno={index + 1} key={room._id} handleEdit={handleEdit} />
                                             );
                                         })
                                     }

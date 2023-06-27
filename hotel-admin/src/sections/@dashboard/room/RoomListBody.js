@@ -1,5 +1,9 @@
 import { memo, useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
+import { useDispatch } from 'react-redux';
+
+
+
 
 // @mui
 import {
@@ -10,6 +14,7 @@ import {
     IconButton,
 
 } from '@mui/material';
+import { deleteRoom } from '../../../features/room/roomSlice';
 import Iconify from '../../../components/iconify';
 
 
@@ -17,7 +22,7 @@ import Iconify from '../../../components/iconify';
 // ----------------------------------------------------------------------
 
 RoomListBody.propTypes = {
-    row: PropTypes.shape({
+    room: PropTypes.shape({
         _id: PropTypes.string,
         type: PropTypes.string,
         price: PropTypes.number,
@@ -29,9 +34,9 @@ RoomListBody.propTypes = {
 
 
 
-function RoomListBody({ row, handleEdit, sno }) {
-
+function RoomListBody({ room, handleEdit, sno }) {
     const [open, setOpen] = useState(false);
+    const dispatch = useDispatch();
 
     const handleCloseMenu = () => {
         setOpen(false);
@@ -41,15 +46,22 @@ function RoomListBody({ row, handleEdit, sno }) {
         setOpen(event.currentTarget)
     }
 
-    const handleEditRoom = (row) => {
-        handleEdit(row);
+    const handleEditRoom = (room) => {
+        handleEdit(room);
+        setOpen(false);
 
     }
 
-    if (row) {
-        const { _id, type, capacity, size, description, price } = row;
+    const handleDeleteRoom = (id) => {
+        dispatch(deleteRoom(id))
+        setOpen(false);
+    }
+
+    if (room) {
+        const { type, capacity, size, description, price } = room;
         return (
             <>
+
                 <TableRow tabIndex={-1} sx={{ '& > *': { borderBottom: 'unset' } }}>
                     <TableCell component="th" scope="row">
                         {sno}
@@ -86,12 +98,12 @@ function RoomListBody({ row, handleEdit, sno }) {
                         },
                     }}
                 >
-                    <MenuItem onClick={() => handleEditRoom(row)}>
+                    <MenuItem onClick={() => handleEditRoom(room)}>
                         <Iconify icon={'eva:edit-fill'} sx={{ mr: 2 }} />
                         Edit
                     </MenuItem>
 
-                    <MenuItem sx={{ color: 'error.main' }}>
+                    <MenuItem sx={{ color: 'error.main' }} onClick={() => handleDeleteRoom(room._id)}>
                         <Iconify icon={'eva:trash-2-outline'} sx={{ mr: 2 }} />
                         Delete
                     </MenuItem>
@@ -102,4 +114,4 @@ function RoomListBody({ row, handleEdit, sno }) {
     }
 }
 
-export default RoomListBody
+export default memo(RoomListBody)

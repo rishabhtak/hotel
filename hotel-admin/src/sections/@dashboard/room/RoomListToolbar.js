@@ -41,6 +41,7 @@ RoomListToolbar.propTypes = {
 };
 
 function RoomListToolbar({ numSelected, filterName, onFilterName }) {
+
   return (
     <StyledRoot
       sx={{

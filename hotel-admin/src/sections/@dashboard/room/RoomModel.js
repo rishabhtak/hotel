@@ -12,21 +12,20 @@ import {
     Divider,
     CardActions,
     TextField,
-    Button
+    Button,
 } from '@mui/material';
-import { addRoom } from '../../../features/room/roomSlice';
+import { addRoom, updateRoom } from '../../../features/room/roomSlice';
 
-AddRoom.propTypes = {
-    open: PropTypes.bool.isRequired,
-    close: PropTypes.func.isRequired
+RoomModel.propTypes = {
+    open: PropTypes.bool,
+    close: PropTypes.func
 }
 
 
 
-function AddRoom({ open, close, actionType, currentRoom }) {
+function RoomModel({ open, close, actionType, currentRoom }) {
+
     const dispatch = useDispatch()
-
-
     const [room, setRoom] = useState({})
 
     useEffect(() => {
@@ -40,22 +39,34 @@ function AddRoom({ open, close, actionType, currentRoom }) {
             })
         }
         else {
-            setRoom(currentRoom)
+            setRoom({
+                id: currentRoom._id,
+                description: currentRoom.description,
+                type: currentRoom.type,
+                size: currentRoom.size,
+                capacity: currentRoom.capacity,
+                price: currentRoom.price,
+            })
         }
     }, [currentRoom])
 
-    console.log(room)
-
     const handleSubmit = (e) => {
         e.preventDefault();
-        dispatch(addRoom(room));
-        setRoom({
-            description: '',
-            type: '',
-            size: '',
-            capacity: '',
-            price: '',
-        })
+        if (actionType === 'Add') {
+            dispatch(addRoom(room))
+            setRoom({
+                description: '',
+                type: '',
+                size: '',
+                capacity: '',
+                price: '',
+            })
+        }
+        if (actionType === 'Update') {
+            dispatch(updateRoom(room));
+        }
+
+
     }
 
     const handleChange = (e) => {
@@ -165,5 +176,5 @@ function AddRoom({ open, close, actionType, currentRoom }) {
     )
 }
 
-export default memo(AddRoom)
+export default memo(RoomModel)
 
