@@ -25,6 +25,7 @@ import {
     CircularProgress
 } from '@mui/material';
 import { getBookings } from '../features/booking/bookingSlice';
+import { openModel, closeModel } from '../features/model/modelSlice';
 
 // components
 import Iconify from '../components/iconify';
@@ -90,6 +91,8 @@ export default function BookingPage() {
     }
     const dispatch = useDispatch();
     const { bookings, loading, error } = useSelector(state => state.bookings);
+    const { modelOpen } = useSelector(state => state.setModel)
+
 
     useEffect(() => {
         dispatch(getBookings());
@@ -104,7 +107,8 @@ export default function BookingPage() {
     const [filterName, setFilterName] = useState('');
     const [rowsPerPage, setRowsPerPage] = useState(5);
 
-    const [modelAddBooking, setModelAddBooking] = useState(false);
+    // const [modelAddBooking, setModelAddBooking] = useState(false);
+
 
     const handleCloseMenu = () => {
         setOpen(false);
@@ -127,7 +131,9 @@ export default function BookingPage() {
 
     const isNotFound = !filteredBooking.length && !!filterName;
 
-    const handleModelToggle = useCallback(() => setModelAddBooking(prevShow => !prevShow), [modelAddBooking]);
+    //  const handleModelToggle = useCallback(() => setModelAddBooking(prevShow => !prevShow), [modelAddBooking]);
+
+    const handleModelClose = useCallback(() => dispatch(closeModel(false)), [dispatch]);
 
     const handleOpenMenu = useCallback((event) => setOpen(event.currentTarget), [open])
 
@@ -154,13 +160,13 @@ export default function BookingPage() {
                     <Typography variant="h4" gutterBottom>
                         Booking
                     </Typography>
-                    <Button variant="contained" onClick={handleModelToggle} startIcon={<Iconify icon="eva:plus-fill" />}>
+                    <Button variant="contained" onClick={() => dispatch(openModel(true))} startIcon={<Iconify icon="eva:plus-fill" />}>
                         New Booking
                     </Button>
                 </Stack>
 
                 {loading ? <PuffLoader cssOverride={override} /> : <>
-                    <AddBooking open={modelAddBooking} close={handleModelToggle} /><Card>
+                    <AddBooking open={modelOpen} close={handleModelClose} /><Card>
                         <BookingListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} />
 
                         <Scrollbar>

@@ -1,4 +1,4 @@
-import { memo, useState, useCallback } from 'react';
+import { memo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 
@@ -23,13 +23,15 @@ import Iconify from '../../../components/iconify';
 
 RoomListBody.propTypes = {
     room: PropTypes.shape({
-        _id: PropTypes.string,
-        type: PropTypes.string,
-        price: PropTypes.number,
-        size: PropTypes.string,
-        capacity: PropTypes.number,
-        description: PropTypes.string,
+        _id: PropTypes.string.isRequired,
+        type: PropTypes.string.isRequired,
+        price: PropTypes.number.isRequired,
+        size: PropTypes.string.isRequired,
+        capacity: PropTypes.number.isRequired,
+        description: PropTypes.string.isRequired,
     }),
+    handleEdit: PropTypes.func.isRequired,
+    sno: PropTypes.number.isRequired,
 };
 
 

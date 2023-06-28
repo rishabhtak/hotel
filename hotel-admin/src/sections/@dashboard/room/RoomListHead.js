@@ -35,8 +35,8 @@ function RoomListHead({
 }) {
 
 
-  const createSortHandler = (property) => (event) => {
 
+  const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
   return (

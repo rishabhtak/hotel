@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Outlet } from 'react-router-dom';
 // @mui
 import { styled } from '@mui/material/styles';
@@ -38,9 +38,7 @@ const Main = styled('div')(({ theme }) => ({
 
 export default function DashboardLayout() {
   const [open, setOpen] = useState(false);
-  const alertMessage = useSelector(state => state.rooms.alertMessage);
-
-
+  const alertMessage = useSelector(state => state.alerts.message);
 
   return (
     <StyledRoot>

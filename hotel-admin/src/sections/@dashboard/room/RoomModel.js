@@ -1,7 +1,8 @@
 // @mui
 import PropTypes from 'prop-types';
 import { useState, useEffect, memo } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { useFormik } from 'formik';
 import {
     Card,
     Dialog,
@@ -14,19 +15,32 @@ import {
     TextField,
     Button,
 } from '@mui/material';
+import { roomModelSchema } from '../../../schemas';
+
 import { addRoom, updateRoom } from '../../../features/room/roomSlice';
+import { closeModel } from '../../../features/model/modelSlice';
+
 
 RoomModel.propTypes = {
-    open: PropTypes.bool,
-    close: PropTypes.func
+    actionType: PropTypes.string.isRequired,
+    // currentRoom: PropTypes.oneOfType([null, PropTypes.object])
 }
 
 
 
-function RoomModel({ open, close, actionType, currentRoom }) {
+function RoomModel({ actionType, currentRoom }) {
+    const { modelOpen } = useSelector(state => state.setModel)
+
 
     const dispatch = useDispatch()
-    const [room, setRoom] = useState({})
+    const [room, setRoom] = useState({
+        description: '',
+        type: "",
+        size: '',
+        capacity: '',
+        price: '',
+    })
+
 
     useEffect(() => {
         if (currentRoom === null) {
@@ -39,6 +53,7 @@ function RoomModel({ open, close, actionType, currentRoom }) {
             })
         }
         else {
+            console.log(currentRoom)
             setRoom({
                 id: currentRoom._id,
                 description: currentRoom.description,
@@ -50,34 +65,29 @@ function RoomModel({ open, close, actionType, currentRoom }) {
         }
     }, [currentRoom])
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        if (actionType === 'Add') {
-            dispatch(addRoom(room))
-            setRoom({
-                description: '',
-                type: '',
-                size: '',
-                capacity: '',
-                price: '',
-            })
+
+    const { values, errors, handleBlur, handleChange, handleSubmit, touched } = useFormik({
+        enableReinitialize: true,
+        initialValues: room,
+        validationSchema: roomModelSchema,
+        onSubmit: (value, action) => {
+            if (actionType === "Add") {
+                dispatch(addRoom(value))
+            }
+            if (actionType === 'Update') {
+                dispatch(updateRoom(value));
+            }
+            action.resetForm()
         }
-        if (actionType === 'Update') {
-            dispatch(updateRoom(room));
-        }
 
+    })
 
-    }
+    const handleModelClose = () => dispatch(closeModel(false));
 
-    const handleChange = (e) => {
-
-        setRoom({ ...room, [e.target.name]: e.target.value })
-    }
     return (
-        <Dialog open={open} onClose={close}>
+        <Dialog open={modelOpen} onClose={handleModelClose}>
             <form
                 autoComplete="on"
-                noValidate
                 onSubmit={handleSubmit}
             >
                 <Card>
@@ -98,10 +108,12 @@ function RoomModel({ open, close, actionType, currentRoom }) {
                                     <TextField
                                         fullWidth
                                         label="Room Type"
+                                        helperText={errors.type && touched.type ? (errors.type) : null}
+                                        id='type'
                                         name="type"
                                         onChange={handleChange}
-                                        required
-                                        value={room.type}
+                                        onBlur={handleBlur}
+                                        value={values.type}
                                     />
                                 </Grid>
                                 <Grid
@@ -111,10 +123,12 @@ function RoomModel({ open, close, actionType, currentRoom }) {
                                     <TextField
                                         fullWidth
                                         label="Room Size"
+                                        helperText={errors.size && touched.size ? (errors.size) : null}
+                                        id='size'
                                         name="size"
                                         onChange={handleChange}
-                                        required
-                                        value={room.size}
+                                        onBlur={handleBlur}
+                                        value={values.size}
                                     />
                                 </Grid>
                                 <Grid
@@ -124,11 +138,13 @@ function RoomModel({ open, close, actionType, currentRoom }) {
                                     <TextField
                                         fullWidth
                                         label="Price"
+                                        id='price'
                                         name="price"
+                                        helperText={errors.price && touched.price ? (errors.price) : null}
                                         onChange={handleChange}
                                         type="number"
-                                        required
-                                        value={room.price}
+                                        onBlur={handleBlur}
+                                        value={values.price}
                                     />
                                 </Grid>
                                 <Grid
@@ -138,24 +154,31 @@ function RoomModel({ open, close, actionType, currentRoom }) {
                                     <TextField
                                         fullWidth
                                         label="Capacity"
+                                        id='capacity'
                                         name="capacity"
+                                        helperText={errors.capacity && touched.capacity ? (errors.capacity) : null}
                                         onChange={handleChange}
                                         type="number"
-                                        required
-                                        value={room.capacity}
+                                        onBlur={handleBlur}
+                                        value={values.capacity}
                                     />
                                 </Grid>
 
                                 <Grid
                                     xs={12}
-                                    md={6}
+                                    md={12}
                                 >
                                     <TextField
                                         fullWidth
                                         label="Description"
+                                        id='description'
+                                        helperText={errors.description && touched.description ? (errors.description) : null}
                                         name="description"
                                         onChange={handleChange}
-                                        value={room.description}
+                                        onBlur={handleBlur}
+                                        value={values.description}
+                                        multiline
+                                        rows={3}
                                     />
                                 </Grid>
                             </Grid>
@@ -163,10 +186,10 @@ function RoomModel({ open, close, actionType, currentRoom }) {
                     </CardContent>
                     <Divider />
                     <CardActions sx={{ justifyContent: 'flex-end' }}>
-                        <Button type="submit" onClick={close} variant="contained">
+                        <Button type="submit" onClick={handleSubmit} variant="contained">
                             {`${actionType} Room`}
                         </Button>
-                        <Button variant="contained" onClick={close} >
+                        <Button variant="contained" onClick={handleModelClose} >
                             Cancel
                         </Button>
                     </CardActions>

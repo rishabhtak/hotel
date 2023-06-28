@@ -1,4 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import { sendMessage, deleteAlert } from '../alert/alertSlice'
+import { closeModel } from '../model/modelSlice'
 
 
 
@@ -6,7 +8,6 @@ const initialState = {
     rooms: [],
     loading: true,
     error: false,
-    alertMessage: null
 
 }
 
@@ -49,6 +50,7 @@ export const addRoom = createAsyncThunk(
             });
 
             const roomAdd = await response.json();
+            thunkAPI.dispatch(closeModel(false))
             thunkAPI.dispatch(sendMessage("room successfully added"))
             thunkAPI.dispatch(deleteAlert(null));
             return roomAdd;
@@ -80,6 +82,7 @@ export const updateRoom = createAsyncThunk(
             });
 
             const roomUpdate = await response.json();
+            thunkAPI.dispatch(closeModel(false))
             thunkAPI.dispatch(sendMessage("room successfully updated"))
             thunkAPI.dispatch(deleteAlert(null));
             return roomUpdate;
@@ -121,9 +124,6 @@ export const roomSlice = createSlice({
     name: 'rooms',
     initialState,
     reducers: {
-        sendMessage: (state, { payload }) => {
-            state.alertMessage = payload
-        },
     },
     extraReducers: (builder) => {
         builder
@@ -189,16 +189,5 @@ export const roomSlice = createSlice({
 
     },
 })
-
-export const { sendMessage } = roomSlice.actions
-
-
-export const deleteAlert = (v) => (dispatch) => {
-
-    setTimeout(() => {
-        dispatch(sendMessage(v))
-    }, 3000)
-}
-
 
 export default roomSlice.reducer

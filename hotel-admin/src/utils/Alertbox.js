@@ -1,11 +1,10 @@
 import Alert from '@mui/material/Alert';
 
-export default function AlertBox(props) {
 
-
+export default function AlertBox({ alert }) {
     return (
         <>
-            {props.alert && <Alert severity="success" sx={{ width: '40%', textTransform: 'capitalize' }}>{props.alert}</Alert>}
+            {alert && <Alert severity="success" sx={{ width: '40%', textTransform: 'capitalize' }}>{alert}</Alert>}
         </>
 
 

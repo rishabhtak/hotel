@@ -7,15 +7,19 @@ export const alertSlice = createSlice({
     },
     reducers: {
         sendMessage: (state, { payload }) => {
-            state.message = payload.message
+            console.log(payload)
+            state.message = payload
         },
     },
 })
 
 export const { sendMessage } = alertSlice.actions
 
+export const deleteAlert = (v) => (dispatch) => {
 
-export const alertMessage = (state) => state.alerts.message
-
+    setTimeout(() => {
+        dispatch(sendMessage(v))
+    }, 3000)
+}
 
 export default alertSlice.reducer

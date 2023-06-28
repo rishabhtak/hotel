@@ -14,7 +14,6 @@ import {
     Stack,
     Paper,
     Button,
-    Popover,
     TableRow,
     TableBody,
     TableCell,
@@ -25,6 +24,8 @@ import {
 } from '@mui/material';
 
 import { getRooms } from '../features/room/roomSlice';
+import { openModel, closeModel } from '../features/model/modelSlice';
+
 
 // components
 import Iconify from '../components/iconify';
@@ -92,6 +93,8 @@ export default function RoomPage() {
 
     const dispatch = useDispatch();
     const { rooms, loading, error } = useSelector(state => state.rooms);
+    const { modelOpen } = useSelector(state => state.setModel)
+
 
     useEffect(() => {
         dispatch(getRooms());
@@ -100,14 +103,15 @@ export default function RoomPage() {
 
     const [page, setPage] = useState(0);
     const [order, setOrder] = useState('asc');
-    const [selected, setSelected] = useState([]);
+    // const [selected, setSelected] = useState([]);
     const [orderBy, setOrderBy] = useState('name');
     const [filterName, setFilterName] = useState('');
     const [rowsPerPage, setRowsPerPage] = useState(5);
     const [actionType, setActionType] = useState("");
     const [currentRoom, setCurrentRoom] = useState(null)
-    const [modelAddRoom, setModelAddRoom] = useState(false);
+    //   const [modelAddRoom, setModelAddRoom] = useState(false);
 
+    const selected = [];
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
     };
@@ -122,20 +126,22 @@ export default function RoomPage() {
 
     const isNotFound = !filteredRoom.length && !!filterName;
 
-    const handleModelToggle = useCallback(() => setModelAddRoom(prevShow => !prevShow), [modelAddRoom]);
+    // const handleModelToggle = useCallback(() => setModelAddRoom(prevShow => !prevShow), []);
+   // const handleModelClose = useCallback(() => dispatch(closeModel(false)), [dispatch]);
+    const handleModelOpen = useCallback(() => dispatch(openModel(true)), [dispatch]);
+
 
     const handleEdit = useCallback((room) => {
         setActionType("Update")
         setCurrentRoom(room)
-        handleModelToggle()
-
+        handleModelOpen()
     }, [])
 
 
     const handleAddRoom = useCallback(() => {
         setActionType("Add")
         setCurrentRoom(null)
-        handleModelToggle()
+        handleModelOpen()
     }, [])
 
     const handleRequestSort = useCallback((event, property) => {
@@ -147,7 +153,7 @@ export default function RoomPage() {
     const handleFilterByName = useCallback((event) => {
         setPage(0);
         setFilterName(event.target.value);
-    }, [page, filterName]);
+    }, []);
 
 
     return (
@@ -166,7 +172,7 @@ export default function RoomPage() {
                         Add Room
                     </Button>
                 </Stack>
-                {loading ? <PuffLoader cssOverride={override} /> : <><RoomModel open={modelAddRoom} close={handleModelToggle} actionType={actionType} currentRoom={currentRoom} />
+                {loading ? <PuffLoader cssOverride={override} /> : <><RoomModel actionType={actionType} currentRoom={currentRoom} />
                     <Card>
                         <RoomListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} />
 
@@ -188,7 +194,6 @@ export default function RoomPage() {
                                             </TableRow>
                                         ) :
                                             filteredRoom.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((room, index) => {
-
                                                 return (
                                                     <RoomListBody room={room} sno={index + 1} key={room._id} handleEdit={handleEdit} />
                                                 );
