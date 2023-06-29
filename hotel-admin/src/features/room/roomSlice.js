@@ -8,16 +8,19 @@ const initialState = {
     rooms: [],
     loading: true,
     error: false,
+    count: 0
+
 
 }
 
 export const getRooms = createAsyncThunk(
     'getRooms',
-    async () => {
+    async (query) => {
 
         try {
+            //    console.log(search);
             // api to get rooms
-            const response = await fetch(`http://localhost:5000/api/room/getallrooms`, {
+            const response = await fetch(`http://localhost:5000/api/room/getallrooms?page=${query.page}&limit=${query.limit}`, {
                 method: 'GET',
                 headers: {
                     "Content-Type": "application/json",
@@ -25,6 +28,7 @@ export const getRooms = createAsyncThunk(
                 },
             });
             const allRooms = await response.json();
+
             return allRooms;
         } catch (error) {
             return error.response.json()
@@ -37,7 +41,7 @@ export const addRoom = createAsyncThunk(
     async (room, thunkAPI) => {
         try {
             // api to add Room
-            const response = await fetch(`http://localhost:5000/api/room/addroom`, {
+            const response = await fetch(`http://localhost:5000/api/room/addrom`, {
                 method: 'POST',
                 headers: {
                     "Content-Type": "application/json",
@@ -48,9 +52,8 @@ export const addRoom = createAsyncThunk(
                     capacity: room.capacity, size: room.size
                 })
             });
-
-            const roomAdd = await response.json();
             thunkAPI.dispatch(closeModel(false))
+            const roomAdd = await response.json();
             thunkAPI.dispatch(sendMessage("room successfully added"))
             thunkAPI.dispatch(deleteAlert(null));
             return roomAdd;
@@ -80,9 +83,8 @@ export const updateRoom = createAsyncThunk(
                     capacity: room.capacity, size: room.size
                 })
             });
-
-            const roomUpdate = await response.json();
             thunkAPI.dispatch(closeModel(false))
+            const roomUpdate = await response.json();
             thunkAPI.dispatch(sendMessage("room successfully updated"))
             thunkAPI.dispatch(deleteAlert(null));
             return roomUpdate;
@@ -133,6 +135,7 @@ export const roomSlice = createSlice({
             .addCase(getRooms.fulfilled, (state, { payload }) => {
                 state.loading = false
                 state.rooms = payload.rooms
+                state.count = payload.count
             })
             .addCase(getRooms.rejected, (state) => {
                 state.loading = false
@@ -144,6 +147,7 @@ export const roomSlice = createSlice({
             .addCase(addRoom.fulfilled, (state, { payload }) => {
                 state.loading = false
                 state.rooms = state.rooms.concat(payload.saveRoom)
+                state.count += 1
             })
             .addCase(addRoom.rejected, (state) => {
                 state.loading = false
@@ -181,6 +185,7 @@ export const roomSlice = createSlice({
                 state.rooms = state.rooms.filter((room) => {
                     return room._id !== payload.room._id
                 })
+                state.count -= 1
             })
             .addCase(deleteRoom.rejected, (state) => {
                 state.loading = false

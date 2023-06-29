@@ -24,7 +24,7 @@ import {
 } from '@mui/material';
 
 import { getRooms } from '../features/room/roomSlice';
-import { openModel, closeModel } from '../features/model/modelSlice';
+import { openModel } from '../features/model/modelSlice';
 
 
 // components
@@ -92,12 +92,17 @@ export default function RoomPage() {
     }
 
     const dispatch = useDispatch();
-    const { rooms, loading, error } = useSelector(state => state.rooms);
-    const { modelOpen } = useSelector(state => state.setModel)
+    const { rooms, loading, error, count } = useSelector(state => state.rooms);
+    // const { modelOpen } = useSelector(state => state.setModel)
 
+    console.log("count", count);
+    console.log("rooms", rooms);
 
     useEffect(() => {
-        dispatch(getRooms());
+        dispatch(getRooms({
+            page: 1,
+            limit: 5
+        }));
         // eslint-disable-next-line
     }, []);
 
@@ -113,12 +118,23 @@ export default function RoomPage() {
 
     const selected = [];
     const handleChangePage = (event, newPage) => {
+        dispatch(getRooms({
+            page: newPage + 1,
+            limit: rowsPerPage
+        }));
         setPage(newPage);
+
     };
 
     const handleChangeRowsPerPage = (event) => {
+        const limit = event.target.value
+        dispatch(getRooms({
+            page: 1,
+            limit
+
+        }));
         setPage(0);
-        setRowsPerPage(parseInt(event.target.value, 10));
+        setRowsPerPage(limit, 10);
     };
 
 
@@ -127,7 +143,7 @@ export default function RoomPage() {
     const isNotFound = !filteredRoom.length && !!filterName;
 
     // const handleModelToggle = useCallback(() => setModelAddRoom(prevShow => !prevShow), []);
-   // const handleModelClose = useCallback(() => dispatch(closeModel(false)), [dispatch]);
+    // const handleModelClose = useCallback(() => dispatch(closeModel(false)), [dispatch]);
     const handleModelOpen = useCallback(() => dispatch(openModel(true)), [dispatch]);
 
 
@@ -152,6 +168,8 @@ export default function RoomPage() {
 
     const handleFilterByName = useCallback((event) => {
         setPage(0);
+        //   console.log("handleFilterByName", event.target.value);
+        //  dispatch(getRooms(query))
         setFilterName(event.target.value);
     }, []);
 
@@ -193,7 +211,7 @@ export default function RoomPage() {
                                                 <TableCell colSpan={7} align='center'>No Data Available</TableCell>
                                             </TableRow>
                                         ) :
-                                            filteredRoom.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((room, index) => {
+                                            filteredRoom.map((room, index) => {
                                                 return (
                                                     <RoomListBody room={room} sno={index + 1} key={room._id} handleEdit={handleEdit} />
                                                 );
@@ -233,7 +251,7 @@ export default function RoomPage() {
                         <TablePagination
                             rowsPerPageOptions={[5, 10, 25]}
                             component="div"
-                            count={rooms.length}
+                            count={count}
                             rowsPerPage={rowsPerPage}
                             page={page}
                             onPageChange={handleChangePage}

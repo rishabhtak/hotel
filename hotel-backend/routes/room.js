@@ -18,7 +18,7 @@ router.post('/addroom', adminmiddle,
         let success = false;
         try {
             const { type, price, size, capacity, description } = req.body;
-             //validation result
+            //validation result
             const errors = validationResult(req);
             if (!errors.isEmpty()) {
 
@@ -27,6 +27,7 @@ router.post('/addroom', adminmiddle,
             //add room
             const rooms = new Room({ type, price, size, capacity, description })
             const saveRoom = await rooms.save();
+            //const count = await Room.find({}).count()
             success = true;
             res.json({ success, saveRoom })
         }
@@ -41,12 +42,17 @@ router.post('/addroom', adminmiddle,
 router.get('/getallrooms', async (req, res) => {
     try {
         let success = false;
-        const rooms = await Room.find();
+        let page = Number(req.query.page);
+        let limit = Number(req.query.limit);
+        let skip = (page - 1) * limit;
+        let search = req.query.search
+        const count = await Room.find({}).count()
+        // const rooms = await Room.find({ type: { $regex: search } }).skip(skip).limit(limit);
+        const rooms = await Room.find({}).skip(skip).limit(limit);
         success = true;
-        res.json({ success, rooms })
+        res.json({ success, rooms, count })
     }
     catch (error) {
-        console.log(error)
         res.status(500).send("Internal server error");
     }
 })
@@ -85,7 +91,6 @@ router.post('/getavailableroom', async (req, res) => {
 
     }
     catch (error) {
-        console.log(error);
         res.status(500).send("Internal server error");
     }
 })
@@ -120,7 +125,6 @@ router.put('/updateroom/:id', adminmiddle, [
 
             //find the room
             let room = await Room.findById(req.params.id);
-            console.log(room)
             if (!room) { return res.status(404).send("Not Found") }
 
             //update room

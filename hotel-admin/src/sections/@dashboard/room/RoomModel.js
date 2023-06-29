@@ -31,7 +31,6 @@ RoomModel.propTypes = {
 function RoomModel({ actionType, currentRoom }) {
     const { modelOpen } = useSelector(state => state.setModel)
 
-
     const dispatch = useDispatch()
     const [room, setRoom] = useState({
         description: '',
@@ -53,7 +52,6 @@ function RoomModel({ actionType, currentRoom }) {
             })
         }
         else {
-            console.log(currentRoom)
             setRoom({
                 id: currentRoom._id,
                 description: currentRoom.description,
@@ -78,9 +76,10 @@ function RoomModel({ actionType, currentRoom }) {
                 dispatch(updateRoom(value));
             }
             action.resetForm()
-        }
-
+        },
     })
+
+
 
     const handleModelClose = () => dispatch(closeModel(false));
 
@@ -142,7 +141,6 @@ function RoomModel({ actionType, currentRoom }) {
                                         name="price"
                                         helperText={errors.price && touched.price ? (errors.price) : null}
                                         onChange={handleChange}
-                                        type="number"
                                         onBlur={handleBlur}
                                         value={values.price}
                                     />
@@ -158,7 +156,6 @@ function RoomModel({ actionType, currentRoom }) {
                                         name="capacity"
                                         helperText={errors.capacity && touched.capacity ? (errors.capacity) : null}
                                         onChange={handleChange}
-                                        type="number"
                                         onBlur={handleBlur}
                                         value={values.capacity}
                                     />
