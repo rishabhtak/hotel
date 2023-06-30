@@ -9,6 +9,7 @@ import LoginPage from './pages/LoginPage';
 import Page404 from './pages/Page404';
 import ProductsPage from './pages/ProductsPage';
 import Room from './pages/Room';
+import User from './pages/User';
 
 // ----------------------------------------------------------------------
 
@@ -23,7 +24,7 @@ export default function Router() {
         { element: <Navigate to="/admin/booking" />, index: true },
         { path: 'booking', element: <Booking /> },
         { path: 'room', element: <Room /> },
-        { path: 'user', element: <UserPage /> },
+        { path: 'user', element: <User /> },
         { path: 'products', element: <ProductsPage /> },
         { path: 'blog', element: <BlogPage /> },
       ],

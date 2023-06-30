@@ -110,12 +110,17 @@ router.get('/getallusers', adminmiddle,
         try {
             //admin id
             const adminId = req.admin.id;
+            console.log(adminId);
+            let page = Number(req.query.page);
+            let limit = Number(req.query.limit);
+            let skip = (page - 1) * limit;
             let users;
             //id admin id found then fetch all user without password
             if (adminId) {
-                users = await User.find({}).select("-password");
+                const count = await User.find({}).count()
+                users = await User.find({}).skip(skip).limit(limit).select("-password");
                 success = true;
-                res.send({ success, users })
+                res.send({ success, users, count })
             }
         }
         catch (error) {

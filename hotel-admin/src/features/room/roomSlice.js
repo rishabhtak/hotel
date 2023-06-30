@@ -3,7 +3,6 @@ import { sendMessage, deleteAlert } from '../alert/alertSlice'
 import { setOpenModel } from '../model/modelSlice'
 
 const host = process.env.REACT_APP_HOST;
-console.log(host)
 const initialState = {
     rooms: [],
     loading: true,
@@ -41,7 +40,7 @@ export const addRoom = createAsyncThunk(
     async (room, thunkAPI) => {
         try {
             // api to add Room
-            const response = await fetch(`http://localhost:5000/api/room/addroom`, {
+            const response = await fetch(`${host}room/addroom`, {
                 method: 'POST',
                 headers: {
                     "Content-Type": "application/json",
@@ -78,7 +77,7 @@ export const updateRoom = createAsyncThunk(
     async (room, thunkAPI) => {
         try {
             // api to update Room
-            const response = await fetch(`http://localhost:5000/api/room/updateroom/${room.id}`, {
+            const response = await fetch(`${host}room/updateroom/${room.id}`, {
                 method: 'PUT',
                 headers: {
                     "Content-Type": "application/json",
@@ -115,7 +114,7 @@ export const deleteRoom = createAsyncThunk(
     async (id, thunkAPI) => {
         try {
             // api to delete room
-            const response = await fetch(`http://localhost:5000/api/room/deleteroom/${id}`, {
+            const response = await fetch(`${host}room/deleteroom/${id}`, {
                 method: 'DELETE',
                 headers: {
                     "Content-Type": "application/json",

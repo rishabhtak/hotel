@@ -27,7 +27,6 @@ router.post('/addroom', adminmiddle,
             //add room
             const rooms = new Room({ type, price, size, capacity, description })
             const saveRoom = await rooms.save();
-            //const count = await Room.find({}).count()
             success = true;
             res.json({ success, saveRoom })
         }
@@ -45,7 +44,7 @@ router.get('/getallrooms', async (req, res) => {
         let page = Number(req.query.page);
         let limit = Number(req.query.limit);
         let skip = (page - 1) * limit;
-        let search = req.query.search
+       // let search = req.query.search
         const count = await Room.find({}).count()
         // const rooms = await Room.find({ type: { $regex: search } }).skip(skip).limit(limit);
         const rooms = await Room.find({}).skip(skip).limit(limit);
