@@ -18,7 +18,7 @@ import {
 import { roomModelSchema } from '../../../schemas';
 
 import { addRoom, updateRoom } from '../../../features/room/roomSlice';
-import { closeModel } from '../../../features/model/modelSlice';
+import { setOpenModel } from '../../../features/model/modelSlice';
 
 
 RoomModel.propTypes = {
@@ -81,7 +81,7 @@ function RoomModel({ actionType, currentRoom }) {
 
 
 
-    const handleModelClose = () => dispatch(closeModel(false));
+    const handleModelClose = () => dispatch(setOpenModel(false));
 
     return (
         <Dialog open={modelOpen} onClose={handleModelClose}>

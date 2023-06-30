@@ -1,10 +1,12 @@
 import Alert from '@mui/material/Alert';
 
 
+
 export default function AlertBox({ alert }) {
+    const { message, type } = alert;
     return (
         <>
-            {alert && <Alert severity="success" sx={{ width: '40%', textTransform: 'capitalize' }}>{alert}</Alert>}
+            {message && <Alert severity={`${type}`} sx={{ width: '40%', textTransform: 'capitalize' }}>{message}</Alert>}
         </>
 
 

@@ -24,14 +24,18 @@ import {
 } from '@mui/material';
 
 import { getRooms } from '../features/room/roomSlice';
-import { openModel } from '../features/model/modelSlice';
+import { setOpenModel, setDialogOpen } from '../features/model/modelSlice';
 
 
 // components
 import Iconify from '../components/iconify';
 import Scrollbar from '../components/scrollbar';
+import DeleteDialogBox from '../utils/DeleteDialogBox';
+
 // sections
 import { RoomModel, RoomListToolbar, RoomListHead, RoomListBody } from '../sections/@dashboard/room';
+
+
 
 // mock
 
@@ -95,9 +99,6 @@ export default function RoomPage() {
     const { rooms, loading, error, count } = useSelector(state => state.rooms);
     // const { modelOpen } = useSelector(state => state.setModel)
 
-    console.log("count", count);
-    console.log("rooms", rooms);
-
     useEffect(() => {
         dispatch(getRooms({
             page: 1,
@@ -114,7 +115,7 @@ export default function RoomPage() {
     const [rowsPerPage, setRowsPerPage] = useState(5);
     const [actionType, setActionType] = useState("");
     const [currentRoom, setCurrentRoom] = useState(null)
-    //   const [modelAddRoom, setModelAddRoom] = useState(false);
+    const [id, setId] = useState(null)
 
     const selected = [];
     const handleChangePage = (event, newPage) => {
@@ -142,15 +143,18 @@ export default function RoomPage() {
 
     const isNotFound = !filteredRoom.length && !!filterName;
 
-    // const handleModelToggle = useCallback(() => setModelAddRoom(prevShow => !prevShow), []);
-    // const handleModelClose = useCallback(() => dispatch(closeModel(false)), [dispatch]);
-    const handleModelOpen = useCallback(() => dispatch(openModel(true)), [dispatch]);
+    const handleModelOpen = useCallback(() => dispatch(setOpenModel(true)), [dispatch]);
 
 
     const handleEdit = useCallback((room) => {
         setActionType("Update")
         setCurrentRoom(room)
         handleModelOpen()
+    }, [])
+
+    const handleDelete = useCallback((id) => {
+        dispatch(setDialogOpen(true))
+        setId(id)
     }, [])
 
 
@@ -168,7 +172,6 @@ export default function RoomPage() {
 
     const handleFilterByName = useCallback((event) => {
         setPage(0);
-        //   console.log("handleFilterByName", event.target.value);
         //  dispatch(getRooms(query))
         setFilterName(event.target.value);
     }, []);
@@ -191,6 +194,7 @@ export default function RoomPage() {
                     </Button>
                 </Stack>
                 {loading ? <PuffLoader cssOverride={override} /> : <><RoomModel actionType={actionType} currentRoom={currentRoom} />
+                    <DeleteDialogBox id={id} type="room"/>
                     <Card>
                         <RoomListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} />
 
@@ -213,7 +217,7 @@ export default function RoomPage() {
                                         ) :
                                             filteredRoom.map((room, index) => {
                                                 return (
-                                                    <RoomListBody room={room} sno={index + 1} key={room._id} handleEdit={handleEdit} />
+                                                    <RoomListBody room={room} sno={index + 1} key={room._id} handleEdit={handleEdit} handleDelete={handleDelete} />
                                                 );
                                             })
                                         }

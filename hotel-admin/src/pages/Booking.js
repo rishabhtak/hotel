@@ -25,7 +25,7 @@ import {
     CircularProgress
 } from '@mui/material';
 import { getBookings } from '../features/booking/bookingSlice';
-import { openModel, closeModel } from '../features/model/modelSlice';
+import { setOpenModel } from '../features/model/modelSlice';
 
 // components
 import Iconify from '../components/iconify';
@@ -133,7 +133,7 @@ export default function BookingPage() {
 
     //  const handleModelToggle = useCallback(() => setModelAddBooking(prevShow => !prevShow), [modelAddBooking]);
 
-    const handleModelClose = useCallback(() => dispatch(closeModel(false)), [dispatch]);
+    const handleModelClose = useCallback(() => dispatch(setOpenModel(false)), [dispatch]);
 
     const handleOpenMenu = useCallback((event) => setOpen(event.currentTarget), [open])
 
@@ -160,7 +160,7 @@ export default function BookingPage() {
                     <Typography variant="h4" gutterBottom>
                         Booking
                     </Typography>
-                    <Button variant="contained" onClick={() => dispatch(openModel(true))} startIcon={<Iconify icon="eva:plus-fill" />}>
+                    <Button variant="contained" onClick={() => dispatch(setOpenModel(true))} startIcon={<Iconify icon="eva:plus-fill" />}>
                         New Booking
                     </Button>
                 </Stack>

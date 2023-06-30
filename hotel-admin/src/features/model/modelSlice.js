@@ -4,17 +4,18 @@ export const modelSlice = createSlice({
     name: 'model',
     initialState: {
         modelOpen: false,
+        dialogOpen: false,
     },
     reducers: {
-        openModel: (state, { payload }) => {
+        setOpenModel: (state, { payload }) => {
             state.modelOpen = payload
         },
-        closeModel: (state, { payload }) => {
-            state.modelOpen = payload
+        setDialogOpen: (state, { payload }) => {
+            state.dialogOpen = payload
         },
     },
 })
 
-export const { openModel, closeModel } = modelSlice.actions
+export const { setOpenModel, setDialogOpen } = modelSlice.actions
 
 export default modelSlice.reducer

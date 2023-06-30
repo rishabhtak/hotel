@@ -38,7 +38,7 @@ const Main = styled('div')(({ theme }) => ({
 
 export default function DashboardLayout() {
   const [open, setOpen] = useState(false);
-  const alertMessage = useSelector(state => state.alerts.message);
+  const alert = useSelector(state => state.alerts);
 
   return (
     <StyledRoot>
@@ -48,7 +48,7 @@ export default function DashboardLayout() {
 
 
       <Main>
-        <AlertBox alert={alertMessage} />
+        <AlertBox alert={alert} />
         <Outlet />
       </Main>
     </StyledRoot>

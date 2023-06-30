@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { sendMessage, deleteAlert } from '../alert/alertSlice'
-import { closeModel } from '../model/modelSlice'
+import { setOpenModel } from '../model/modelSlice'
 
 
 
@@ -41,7 +41,7 @@ export const addRoom = createAsyncThunk(
     async (room, thunkAPI) => {
         try {
             // api to add Room
-            const response = await fetch(`http://localhost:5000/api/room/addrom`, {
+            const response = await fetch(`http://localhost:5000/api/room/addroom`, {
                 method: 'POST',
                 headers: {
                     "Content-Type": "application/json",
@@ -52,14 +52,20 @@ export const addRoom = createAsyncThunk(
                     capacity: room.capacity, size: room.size
                 })
             });
-            thunkAPI.dispatch(closeModel(false))
+            thunkAPI.dispatch(setOpenModel(false))
             const roomAdd = await response.json();
-            thunkAPI.dispatch(sendMessage("room successfully added"))
-            thunkAPI.dispatch(deleteAlert(null));
+            thunkAPI.dispatch(sendMessage({
+                message: "room successfully added",
+                type: "success"
+            }))
+            thunkAPI.dispatch(deleteAlert());
             return roomAdd;
         } catch (error) {
-            thunkAPI.dispatch(sendMessage("Something went wrong"))
-            thunkAPI.dispatch(deleteAlert(null));
+            thunkAPI.dispatch(sendMessage({
+                message: "something went wrong",
+                type: "error"
+            }))
+            thunkAPI.dispatch(deleteAlert());
             return error.response.json()
         }
 
@@ -83,14 +89,20 @@ export const updateRoom = createAsyncThunk(
                     capacity: room.capacity, size: room.size
                 })
             });
-            thunkAPI.dispatch(closeModel(false))
+            thunkAPI.dispatch(setOpenModel(false))
             const roomUpdate = await response.json();
-            thunkAPI.dispatch(sendMessage("room successfully updated"))
-            thunkAPI.dispatch(deleteAlert(null));
+            thunkAPI.dispatch(sendMessage({
+                message: "room successfully updated",
+                type: "success"
+            }))
+            thunkAPI.dispatch(deleteAlert());
             return roomUpdate;
         } catch (error) {
-            thunkAPI.dispatch(sendMessage("Something went wrong"))
-            thunkAPI.dispatch(deleteAlert(null));
+            thunkAPI.dispatch(sendMessage({
+                message: "something went wrong",
+                type: "error"
+            }))
+            thunkAPI.dispatch(deleteAlert());
             return error.response.json()
         }
 
@@ -111,12 +123,18 @@ export const deleteRoom = createAsyncThunk(
                 },
             });
             const roomDelete = await response.json();
-            thunkAPI.dispatch(sendMessage("room successfully deleted"))
-            thunkAPI.dispatch(deleteAlert(null));
+            thunkAPI.dispatch(sendMessage({
+                message: "room successfully deleted",
+                type: "success"
+            }))
+            thunkAPI.dispatch(deleteAlert());
             return roomDelete;
         } catch (error) {
-            thunkAPI.dispatch(sendMessage("Something went wrong"))
-            thunkAPI.dispatch(deleteAlert(null));
+            thunkAPI.dispatch(sendMessage({
+                message: "something went wrong",
+                type: "error"
+            }))
+            thunkAPI.dispatch(deleteAlert());
             return error.response.json()
         }
     }

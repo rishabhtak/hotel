@@ -1,10 +1,6 @@
 import { memo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
-
-
-
-
 // @mui
 import {
     Popover,
@@ -14,10 +10,7 @@ import {
     IconButton,
 
 } from '@mui/material';
-import { deleteRoom } from '../../../features/room/roomSlice';
 import Iconify from '../../../components/iconify';
-
-
 
 // ----------------------------------------------------------------------
 
@@ -32,13 +25,13 @@ RoomListBody.propTypes = {
     }),
     handleEdit: PropTypes.func.isRequired,
     sno: PropTypes.number.isRequired,
+    handleDelete: PropTypes.func.isRequired,
 };
 
 
 
-function RoomListBody({ room, handleEdit, sno }) {
+function RoomListBody({ room, handleEdit, sno, handleDelete }) {
     const [open, setOpen] = useState(false);
-    const dispatch = useDispatch();
 
     const handleCloseMenu = () => {
         setOpen(false);
@@ -55,15 +48,15 @@ function RoomListBody({ room, handleEdit, sno }) {
     }
 
     const handleDeleteRoom = (id) => {
-        dispatch(deleteRoom(id))
+        handleDelete(id)
         setOpen(false);
+
     }
 
     if (room) {
         const { type, capacity, size, description, price } = room;
         return (
             <>
-
                 <TableRow tabIndex={-1} sx={{ '& > *': { borderBottom: 'unset' } }}>
                     <TableCell component="th" scope="row">
                         {sno}
@@ -110,7 +103,6 @@ function RoomListBody({ room, handleEdit, sno }) {
                         Delete
                     </MenuItem>
                 </Popover>
-
             </>
         )
     }
