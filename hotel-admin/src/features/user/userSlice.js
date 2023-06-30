@@ -2,10 +2,10 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { sendMessage, deleteAlert } from '../alert/alertSlice'
 import { setOpenModel } from '../model/modelSlice'
 
-const host = process.env.REACT_APP_HOST;
-console.log(host)
+
+
 const initialState = {
-    rooms: [],
+    users: [],
     loading: true,
     error: false,
     count: 0
@@ -13,14 +13,14 @@ const initialState = {
 
 }
 
-export const getRooms = createAsyncThunk(
-    'getRooms',
+export const getUsers = createAsyncThunk(
+    'getUsers',
     async (query) => {
 
         try {
             //    console.log(search);
-            // api to get rooms
-            const response = await fetch(`${host}room/getallrooms?page=${query.page}&limit=${query.limit}`, {
+            // api to get users
+            const response = await fetch(`http://localhost:5000/api/room/getallrooms?page=${query.page}&limit=${query.limit}`, {
                 method: 'GET',
                 headers: {
                     "Content-Type": "application/json",
