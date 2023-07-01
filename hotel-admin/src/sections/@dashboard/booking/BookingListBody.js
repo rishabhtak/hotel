@@ -18,6 +18,8 @@ import {
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import Iconify from '../../../components/iconify';
+import { fDate } from '../../../utils/formatTime';
+
 
 
 
@@ -77,8 +79,8 @@ function BookingListBody({ row, handleOpenMenu }) {
 
                     <TableCell align="left">{phone}</TableCell>
 
-                    <TableCell align="left">{startdate}</TableCell>
-                    <TableCell align="left">{enddate}</TableCell>
+                    <TableCell align="left"> {fDate(startdate)}</TableCell>
+                    <TableCell align="left">{fDate(enddate)}</TableCell>
 
                     <TableCell align="right">
                         <IconButton size="large" color="inherit" onClick={handleOpenMenu}>

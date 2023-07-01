@@ -3,10 +3,8 @@ import { Navigate, useRoutes } from 'react-router-dom';
 import DashboardLayout from './layouts/dashboard';
 import SimpleLayout from './layouts/simple';
 import Booking from './pages/Booking';
-import BlogPage from './pages/BlogPage';
 import LoginPage from './pages/LoginPage';
 import Page404 from './pages/Page404';
-import ProductsPage from './pages/ProductsPage';
 import Room from './pages/Room';
 import User from './pages/User';
 
@@ -24,8 +22,6 @@ export default function Router() {
         { path: 'booking', element: <Booking /> },
         { path: 'room', element: <Room /> },
         { path: 'user', element: <User /> },
-        { path: 'products', element: <ProductsPage /> },
-        { path: 'blog', element: <BlogPage /> },
       ],
     },
     {

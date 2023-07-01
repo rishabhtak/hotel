@@ -4,6 +4,7 @@ import RoomReducer from '../features/room/roomSlice'
 import AlertReducer from '../features/alert/alertSlice'
 import ModelReducer from '../features/model/modelSlice'
 import UserReducer from '../features/user/userSlice'
+import AuthReducer from '../features/auth/authSlice'
 
 export const store = configureStore({
     reducer: {
@@ -11,7 +12,8 @@ export const store = configureStore({
         rooms: RoomReducer,
         alerts: AlertReducer,
         setModel: ModelReducer,
-        users: UserReducer
+        users: UserReducer,
+        admin: AuthReducer
 
     },
 

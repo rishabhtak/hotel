@@ -1,19 +1,19 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 // @mui
 import { alpha } from '@mui/material/styles';
 import { Box, Divider, Typography, Stack, MenuItem, Avatar, IconButton, Popover } from '@mui/material';
+import { useDispatch, useSelector } from 'react-redux';
+import { getAdmin } from '../../../features/auth/authSlice'
+
 // mocks_
 import account from '../../../_mock/account';
+
 
 // ----------------------------------------------------------------------
 
 const MENU_OPTIONS = [
-  {
-    label: 'Home',
-    icon: 'eva:home-fill',
-  },
   {
     label: 'Profile',
     icon: 'eva:person-fill',
@@ -27,6 +27,14 @@ const MENU_OPTIONS = [
 // ----------------------------------------------------------------------
 
 export default function AccountPopover() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getAdmin());
+    // eslint-disable-next-line
+  }, []);
+
+  const { admin } = useSelector(state => state.admin);
   const navigate = useNavigate();
 
   const [open, setOpen] = useState(null);
@@ -86,11 +94,11 @@ export default function AccountPopover() {
         }}
       >
         <Box sx={{ my: 1.5, px: 2.5 }}>
-          <Typography variant="subtitle2" noWrap>
-            {account.displayName}
+          <Typography variant="subtitle2" style={{ textTransform: 'capitalize' }} noWrap>
+            {admin.name ? admin.name : "Admin"}
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-            {account.email}
+            {admin.email ? admin.email : ""}
           </Typography>
         </Box>
 

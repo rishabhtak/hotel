@@ -1,13 +1,13 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { sendMessage, deleteAlert } from '../alert/alertSlice'
 
-
 const host = process.env.REACT_APP_HOST;
 
 const initialState = {
     userToken: null,
     loading: false,
-    error: false
+    error: false,
+    admin: {}
 }
 
 export const login = createAsyncThunk(
@@ -24,9 +24,9 @@ export const login = createAsyncThunk(
             const adminLogin = await response.json();
             if (adminLogin.success) {
                 localStorage.setItem('adminToken', adminLogin.authToken);
+                thunkAPI.dispatch(getAdmin())
                 return adminLogin;
             }
-            console.log(adminLogin.authToken);
             thunkAPI.dispatch(sendMessage({
                 message: "invalid credentials",
                 type: "error"
@@ -43,6 +43,27 @@ export const login = createAsyncThunk(
             return error.response.json()
         }
 
+    }
+)
+
+export const getAdmin = createAsyncThunk(
+    'getAdmin',
+    async () => {
+
+        try {
+            // api to get users
+            const response = await fetch(`${host}admin/getadmin`, {
+                method: 'GET',
+                headers: {
+                    "Content-Type": "application/json",
+                    "auth-token": localStorage.getItem('adminToken')
+                },
+            });
+            const admin = await response.json();
+            return admin;
+        } catch (error) {
+            return error.response.json()
+        }
     }
 )
 
@@ -68,16 +89,19 @@ export const authSlice = createSlice({
                 state.loading = false
                 state.error = true
             })
+            .addCase(getAdmin.pending, (state) => {
+                state.loading = true
+            })
+            .addCase(getAdmin.fulfilled, (state, { payload }) => {
+                state.loading = false
+                state.admin = payload.admin
+            })
+            .addCase(getAdmin.rejected, (state) => {
+                state.loading = false
+                state.error = true
+            })
 
     },
-    // [logout.fulfilled]: (state, { payload }) => {
-    //      state.userToken = null
-    //      localStorage.removeItem('token');
-    //  },
-    // [logout.rejected]: (state) => {
-    //      state.userToken = null
-    //      localStorage.removeItem('token');
-    //  }
 })
 
 
