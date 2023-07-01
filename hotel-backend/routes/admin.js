@@ -149,5 +149,22 @@ router.get('/getallbookings', adminmiddle,
 
     })
 
+//Route 4: get loggedin admin details. Admin Login required /api/admin/getadmin
+router.get('/getadmin', adminmiddle,
+    async (req, res) => {
+        let success = false;
+        try {
+            const adminId = req.admin.id;
+            const admin = await Admin.findById(adminId).select("-password");
+            success = true;
+            res.send({ success, admin })
+        }
+        catch (error) {
+            res.status(500).send("Internal server error");
+        }
+
+    })
+
+
 
 module.exports = router

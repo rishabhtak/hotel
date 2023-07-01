@@ -121,5 +121,4 @@ router.get('/getuser', getuser,
     })
 
 
-
 module.exports = router
