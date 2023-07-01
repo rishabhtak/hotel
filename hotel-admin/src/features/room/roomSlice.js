@@ -27,7 +27,6 @@ export const getRooms = createAsyncThunk(
                 },
             });
             const allRooms = await response.json();
-
             return allRooms;
         } catch (error) {
             return error.response.json()
@@ -44,7 +43,7 @@ export const addRoom = createAsyncThunk(
                 method: 'POST',
                 headers: {
                     "Content-Type": "application/json",
-                    "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjQ5MzBkZmZmOWQ2NmU3OWJhMjYzNDkwIn0sImlhdCI6MTY4NzM3NzM5Mn0.TPJANmY0SDDN_Eto5hrh_vkdGwPgCgQ80noiYinwGEk"
+                    "auth-token": localStorage.getItem('adminToken')
                 },
                 body: JSON.stringify({
                     type: room.type, description: room.description, price: room.price,
@@ -81,7 +80,7 @@ export const updateRoom = createAsyncThunk(
                 method: 'PUT',
                 headers: {
                     "Content-Type": "application/json",
-                    "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjQ5MzBkZmZmOWQ2NmU3OWJhMjYzNDkwIn0sImlhdCI6MTY4NzM3NzM5Mn0.TPJANmY0SDDN_Eto5hrh_vkdGwPgCgQ80noiYinwGEk"
+                    "auth-token": localStorage.getItem('adminToken')
                 },
                 body: JSON.stringify({
                     type: room.type, description: room.description, price: room.price,
@@ -118,7 +117,7 @@ export const deleteRoom = createAsyncThunk(
                 method: 'DELETE',
                 headers: {
                     "Content-Type": "application/json",
-                    "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjQ5MzBkZmZmOWQ2NmU3OWJhMjYzNDkwIn0sImlhdCI6MTY4NzM3NzM5Mn0.TPJANmY0SDDN_Eto5hrh_vkdGwPgCgQ80noiYinwGEk"
+                    "auth-token": localStorage.getItem('adminToken')
                 },
             });
             const roomDelete = await response.json();

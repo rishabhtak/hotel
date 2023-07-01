@@ -1,5 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 import { PuffLoader } from 'react-spinners'
+import { useNavigate } from 'react-router-dom';
 
 import { filter } from 'lodash';
 import { useState, useEffect, useCallback } from 'react';
@@ -87,6 +88,8 @@ function applySortFilter(array, comparator, query) {
 
 
 export default function RoomPage() {
+    const navigate = useNavigate();
+
     const override = {
         position: "fixed",
         zIndex: 1031,
@@ -100,10 +103,15 @@ export default function RoomPage() {
     // const { modelOpen } = useSelector(state => state.setModel)
 
     useEffect(() => {
-        dispatch(getRooms({
-            page: 1,
-            limit: 5
-        }));
+        if (localStorage.getItem('adminToken')) {
+            dispatch(getRooms({
+                page: 1,
+                limit: 5
+            }));
+        }
+        else {
+            navigate('/login')
+        }
         // eslint-disable-next-line
     }, []);
 

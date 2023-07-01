@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { PuffLoader } from 'react-spinners'
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, useNavigate  } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 // routes
 import Router from './routes';
@@ -23,7 +23,6 @@ const override = {
 }
 
 export default function App() {
-
   const [isLoading, setIsLoading] = useState(true);
 
   const handleLoading = () => {
@@ -31,6 +30,7 @@ export default function App() {
   }
 
   useEffect(() => {
+   
     window.addEventListener("load", handleLoading);
     return () => window.removeEventListener("load", handleLoading);
   }, [])

@@ -22,7 +22,7 @@ export const getUsers = createAsyncThunk(
                 method: 'GET',
                 headers: {
                     "Content-Type": "application/json",
-                    "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbiI6eyJpZCI6IjY0OTM1MWZlYWQyNTEyMTkyM2M5NmY4NyJ9LCJpYXQiOjE2ODc1MzIzMTB9.sA5NxpCeAH24mxryTuUywy5jPT8grLzzD3x2Gc3Nhu4"
+                    "auth-token": localStorage.getItem('adminToken')
                 },
             });
             const allUsers = await response.json();

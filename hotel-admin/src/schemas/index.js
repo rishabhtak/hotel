@@ -7,3 +7,8 @@ export const roomModelSchema = Yup.object().shape({
     capacity: Yup.number().typeError("Please enter only number").positive("Please enter a positive number").integer("Please enter an integer number").required("Please enter a room capacity"),
     size: Yup.string().required("Please enter a room size")
 })
+
+export const loginModelSchema = Yup.object().shape({
+    email: Yup.string().email().required("Please enter email address"),
+    password: Yup.string().required("Please enter a password")
+})

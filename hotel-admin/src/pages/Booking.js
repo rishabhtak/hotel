@@ -1,5 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 import { PuffLoader } from 'react-spinners'
+import { useNavigate } from 'react-router-dom';
 
 import { filter } from 'lodash';
 import { useState, useEffect, useCallback } from 'react';
@@ -81,6 +82,8 @@ function applySortFilter(array, comparator, query) {
 
 
 export default function BookingPage() {
+    const navigate = useNavigate();
+
     const override = {
         position: "fixed",
         zIndex: 1031,
@@ -95,7 +98,12 @@ export default function BookingPage() {
 
 
     useEffect(() => {
-        dispatch(getBookings());
+        if (localStorage.getItem('adminToken')) {
+            dispatch(getBookings());
+        }
+        else {
+            navigate('/login')
+        }
         // eslint-disable-next-line
     }, []);
 
