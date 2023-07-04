@@ -1,38 +1,11 @@
+import SwiperSlide from "@/app/components/SwiperSlide"
 
 export default function Home() {
   return (
-    <div>
-      <div>this is a home</div>
-      <div>this is a home</div>
+    <>
 
-      <div>this is a home</div>
-      <div>this is a home</div>
+      <SwiperSlide />
 
-
-
-      <div>this is a home</div>
-
-      <div>this is a home</div>
-
-      <div>this is a home</div>
-
-      <div>this is a home</div>
-
-      <div>this is a home</div>
-
-      <div>this is a home</div>
-
-      <div>this is a home</div>
-
-      <div>this is a home</div>
-
-      <div>this is a home</div>
-
-
-
-      <div>this is a home</div>
-
-
-    </div>
+    </>
   )
 }

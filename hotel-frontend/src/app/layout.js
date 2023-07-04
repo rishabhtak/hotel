@@ -1,5 +1,5 @@
 import './globals.css'
-import Navbar from './components/navbar/Navbar'
+import Navbar from './components/Navbar'
 import { Mulish } from 'next/font/google'
 
 const mulish = Mulish({

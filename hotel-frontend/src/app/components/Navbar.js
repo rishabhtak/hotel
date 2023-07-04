@@ -1,7 +1,7 @@
 'use client'
 import { useState } from "react";
 import Link from "next/link"
-import styles from "../navbar/navbar.module.css"
+import styles from "@/app/styles/navbar.module.css"
 import { BiMenu, BiX } from 'react-icons/bi';
 
 function Navbar() {
@@ -16,10 +16,10 @@ function Navbar() {
             <nav className={`${styles.navbar} ${sidebarOpen ? styles.active : ""}`} >
                 <div className={styles.navbarList}>
                     <BiMenu color="white" size={30} onClick={toggleSidebar} className={`${sidebarOpen} ? ${styles.sidebarOpen} : "" `} />
-                    <span className={`${styles.logo} ${styles.navLogo}`}><Link href="/">CodingLab</Link></span>
+                    <span className={`${styles.logo} ${styles.navLogo}`}><Link href="/">Hotel Logo</Link></span>
                     <div className={styles.menu}>
                         <div className={styles.logo_toggle}>
-                            <span className={styles.logo}><Link href="/">CodingLab</Link></span>
+                            <span className={styles.logo}><Link href="/">Hotel Logo</Link></span>
                             <BiX color="white" size={30} onClick={closeSidebar} style={{ cursor: 'pointer' }} />
                         </div>
                         <ul className={styles.nav_links}>
