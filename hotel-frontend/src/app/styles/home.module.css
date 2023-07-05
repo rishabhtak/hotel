@@ -1,0 +1,28 @@
+.card {
+    width: 100%;
+}
+
+.cardImage {
+    position: relative;
+    overflow: hidden;
+
+}
+
+.cardImage img {
+
+    width: 100%;
+    transition: all 0.5s ease-in-out;
+}
+
+
+
+.cardImage img:hover {
+    transform: scale(1.1);
+
+}
+
+.blogContent {
+    background-color: #a98a5c;
+    color: white;
+    padding: 2rem;
+}

@@ -1,9 +1,11 @@
+'use client'
 import './globals.css'
 import Navbar from './components/Navbar'
-import { Mulish } from 'next/font/google'
+import { Roboto } from 'next/font/google'
 
-const mulish = Mulish({
-  weight: ['300', '400', '500', '600', '700', '800', '900'],
+
+const roboto = Roboto({
+  weight: ['300', '400', '500', '700', '900'],
   subsets: ['latin'],
   display: 'swap'
 })
@@ -16,10 +18,11 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={mulish.className}>
-        <Navbar />
-        {children}
-      </body>
-    </html>
+  
+        <body className={roboto.className}>
+          <Navbar />
+          {children}
+    </body>
+    </html >
   )
 }

@@ -1,13 +1,10 @@
 'use client'
 
-import React, { useRef, useState } from 'react';
 import Image from 'next/image';
 // Import Swiper React components
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { EffectFade } from 'swiper/modules';
-import ReactGlTransitionImage, {
-    blurTransition
-} from 'react-gl-transition-image';
+
 
 // Import Swiper styles
 import 'swiper/css';
@@ -23,12 +20,11 @@ import { Autoplay, Navigation } from 'swiper/modules';
 import Link from 'next/link';
 
 export default function Slider() {
-    const imgSrc = '/slider1.jpg';
     return (
         <>
             <Swiper
                 autoplay={{
-                    delay: 2500,
+                    delay: 3500,
                     disableOnInteraction: false,
                 }}
                 navigation={true}
@@ -37,16 +33,13 @@ export default function Slider() {
                 modules={[EffectFade, Navigation, Autoplay]}>
                 <SwiperSlide>
                     <div className={styles.slideItem}>
-                        <ReactGlTransitionImage
-                            src='/slider1.jpg'
-                            transition={blurTransition}
-                            progress={1}
-                        />
+                        <Image src="/slider1.jpg" alt="slider1" width={1900} height={1200} />
                         <div className={styles.slideCaption}>
-                            <h1>Unforgettable luxury awaits you</h1>
+                            <h1>Elegant escape, timeless luxury awaits</h1>
                         </div>
                         <Link href='/' className={styles.slideButton}>Book Now</Link>
                     </div>
+
                 </SwiperSlide>
                 <SwiperSlide>
                     <div className={styles.slideItem}>

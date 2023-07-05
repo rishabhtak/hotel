@@ -34,7 +34,15 @@ a {
   object-fit: cover;
 }
 
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+
 @media only screen and (max-width: 768px) {
+
   .swiper-button-prev,
   .swiper-button-next {
     display: none !important;
