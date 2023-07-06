@@ -1,0 +1,70 @@
+/* proffesional section */
+
+.main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 50px;
+    font-family: 'Roboto', sans-serif;
+}
+
+.card {
+    width: 20rem;
+    height: 25rem;
+    border-radius: 10px;
+    overflow: hidden;
+    cursor: pointer;
+    position: relative;
+    color: #f0f0f0;
+    box-shadow: 0 10px 30px 5px rgba(0, 0, 0, 0.2);
+}
+
+.image {
+    position: absolute;
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    opacity: 0.9;
+    transition: opacity 0.2s ease-out;
+}
+
+.title {
+    position: absolute;
+    inset: auto auto 30px 90px;
+    margin: 0;
+    transition: inset 0.3s 0.3s ease-out;
+    font-size: 1.5rem;
+    color:black;
+    font-weight: normal;
+    text-transform: uppercase;
+}
+
+
+.content {
+    position: absolute;
+    opacity: 0;
+    max-width: 80%;
+    transition: opacity 0.3s ease-out;
+    color: rgb(114, 92, 92);
+    inset: auto auto 50px 100px;
+}
+
+
+
+.card:hover .title {
+    inset: auto auto 130px 90px;
+    transition: inset 0.3s ease-out;
+}
+
+.card:hover .content {
+    opacity: 1;
+    transition: opacity 0.5s 0.1s ease-in;
+}
+
+.card:hover .image {
+    transition: opacity 0.3s ease-in;
+    opacity: 1;
+}

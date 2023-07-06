@@ -104,7 +104,7 @@
     }
 
     .menu .logo_toggle{
-        display: block;
+      /*  display: block; */
         width: 100%;
         display: flex;
         align-items: center;

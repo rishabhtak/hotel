@@ -2,23 +2,58 @@
 
 import SwiperSlide from "@/app/components/SwiperSlide"
 import Image from "next/image"
-import { Button, Grid, Stack, Box, Typography, styled } from "@mui/material";
+import { Grid, Box, Typography, styled, Divider } from "@mui/material";
 import styles from '@/app/styles/home.module.css'
+import cards from '@/app/styles/card.module.scss'
+import CountUp from 'react-countup';
+import { Facebook, Instagram, LinkedIn, Spa, FoodBank } from '@mui/icons-material';
 
-
-const Root = styled('div')(({ theme }) => ({
+const About = styled('div')(({ theme }) => ({
   padding: theme.spacing(7),
   [theme.breakpoints.down('sm')]: {
     padding: theme.spacing(2),
   },
 }));
+const Counter = styled('div')(({ theme }) => ({
+  margin: theme.spacing(5),
+  [theme.breakpoints.down('sm')]: {
+    margin: theme.spacing(1),
+  },
+}));
 export default function Home() {
+  const counterData = [{
+    "counternum": 1,
+    "countup": {
+      "start": 0,
+      "end": 5,
+    },
+    "label": 'years of',
+    "desc": "experience"
+  },
+  {
+    "counternum": 2,
+    "countup": {
+      "start": 0,
+      "end": 25,
+    },
+    "label": 'rooms at',
+    "desc": "luxury"
+  },
+  {
+    "counternum": 3,
+    "countup": {
+      "start": 0,
+      "end": 15,
+    },
+    "label": 'teams of',
+    "desc": "Professionals"
+  }]
 
   return (
     <>
 
       <SwiperSlide />
-      <Root>
+      <About>
         <Grid container spacing={3}>
           <Grid item xs={12} sm={6} mt={5}>
             <Typography variant="h2" style={{ fontSize: '3.2rem' }}>Welcome To Hotel!</Typography>
@@ -29,16 +64,27 @@ export default function Home() {
             <Image src='/about.webp' alt="about" height={600} width={450} style={{ float: 'right', border: '0.8rem solid white', boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)' }} />
           </Grid>
         </Grid>
-      </Root>
-      <Grid container>
+      </About>
+      <Grid container mt={5}>
         <Grid item xs={12} sm={6} lg={4}>
           <div className={styles.card}>
             <div className={styles.cardImage}>
               <Image src='/palace.webp' alt="palace" height={400} width={600} />
             </div>
             <div className={styles.blogContent}>
-              <span>icon</span>
-              <span>Food</span>
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  '& hr': {
+                    mx: 8,
+                  },
+                }}
+              >
+                <FoodBank style={{ fontSize: '3rem' }} />
+                <Divider orientation="vertical" flexItem />
+                <span style={{ fontSize: '2rem' }}>Food</span>
+              </Box>
             </div>
           </div>
         </Grid>
@@ -48,8 +94,19 @@ export default function Home() {
               <Image src='/swimming.webp' alt="palace" height={400} width={600} />
             </div>
             <div className={styles.blogContent}>
-              <span>icon</span>
-              <span>Food</span>
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  '& hr': {
+                    mx: 8,
+                  },
+                }}
+              >
+                <Spa style={{ fontSize: '3rem' }} />
+                <Divider orientation="vertical" flexItem />
+                <span style={{ fontSize: '2rem' }}>Relax</span>
+              </Box>
             </div>
           </div>
         </Grid>
@@ -59,8 +116,107 @@ export default function Home() {
               <Image src='/palace.webp' alt="palace" height={400} width={600} />
             </div>
             <div className={styles.blogContent}>
-              <span>icon</span>
-              <span>Food</span>
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  '& hr': {
+                    mx: 8,
+                  },
+                }}
+              >
+                <FoodBank style={{ fontSize: '3rem' }} />
+                <Divider orientation="vertical" flexItem />
+                <span style={{ fontSize: '2rem' }}>Food</span>
+              </Box>
+            </div>
+          </div>
+        </Grid>
+      </Grid >
+      <Counter>
+        <Grid container spacing={2}>
+          {counterData.map((element, index) => {
+            return <Grid key={element.counternum} item xs={12} sm={6} lg={4}>
+              <div className={styles.counter}>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    '& hr': {
+                      mx: 8,
+                    },
+                  }}
+                >
+                  <CountUp className={styles.countUp} start={element.countup.start} end={element.countup.end} duration={5} />
+                  <div className={styles.counterContent}>
+                    <div className={styles.label}>{element.label}</div>
+                    <div className={styles.desc}>{element.desc}</div>
+                  </div>
+                  {index !== 2 ? <Divider orientation="vertical" flexItem /> : ""}
+                </Box>
+              </div>
+            </Grid>
+          })}
+        </Grid>
+      </Counter>
+      <div className={styles.dividerMain}>
+        <div className={styles.divider}>
+          <span className={styles.dividerTitle}>OUR PROFESSIONALS</span>
+        </div>
+        <div className={styles.dividerText}>Meet Our Amazing Team</div>
+      </div>
+      <Grid container spacing={2}>
+        <Grid item xs={12} sm={6} lg={4}>
+          <div className={cards.main}>
+            <div className={cards.card}>
+              <Image style={cards.image} src='/photo1.jpg' width={340} height={340} alt='photo1' />
+              <div>
+                <div className={cards.title}>
+                  John Doe
+                  <div style={{ fontSize: "1rem", textAlign: 'center' }}>CEO</div>
+                </div>
+                <p className={cards.content}>
+                  <Facebook style={{ marginRight: '1rem' }} />
+                  <Instagram style={{ marginRight: '1rem' }} />
+                  <LinkedIn />
+                </p>
+              </div>
+            </div>
+          </div>
+        </Grid>
+        <Grid item xs={12} sm={6} lg={4}>
+          <div className={cards.main}>
+            <div className={cards.card}>
+              <Image style={cards.image} src='/photo1.jpg' width={340} height={340} alt='photo1' />
+              <div>
+                <div className={cards.title}>
+                  John Doe
+                  <div style={{ fontSize: "1rem", textAlign: 'center' }}>CEO</div>
+                </div>
+                <p className={cards.content}>
+                  <Facebook style={{ marginRight: '1rem' }} />
+                  <Instagram style={{ marginRight: '1rem' }} />
+                  <LinkedIn />
+                </p>
+              </div>
+            </div>
+          </div>
+        </Grid>
+        <Grid item xs={12} sm={6} lg={4}>
+          <div className={cards.main}>
+            <div className={cards.card}>
+              <Image style={cards.image} src='/photo1.jpg' width={340} height={340} alt='photo1' />
+              <div>
+                <div className={cards.title}>
+                  John Doe
+                  <div style={{ fontSize: "1rem", textAlign: 'center' }}>CEO</div>
+                </div>
+                <p className={cards.content}>
+                  <Facebook style={{ marginRight: '1rem' }} />
+                  <Instagram style={{ marginRight: '1rem' }} />
+                  <LinkedIn />
+                </p>
+              </div>
             </div>
           </div>
         </Grid>

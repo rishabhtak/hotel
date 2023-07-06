@@ -1,3 +1,4 @@
+/* Home service section */
 .card {
     width: 100%;
 }
@@ -5,24 +6,107 @@
 .cardImage {
     position: relative;
     overflow: hidden;
-
 }
 
 .cardImage img {
-
     width: 100%;
     transition: all 0.5s ease-in-out;
 }
 
-
-
 .cardImage img:hover {
     transform: scale(1.1);
-
 }
 
 .blogContent {
     background-color: #a98a5c;
     color: white;
-    padding: 2rem;
+    padding: 1rem;
+    border-right: 1px solid #7f6033;
+}
+
+/* Counters */
+
+.counter {
+    display: table;
+}
+
+.countUp {
+    font-size: 5rem;
+    color: #a98a5c;
+    font-weight: 600;
+    margin-right: 1.5rem;
+}
+
+.counterContent {
+    display: table-cell;
+    vertical-align: middle;
+    text-transform: capitalize;
+}
+
+.label {
+    color: #191919;
+    font-size: 1rem;
+    font-weight: 600;
+    padding-bottom: 5px;
+}
+
+.desc {
+    color: #191919;
+    font-size: 2rem;
+    font-family: Cormorant Garamond;
+}
+
+
+/* custom divider */
+
+.dividerMain {
+    text-align: center;
+    margin-top: 5rem;
+}
+
+.divider {
+    display: inline-block;
+    background: 0 0;
+    z-index: 1;
+    position: relative;
+    padding: 0 20px;
+    margin-bottom: 15px;
+}
+
+.divider:before {
+    left: -100px;
+}
+
+.divider:after {
+    right: -100px;
+}
+
+.divider:after,
+.divider:before {
+    position: absolute;
+    width: 100px;
+    height: 1px;
+    background: #333;
+    content: "";
+    top: 50%;
+}
+
+.dividerTitle {
+    font-size: 1.5rem;
+}
+
+.dividerText {
+    font-size: 3rem;
+}
+
+
+@media only screen and (max-width: 768px) {
+
+    .dividerTitle {
+        font-size: 1rem;
+    }
+
+    .dividerText {
+        font-size: 1.5rem;
+    }
 }
