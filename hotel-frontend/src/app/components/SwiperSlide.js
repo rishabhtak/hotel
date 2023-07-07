@@ -37,7 +37,7 @@ export default function Slider() {
                         <div className={styles.slideCaption}>
                             <h1>Elegant escape, timeless luxury awaits</h1>
                         </div>
-                        <Link href='/' className={styles.slideButton}>Book Now</Link>
+                        <Link href='/' className="styleButton">Book Now</Link>
                     </div>
 
                 </SwiperSlide>
@@ -47,7 +47,7 @@ export default function Slider() {
                         <div className={styles.slideCaption}>
                             <h1>Elegant escape, timeless luxury awaits</h1>
                         </div>
-                        <Link href='/' className={styles.slideButton}>Book Now</Link>
+                        <Link href='/' className="styleButton">Book Now</Link>
                     </div>
 
                 </SwiperSlide>
@@ -57,7 +57,7 @@ export default function Slider() {
                         <div className={styles.slideCaption}>
                             <h1>Elevated elegance awaits your arrival</h1>
                         </div>
-                        <Link href='/' className={styles.slideButton}>Book Now</Link>
+                        <Link href='/' className="styleButton">Book Now</Link>
                     </div>
                 </SwiperSlide>
             </Swiper>
