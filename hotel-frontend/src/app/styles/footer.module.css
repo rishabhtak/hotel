@@ -23,10 +23,12 @@
     margin-bottom: 10px;
 }
 
+.footer ul li,
 .footer ul li a {
-    font-size: 14px;
+    font-size: 1rem;
     color: #fff;
     transition: all .3s;
+    letter-spacing: 1px;
 }
 
 .footer ul li a:hover {
@@ -35,8 +37,8 @@
 
 .footer h4 {
     letter-spacing: 0.5px;
-    font-size: 16px;
-    color: #fff;
+    font-size: 1.5rem;
+    color: #888a5b;
     font-weight: 700;
     margin-bottom: 20px;
 }
@@ -50,7 +52,7 @@
 
 .footer .underFooterContainer {
     position: relative;
-    width:100%;
+    width: 100%;
     padding-right: 15px;
 }
 
@@ -84,19 +86,19 @@
 
 @media (min-width: 576px) {
     .footerContainer {
-        max-width:540px;
+        max-width: 540px;
     }
 }
 
 @media (min-width: 768px) {
     .footerContainer {
-        max-width:720px;
+        max-width: 720px;
     }
 }
 
 @media (min-width: 992px) {
     .footerContainer {
-        max-width:960px;
+        max-width: 960px;
     }
 }
 
