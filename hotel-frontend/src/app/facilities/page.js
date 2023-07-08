@@ -8,7 +8,7 @@ function Facilities() {
 
   return (
     <>
-      <SimpleBackground />
+      <SimpleBackground text="our facilities" imgLink="/slider3.jpg" />
       <Grid container>
         <Grid item sm={6} md={6} lg={4}>
           <div className={styles.card}>
