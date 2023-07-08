@@ -11,7 +11,7 @@ const Footer = () => {
         <>
             <div className={styles.footer}>
                 <Grid container className={styles.footerContainer}>
-                    <Grid xs={12} sm={6} md={6} lg={4} style={{ marginBottom: '1rem' }}>
+                    <Grid item sm={12} md={6} lg={4} style={{ marginBottom: '1rem' }}>
                         <div className={styles.logo} style={{ color: 'white', fontSize: '2rem' }}>
                             Hotel Logo
                         </div>
@@ -21,7 +21,7 @@ const Footer = () => {
                             <li><Link href="tel:9876543210">+91-9876543210</Link></li>
                         </ul>
                     </Grid>
-                    <Grid xs={12} sm={6} md={6} lg={4} style={{ marginBottom: '1rem' }}>
+                    <Grid item sm={12} md={6} lg={4} style={{ marginBottom: '1rem' }}>
                         <h4>Useful Links</h4>
                         <ul>
                             <li><Link href="/">Home</Link></li>
@@ -30,7 +30,7 @@ const Footer = () => {
                             <li><Link href="/">Contact Us</Link></li>
                         </ul>
                     </Grid>
-                    <Grid xs={12} sm={6} md={6} lg={4}>
+                    <Grid item sm={12} md={6} lg={4}>
                         <h4>Help &amp; Information</h4>
                         <ul>
                             <li><Link href="/">Help</Link></li>
@@ -39,7 +39,7 @@ const Footer = () => {
                             <li><Link href="/">Tracking ID</Link></li>
                         </ul>
                     </Grid>
-                    <Grid lg={12} className={styles.underFooterContainer}>
+                    <Grid item lg={12} className={styles.underFooterContainer}>
                         <div className={styles.underFooter}>
                             <p>Copyright © 2023 Rishabh Tak. All Rights Reserved.
                             </p>

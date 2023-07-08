@@ -48,7 +48,7 @@ export default function Home() {
     },
     "label": 'teams of',
     "desc": "Professionals"
-  }]
+  }];
 
   return (
     <>
@@ -189,7 +189,7 @@ export default function Home() {
         })}
       </Grid>
       <Grid container className={styles.BookingMain}>
-        <Image src='/booking.webp' alt="booking" width={1200} height={800} className={styles.bookingImage}/>
+        <Image src='/booking.webp' alt="booking" width={1200} height={800} className={styles.bookingImage} />
         <div className={styles.dividerMain} style={{ position: 'absolute', color: 'white' }}>
           <div className={styles.divider}>
             <span className={styles.dividerTitle}>Book Directly</span>
