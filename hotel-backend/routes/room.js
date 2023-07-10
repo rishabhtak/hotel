@@ -15,7 +15,6 @@ router.post('/addroom', adminVerify,
         body('description').isLength({ min: 5 }),
     ],
     async (req, res) => {
-        let success = false;
         try {
             const { type, price, size, capacity, description } = req.body;
             //validation result
@@ -27,8 +26,7 @@ router.post('/addroom', adminVerify,
             //add room
             const rooms = new Room({ type, price, size, capacity, description })
             const saveRoom = await rooms.save();
-            success = true;
-            res.json({ success, saveRoom })
+            res.json({ message: "Room succesfully added", saveRoom })
         }
         catch (error) {
             res.status(500).send("Internal server error");
@@ -44,7 +42,7 @@ router.get('/getallrooms', async (req, res) => {
         let page = Number(req.query.page);
         let limit = Number(req.query.limit);
         let skip = (page - 1) * limit;
-       // let search = req.query.search
+        // let search = req.query.search
         const count = await Room.find({}).count()
         // const rooms = await Room.find({ type: { $regex: search } }).skip(skip).limit(limit);
         const rooms = await Room.find({}).skip(skip).limit(limit);
@@ -105,7 +103,6 @@ router.put('/updateroom/:id', adminVerify, [
 ],
     async (req, res) => {
         try {
-            let success = false;
             const { type, price, size, capacity, description } = req.body;
             //validation result
             const errors = validationResult(req);
@@ -128,8 +125,7 @@ router.put('/updateroom/:id', adminVerify, [
 
             //update room
             room = await Room.findByIdAndUpdate(req.params.id, { $set: newRoom }, { new: true })
-            success = true;
-            res.json({ success, room })
+            res.json({ message: "Room succesfully updated", room })
         }
         catch (error) {
             res.status(500).send("Internal server error");
@@ -142,8 +138,6 @@ router.put('/updateroom/:id', adminVerify, [
 router.delete('/deleteroom/:id', adminVerify,
     async (req, res) => {
         try {
-            let success = false;
-
             //find the room
             let room = await Room.findById(req.params.id);
             if (!room) { return res.status(404).send("Not Found") }
@@ -151,7 +145,7 @@ router.delete('/deleteroom/:id', adminVerify,
             //delete room
             room = await Room.findByIdAndDelete(req.params.id)
             success = true;
-            res.json({ success, room })
+            res.json({ message: "Room succesfully deleted", room })
         }
         catch (error) {
             res.status(500).send("Internal server error");

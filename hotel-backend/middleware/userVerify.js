@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 require('dotenv').config()
 
-const getuser = (req, res, next) => {
+const userVerify = (req, res, next) => {
     //get the user from jwt token and add id to req object
  
     try {
@@ -17,4 +17,4 @@ const getuser = (req, res, next) => {
     }
 }
 
-module.exports = getuser;
+module.exports = userVerify;

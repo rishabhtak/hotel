@@ -2,11 +2,11 @@ const express = require('express');
 const Booking = require('../models/Booking');
 const router = express.Router();
 const { body, validationResult } = require('express-validator');
-const bookingmiddle = require('../middleware/bookingmiddle');
+const bookingVerify = require('../middleware/bookingVerify');
 
 
 //Route 1:create a booking using:POST "/api/booking" .no login reqired
-router.post('/createbooking', bookingmiddle,
+router.post('/createbooking', bookingVerify,
     [
         body('name', "Enter a valid name").isLength({ min: 3 }),
         body('email', "Enter a valid email").isEmail(),
@@ -21,7 +21,6 @@ router.post('/createbooking', bookingmiddle,
         body('totalprice').not().isEmpty(),
     ],
     async (req, res) => {
-        let success = false;
         try {
 
             const { name, email, phone, specialrequest, roomsid, startdate, enddate, totalperson, roomtype, totalroom, totalprice } = req.body;
@@ -42,9 +41,7 @@ router.post('/createbooking', bookingmiddle,
                 const booking = new Booking({ name, email, phone, specialrequest, roomsid, startdate, enddate, totalperson, roomtype, totalroom, totalprice, user: req.user.id })
                 saveBooking = await booking.save();
             }
-
-            success = true;
-            res.json({ success, saveBooking })
+            res.json({ message: "Booking succesfully", saveBooking })
         }
         catch (error) {
             console.log(error)
@@ -55,7 +52,7 @@ router.post('/createbooking', bookingmiddle,
 
 //Route 2: get user room booking history if he have account using GET '/api/booking/getuserbooking'
 
-router.get('/getuserbooking', bookingmiddle,
+router.get('/getuserbooking', bookingVerify,
     async (req, res) => {
         try {
             let success = false;

@@ -4,7 +4,7 @@ const router = express.Router();
 const { body, validationResult } = require('express-validator');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const getuser = require('../middleware/getuser');
+const userVerify = require('../middleware/userVerify');
 
 
 require('dotenv').config()
@@ -19,7 +19,6 @@ router.post('/createuser',
     ],
     async (req, res) => {
         let success = false;
-
         try {
             //validation result
             const errors = validationResult(req);
@@ -105,7 +104,7 @@ router.post('/login',
 
 //Route 3: get loggedin user details. User Login required /api/auth/getuser
 
-router.get('/getuser', getuser,
+router.get('/getuser', userVerify,
     async (req, res) => {
         let success = false;
         try {

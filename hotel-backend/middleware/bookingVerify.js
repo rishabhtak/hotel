@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 require('dotenv').config()
 
-const bookingmiddle = (req, res, next) => {
+const bookingVerify = (req, res, next) => {
     //get the user from jwt token and add id to req object
 
     try {
@@ -22,4 +22,4 @@ const bookingmiddle = (req, res, next) => {
     }
 }
 
-module.exports = bookingmiddle;
+module.exports = bookingVerify;

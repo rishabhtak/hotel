@@ -18,18 +18,15 @@ router.post('/createadmin',
         body('password', "Enter atlease 5 charactors").isLength({ min: 5 }),
     ],
     async (req, res) => {
-        let success = false;
-
         try {
             const errors = validationResult(req);
             if (!errors.isEmpty()) {
                 return res.status(400).json({ message: "Validation Error", error: errors.array() })
             }
-
             //check whether the admin with this email alrady exists.
             let admin = await Admin.findOne({ email: req.body.email });
             if (admin) {
-                return res.status(400).json({ success, error: 'Sorry an admin with this email already exists ' });
+                return res.status(400).json({ error: 'Sorry an admin with this email already exists ' });
             }
 
             //adding security in password
@@ -51,7 +48,7 @@ router.post('/createadmin',
             // add jwt token with admin id
             const authToken = jwt.sign(data, process.env.JWT_SECRET);
             success = true;
-            res.json({ success, authToken })
+            res.json({ message: "Admin succesfully created", authToken })
         }
         catch (error) {
             res.status(500).send("Internal server error");
@@ -68,7 +65,6 @@ router.post('/login',
     ],
     async (req, res) => {
         let success = false;
-
         try {
             const errors = validationResult(req);
             if (!errors.isEmpty()) {
