@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 require('dotenv').config()
 
-const adminmiddle = (req, res, next) => {
+const adminVerify = (req, res, next) => {
     //get all the users for admin access
  
     try {
@@ -17,4 +17,4 @@ const adminmiddle = (req, res, next) => {
     }
 }
 
-module.exports = adminmiddle;
+module.exports = adminVerify;

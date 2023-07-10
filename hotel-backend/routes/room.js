@@ -3,10 +3,10 @@ const Room = require('../models/Room');
 const Booking = require('../models/Booking');
 const router = express.Router();
 const { body, validationResult } = require('express-validator');
-const adminmiddle = require('../middleware/adminmiddle');
+const adminVerify = require('../middleware/adminVerify');
 
 //Route 1:add a room using:POST "/api/rooms" .admin login reqired
-router.post('/addroom', adminmiddle,
+router.post('/addroom', adminVerify,
     [
         body('type', "Enter a valid type").isLength({ min: 3 }),
         body('price', "Enter a valid price").isInt(),
@@ -96,7 +96,7 @@ router.post('/getavailableroom', async (req, res) => {
 
 //Route 4: update room details using PUT '/api/room/updateroom' Admin Login required
 
-router.put('/updateroom/:id', adminmiddle, [
+router.put('/updateroom/:id', adminVerify, [
     body('type', "Enter a valid type").isLength({ min: 3 }),
     body('price', "Enter a valid price").isInt(),
     body('size'),
@@ -139,7 +139,7 @@ router.put('/updateroom/:id', adminmiddle, [
 
 //Route 5: delete notes using DELETE '/api/notes/deletenote' Login required
 
-router.delete('/deleteroom/:id', adminmiddle,
+router.delete('/deleteroom/:id', adminVerify,
     async (req, res) => {
         try {
             let success = false;

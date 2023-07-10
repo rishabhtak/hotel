@@ -6,7 +6,7 @@ const { body, validationResult } = require('express-validator');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 require('dotenv').config()
-const adminmiddle = require('../middleware/adminmiddle');
+const adminVerify = require('../middleware/adminVerify');
 const Booking = require('../models/Booking');
 
 
@@ -104,7 +104,7 @@ router.post('/login',
 
 //Route 3: get all user details. login admin required /api/admin/getallusers
 
-router.get('/getallusers', adminmiddle,
+router.get('/getallusers', adminVerify,
     async (req, res) => {
         let success = false;
         try {
@@ -132,7 +132,7 @@ router.get('/getallusers', adminmiddle,
 
 //Route 4: get all bookings using GET '/admin/getallbooking'
 
-router.get('/getallbookings', adminmiddle,
+router.get('/getallbookings', adminVerify,
     async (req, res) => {
         try {
             const adminId = req.admin.id;
@@ -150,7 +150,7 @@ router.get('/getallbookings', adminmiddle,
     })
 
 //Route 4: get loggedin admin details. Admin Login required /api/admin/getadmin
-router.get('/getadmin', adminmiddle,
+router.get('/getadmin', adminVerify,
     async (req, res) => {
         let success = false;
         try {
