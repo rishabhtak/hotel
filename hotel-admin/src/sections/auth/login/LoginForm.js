@@ -23,14 +23,7 @@ export default function LoginForm() {
   const navigate = useNavigate();
   const dispatch = useDispatch()
 
-  useEffect(() => {
-    if (localStorage.getItem('adminToken')) {
-      navigate('/admin/booking')
-    }
-    else {
-      navigate('/login')
-    }
-  }, [])
+
 
   const [showPassword, setShowPassword] = useState(false);
   const [credentials, setcredentials] = useState({ email: "", password: "" })
@@ -41,11 +34,18 @@ export default function LoginForm() {
     validationSchema: loginModelSchema,
     onSubmit: (value, action) => {
       dispatch(login(value))
-        .unwrap()
-        .then(() => navigate("/admin/booking"))
-
     },
   })
+
+  const { admin, success, loading, error } = useSelector(state => state.admin);
+
+  useEffect(() => {
+    if (success) {
+      navigate("/admin/booking");
+    } else {
+      navigate("/login");
+    }
+  }, [error, admin, success, loading]);
 
   return (
     <>

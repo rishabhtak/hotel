@@ -29,13 +29,13 @@ const MENU_OPTIONS = [
 export default function AccountPopover() {
   const dispatch = useDispatch();
 
+  const { admin } = useSelector(state => state.admin);
+  const navigate = useNavigate();
+
   useEffect(() => {
     dispatch(getAdmin());
     // eslint-disable-next-line
   }, []);
-
-  const { admin } = useSelector(state => state.admin);
-  const navigate = useNavigate();
 
   const [open, setOpen] = useState(null);
 

@@ -24,7 +24,7 @@ import {
     TablePagination,
 } from '@mui/material';
 
-import { getRooms } from '../features/room/roomSlice';
+import { getRoomDetail } from '../features/roomDetail/roomDetailSlice';
 import { setOpenModel, setDialogOpen } from '../features/model/modelSlice';
 
 
@@ -34,7 +34,7 @@ import Scrollbar from '../components/scrollbar';
 import DeleteDialogBox from '../utils/DeleteDialogBox';
 
 // sections
-import { RoomModel, RoomListToolbar, RoomListHead, RoomListBody } from '../sections/@dashboard/room';
+import { RoomDetailModel, RoomDetailListToolbar, RoomDetailListHead, RoomDetailListBody } from '../sections/@dashboard/roomdetail';
 
 
 
@@ -44,11 +44,9 @@ import { RoomModel, RoomListToolbar, RoomListHead, RoomListBody } from '../secti
 
 const TABLE_HEAD = [
     { id: 'sno', label: 'S.No.', alignRight: false },
-    { id: 'type', label: 'Room Type', alignRight: false },
-    { id: 'size', label: 'Size', alignRight: false },
-    { id: 'capacity', label: 'Capacity', alignRight: false },
-    { id: 'price', label: 'Price', alignRight: false },
-    { id: 'description', label: 'Description', alignRight: false },
+    { id: 'roomType', label: 'Room Type', alignRight: false },
+    { id: 'features', label: 'Features', alignRight: false },
+    { id: 'description', label: 'description', alignRight: false },
     { id: '' },
 ];
 
@@ -80,14 +78,14 @@ function applySortFilter(array, comparator, query) {
         return a[1] - b[1];
     });
     if (query) {
-        return filter(array, (_room) => _room.type.toLowerCase().indexOf(query.toLowerCase()) !== -1);
+        return filter(array, (_roomDetail) => _roomDetail.roomType.toLowerCase().indexOf(query.toLowerCase()) !== -1);
     }
     return stabilizedThis.map((el) => el[0]);
 }
 
 
 
-export default function RoomPage() {
+export default function RoomDetailPage() {
     const navigate = useNavigate();
 
     const override = {
@@ -99,19 +97,12 @@ export default function RoomPage() {
     }
 
     const dispatch = useDispatch();
-    const { rooms, loading, error, count } = useSelector(state => state.rooms);
-    // const { modelOpen } = useSelector(state => state.setModel)
+    const { roomDetail, loading, error } = useSelector(state => state.roomDetail);
 
     useEffect(() => {
-        if (localStorage.getItem('adminToken')) {
-            dispatch(getRooms({
-                page: 1,
-                limit: 5
-            }));
-        }
-        else {
-            navigate('/login')
-        }
+        dispatch(getRoomDetail());
+
+
         // eslint-disable-next-line
     }, []);
 
@@ -121,41 +112,36 @@ export default function RoomPage() {
     const [filterName, setFilterName] = useState('');
     const [rowsPerPage, setRowsPerPage] = useState(5);
     const [actionType, setActionType] = useState("");
-    const [currentRoom, setCurrentRoom] = useState(null)
+    const [currentRoomDetail, setCurrentRoomDetail] = useState(null)
     const [id, setId] = useState(null)
 
-  
+    let roomTypeArray = [];
+
+    if (roomDetail && roomDetail.length > 0) {
+        roomTypeArray = roomDetail.map((element, index) => {
+            return element.roomType
+        })
+    }
+
     const handleChangePage = (event, newPage) => {
-        dispatch(getRooms({
-            page: newPage + 1,
-            limit: rowsPerPage
-        }));
         setPage(newPage);
-
     };
-
     const handleChangeRowsPerPage = (event) => {
-        const limit = event.target.value
-        dispatch(getRooms({
-            page: 1,
-            limit
-
-        }));
         setPage(0);
-        setRowsPerPage(limit, 10);
+        setRowsPerPage(parseInt(event.target.value, 10));
     };
 
 
-    const filteredRoom = applySortFilter(rooms, getComparator(order, orderBy), filterName);
+    const filteredRoomDetail = applySortFilter(roomDetail, getComparator(order, orderBy), filterName);
 
-    const isNotFound = !filteredRoom.length && !!filterName;
+    const isNotFound = !filteredRoomDetail.length && !!filterName;
 
     const handleModelOpen = useCallback(() => dispatch(setOpenModel(true)), [dispatch]);
 
 
-    const handleEdit = useCallback((room) => {
+    const handleEdit = useCallback((roomDetail) => {
         setActionType("Update")
-        setCurrentRoom(room)
+        setCurrentRoomDetail(roomDetail)
         handleModelOpen()
     }, [])
 
@@ -165,9 +151,9 @@ export default function RoomPage() {
     }, [])
 
 
-    const handleAddRoom = useCallback(() => {
+    const handleAddRoomDetail = useCallback(() => {
         setActionType("Add")
-        setCurrentRoom(null)
+        setCurrentRoomDetail(null)
         handleModelOpen()
     }, [])
 
@@ -179,7 +165,6 @@ export default function RoomPage() {
 
     const handleFilterByName = useCallback((event) => {
         setPage(0);
-        //  dispatch(getRooms(query))
         setFilterName(event.target.value);
     }, []);
 
@@ -187,28 +172,28 @@ export default function RoomPage() {
     return (
         <>
             <Helmet>
-                <title>Room</title>
+                <title>Room Detail</title>
             </Helmet>
             <Container>
 
                 <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
                     <Typography variant="h4" gutterBottom>
-                        Room
+                        Room Detail
                     </Typography>
-                    <Button variant="contained" onClick={handleAddRoom}
+                    <Button variant="contained" onClick={handleAddRoomDetail}
                         startIcon={<Iconify icon="eva:plus-fill" />}>
-                        Add Room
+                        Add Room Detail
                     </Button>
                 </Stack>
-                {loading ? <PuffLoader cssOverride={override} /> : <><RoomModel actionType={actionType} currentRoom={currentRoom} />
-                    <DeleteDialogBox id={id} type="room"/>
+                {loading ? <PuffLoader cssOverride={override} /> : <><RoomDetailModel actionType={actionType} currentRoomDetail={currentRoomDetail} roomTypeArray={roomTypeArray} />
+                    <DeleteDialogBox id={id} type="room detail" />
                     <Card>
-                        <RoomListToolbar filterName={filterName} onFilterName={handleFilterByName} />
+                        <RoomDetailListToolbar filterName={filterName} onFilterName={handleFilterByName} />
 
                         <Scrollbar>
                             <TableContainer sx={{ minWidth: 800 }} component={Paper}>
                                 <Table aria-label="collapsible table">
-                                    <RoomListHead
+                                    <RoomDetailListHead
                                         order={order}
                                         orderBy={orderBy}
                                         headLabel={TABLE_HEAD}
@@ -217,14 +202,14 @@ export default function RoomPage() {
                                     <TableBody>
                                         {error ? <TableRow style={{ height: 53 }}>
                                             <TableCell colSpan={7} align='center'>Sorry, Some Error Occurred Please Try after Some Time</TableCell>
-                                        </TableRow> : rooms.length === 0 ? (
+                                        </TableRow> : roomDetail.length === 0 ? (
                                             <TableRow style={{ height: 53 }}>
                                                 <TableCell colSpan={7} align='center'>No Data Available</TableCell>
                                             </TableRow>
                                         ) :
-                                            filteredRoom.map((room, index) => {
+                                            filteredRoomDetail.map((roomDetail, index) => {
                                                 return (
-                                                    <RoomListBody room={room} sno={index + 1} key={room._id} handleEdit={handleEdit} handleDelete={handleDelete} />
+                                                    <RoomDetailListBody roomDetail={roomDetail} sno={index + 1} key={roomDetail._id} handleEdit={handleEdit} handleDelete={handleDelete} />
                                                 );
                                             })
                                         }
@@ -262,7 +247,7 @@ export default function RoomPage() {
                         <TablePagination
                             rowsPerPageOptions={[5, 10, 25]}
                             component="div"
-                            count={count}
+                            count={roomDetail.length}
                             rowsPerPage={rowsPerPage}
                             page={page}
                             onPageChange={handleChangePage}

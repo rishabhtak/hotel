@@ -7,6 +7,7 @@ import LoginPage from './pages/LoginPage';
 import Page404 from './pages/Page404';
 import Room from './pages/Room';
 import User from './pages/User';
+import RoomDetail from './pages/RoomDetail';
 
 // ----------------------------------------------------------------------
 
@@ -21,6 +22,7 @@ export default function Router() {
         { element: <Navigate to="/admin/booking" />, index: true },
         { path: 'booking', element: <Booking /> },
         { path: 'room', element: <Room /> },
+        { path: 'roomdetail', element: <RoomDetail /> },
         { path: 'user', element: <User /> },
       ],
     },

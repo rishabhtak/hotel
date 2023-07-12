@@ -8,7 +8,7 @@ const { roomImgResize, uploadPhoto } = require("../middleware/uploadImage");
 const adminVerify = require('../middleware/adminVerify');
 
 
-router.post('/addRoomDetail', adminVerify,
+router.post('/addroomdetail', adminVerify,
     uploadPhoto.array("images", 4),
     roomImgResize,
     [
@@ -125,14 +125,14 @@ router.delete('/deleteroomdetail/:id', adminVerify,
     })
 
 // get room details
-router.get('/getRoomDetails', async (req, res) => {
+router.get('/getRoomDetail', async (req, res) => {
     try {
-        const rooms = await RoomDetail.find({});
-        if (rooms.length > 0) {
-            res.json({ rooms })
+        const roomDetail = await RoomDetail.find({});
+        if (roomDetail.length > 0) {
+            res.json({ roomDetail })
         }
         else {
-            res.json({ message: "No room detail available", rooms })
+            res.json({ message: "No room detail available", roomDetail })
         }
 
     }

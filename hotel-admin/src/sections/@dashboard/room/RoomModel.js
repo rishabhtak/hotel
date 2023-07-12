@@ -65,7 +65,7 @@ function RoomModel({ actionType, currentRoom }) {
 
 
     const { values, errors, handleBlur, handleChange, handleSubmit, touched } = useFormik({
-        enableReinitialize: true,
+        enableReinitialize: actionType === "Update",
         initialValues: room,
         validationSchema: roomModelSchema,
         onSubmit: (value, action) => {

@@ -2,11 +2,15 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { sendMessage, deleteAlert } from '../alert/alertSlice'
 
 const host = process.env.REACT_APP_HOST;
+const getAdminfromLocalStorage = localStorage.getItem('adminToken')
+    ? localStorage.getItem('adminToken')
+    : null;
 
 const initialState = {
-    userToken: null,
+    adminToken: getAdminfromLocalStorage,
     loading: false,
     error: false,
+    success: false,
     admin: {}
 }
 
@@ -32,9 +36,8 @@ export const login = createAsyncThunk(
                 type: "error"
             }))
             thunkAPI.dispatch(deleteAlert());
-            return adminLogin
+            return thunkAPI.rejectWithValue(adminLogin.error)
         } catch (error) {
-            console.error(error)
             thunkAPI.dispatch(sendMessage({
                 message: "something went wrong,Please try again later",
                 type: "error"
@@ -80,14 +83,14 @@ export const authSlice = createSlice({
                 state.loading = true
             })
             .addCase(login.fulfilled, (state, { payload }) => {
-                console.log(payload)
                 state.loading = false
-                //  state.userToken = payload.authToken
-                // localStorage.setItem('adminToken', payload.authToken);
+                state.adminToken = payload.authToken
+                state.success = payload.success
             })
             .addCase(login.rejected, (state) => {
                 state.loading = false
                 state.error = true
+                state.success = false
             })
             .addCase(getAdmin.pending, (state) => {
                 state.loading = true

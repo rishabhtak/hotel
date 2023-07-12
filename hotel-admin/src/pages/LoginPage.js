@@ -43,8 +43,6 @@ const StyledContent = styled('div')(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 export default function LoginPage() {
- // const alert = useSelector(state => state.alerts);
-
   const mdUp = useResponsive('up', 'md');
 
   return (
