@@ -1,5 +1,6 @@
 import * as Yup from 'yup'
 
+
 export const roomModelSchema = Yup.object().shape({
     type: Yup.string().min(3, "Please enter minimum 3 characters").required("Please enter a room type"),
     description: Yup.string().min(5, "Please enter minimum 5 characters").required("Please enter a room description"),
@@ -13,7 +14,3 @@ export const loginModelSchema = Yup.object().shape({
     password: Yup.string().required("Please enter a password")
 })
 
-
-export const roomDetailModelSchema = Yup.object().shape({
-    roomType: Yup.string().min(3, "Please enter minimum 3 characters").required("Please enter a room type"),
-})

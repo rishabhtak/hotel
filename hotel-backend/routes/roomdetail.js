@@ -14,7 +14,7 @@ router.post('/addroomdetail', adminVerify,
     [
         body('roomType', "Please enter atleast 3 letters").isLength({ min: 3 }),
         body('features', "Please write atleast 1 features").not().isEmpty(),
-        body('description', "Please write atleast 5 letters").isLength({ min: 5 }),
+        body('description', "Please write description").not().isEmpty(),
     ],
 
     async (req, res) => {
@@ -28,6 +28,7 @@ router.post('/addroomdetail', adminVerify,
             //create image filename
             let imageName = [];
             const files = req.files;
+            console.log("req.files", files);
             for (const file of files) {
                 const { filename } = file;
                 imageName.push(filename);

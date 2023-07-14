@@ -3,6 +3,10 @@ import PropTypes from 'prop-types';
 import { useState, useEffect, memo, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useFormik } from 'formik';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
+import * as Yup from 'yup'
+
 import {
     Dialog,
     DialogTitle,
@@ -16,9 +20,10 @@ import {
     Autocomplete,
     Chip
 } from '@mui/material';
-import { roomDetailModelSchema } from '../../../schemas';
+import UploadImage from '../../../utils/UploadImage';
 
-// import { addRoom, updateRoom } from '../../../features/room/roomSlice';
+// import { roomDetailModelSchema } from '../../../schemas';
+import { addRoomDetail } from '../../../features/roomDetail/roomDetailSlice';
 import { setOpenModel } from '../../../features/model/modelSlice';
 
 
@@ -29,70 +34,106 @@ RoomDetailModel.propTypes = {
 
 
 
+
 function RoomDetailModel({ actionType, currentRoomDetail, roomTypeArray }) {
     const { modelOpen } = useSelector(state => state.setModel)
 
     const dispatch = useDispatch()
-    const [roomDetail, setRoomDetail] = useState({
-        description: '',
-        roomType: "",
-        features: [],
-        images: [],
+    const [features, setFeatures] = useState([
+        'Free Wifi'
+    ])
+
+    const [images, setImages] = useState([])
+    /*  const [roomDetail, setRoomDetail] = useState({
+          description: "",
+          roomType: "",
+          features: [],
+          images: [],
+      }) */
+
+
+    /* useEffect(() => {
+         if (currentRoomDetail === null) {
+             setRoomDetail({
+                 description: "",
+                 roomType: "",
+                 features: ["Free Wifi"],
+                 images: [],
+             })
+         }
+         else {
+             setRoomDetail({
+                 id: currentRoomDetail._id,
+                 description: currentRoomDetail.description,
+                 type: currentRoomDetail.roomType,
+                 features: currentRoomDetail.features,
+                 images: currentRoomDetail.images,
+             })
+         }
+     }, [currentRoomDetail]) */
+
+
+
+
+    const validate = (value) => {
+        //  let isExistRoomType = false;
+        const string = value.toLowerCase().split(' ').filter(s => s).join(' ');
+        return roomTypeArray.includes(string);
+
+    }
+
+    const roomDetailModelSchema = Yup.object().shape({
+        roomType: Yup.string().min(3, "Please enter minimum 3 characters").required("Please enter a room type").test(
+            "test",
+            "Please enter another room type",
+            (value) => !validate(value)
+        ),
+        description: Yup.string().required("Please enter a room description"),
+        features: Yup
+            .array()
+            .min(1, "Please add atleast one Features")
+            .required("Features is Required"),
+        images: Yup
+            .array()
+            .min(1, "Please add atleast one image")
+            .required("Images is Required"),
     })
 
     useEffect(() => {
-        if (currentRoomDetail === null) {
-            setRoomDetail({
-                description: '',
-                roomType: "",
-                features: [],
-                images: [],
-            })
-        }
-        else {
-            setRoomDetail({
-                id: currentRoomDetail._id,
-                description: currentRoomDetail.description,
-                type: currentRoomDetail.roomType,
-                features: currentRoomDetail.features,
-                images: currentRoomDetail.images,
-            })
-        }
-    }, [currentRoomDetail])
+        values.features = features;
+        values.images = images;
+    }, [features, images]);
 
-    const handleRoomTypeChange = (event) => {
-        console.log(event.target.value)
-        setRoomDetail({
-            ...roomDetail, [event.target.name]: event.target.value
-        })
-    }
+    const { values, errors, handleBlur, handleChange, handleSubmit, touched } = useFormik({
+        enableReinitialize: true,
+        initialValues: {
+            roomType: '',
+            description: '',
+            images: '',
+            features: ''
+        },
+        validationSchema: roomDetailModelSchema,
+        onSubmit: (value, action) => {
+            console.log(value)
+            action.resetForm()
+        },
+    })
+
+    console.log(errors)
+
     const handleFeatureChange = (event, value) => {
-        setRoomDetail({
-            ...roomDetail, features: value
-        })
+         setFeatures(value)
     }
 
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        console.log(roomDetail)
+    const handleImageUpload = (images) => {
+         setImages(images)
     }
 
-
-    //   let isExistRoomType = false;
-    /*  if (values.roomType) {
-          const string = values.roomType.split(' ').filter(s => s).join(' ');
-          isExistRoomType = roomTypeArray.includes(string);
-  
-      } */
-
-    const addFeatures = [
+    const defaultFeatures = [
         { title: 'Free Wifi' },
         { title: 'Free Breakfast' },
         { title: 'Free Coffee' },
     ];
-
-
 
     const handleModelClose = () => dispatch(setOpenModel(false));
 
@@ -102,6 +143,10 @@ function RoomDetailModel({ actionType, currentRoomDetail, roomTypeArray }) {
             onClose={handleModelClose}
             scroll='paper'
             aria-labelledby={`${actionType} Room Detail`}
+            sx={{
+                zIndex: 1000,
+            }}
+
         >
             <form
                 autoComplete="on"
@@ -117,22 +162,33 @@ function RoomDetailModel({ actionType, currentRoomDetail, roomTypeArray }) {
                             <Grid
                                 xs={12}
                                 md={12}
+                                sx={{
+                                    marginBottom: 3
+                                }}
                             >
                                 <TextField
                                     fullWidth
                                     label="Room Type"
                                     id='roomType'
                                     name="roomType"
-                                    onChange={handleRoomTypeChange}
-                                    value={roomDetail.roomType}
+                                    helperText={errors.roomType && touched.roomType ? (errors.roomType) : null}
+                                    //    onChange={handleRoomTypeChange}
+                                    //   value={roomDetail.roomType}
+                                    onBlur={handleBlur("roomType")}
+                                    onChange={handleChange}
+
+                                    value={values.roomType}
                                 />
                             </Grid>
                             <Grid xs={12} md={12} >
                                 <Autocomplete
                                     multiple
-                                    options={addFeatures.map((option) => option.title)}
+                                    name="features"
+                                    options={defaultFeatures.map((option) => option.title)}
                                     filterSelectedOptions
+                                     defaultValue={[defaultFeatures[0].title]}
                                     onChange={handleFeatureChange}
+                                    onBlur={handleBlur}
                                     freeSolo
                                     renderTags={(value, getTagProps) =>
                                         value.map((option, index) => (
@@ -142,16 +198,33 @@ function RoomDetailModel({ actionType, currentRoomDetail, roomTypeArray }) {
                                     renderInput={(params) => (
                                         <TextField
                                             {...params}
-                                            label="Features"
+                                            label="Features *"
                                             id="features"
                                             name="features"
-                                            value={roomDetail.features}
+                                            helperText={errors.features && touched.features ? (errors.features) : null}
                                         />
                                     )}
                                 />
                                 <p>Note: For add features just type and press enter!</p>
+
                             </Grid>
 
+                            <Grid xs={12} md={12} >
+                                <h3>Upload Images *</h3>
+                                <UploadImage handleImageUpload={handleImageUpload} />
+                                <p>Note: Please upload only jpeg, jpg, png, webp format image!</p>
+                                <p>{errors.images && touched.images ? (errors.images) : ""}</p>
+                            </Grid>
+                            <Grid xs={12} md={12}>
+                                <h3>Description *</h3>
+                                <ReactQuill theme="snow"
+                                    name="description"
+                                    id="description"
+                                    onChange={handleChange("description")}
+                                    value={values.description}
+                                />
+                                <p>{errors.description && touched.description ? (errors.description) : ""}</p>
+                            </Grid>
                         </Grid>
                     </Box>
                 </DialogContent>
