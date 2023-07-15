@@ -23,7 +23,7 @@ import {
 import UploadImage from '../../../utils/UploadImage';
 
 // import { roomDetailModelSchema } from '../../../schemas';
-import { addRoomDetail } from '../../../features/roomDetail/roomDetailSlice';
+import { addRoomDetail, updateRoomDetail } from '../../../features/roomDetail/roomDetailSlice';
 import { setOpenModel } from '../../../features/model/modelSlice';
 
 
@@ -39,54 +39,31 @@ function RoomDetailModel({ actionType, currentRoomDetail, roomTypeArray }) {
     const { modelOpen } = useSelector(state => state.setModel)
 
     const dispatch = useDispatch()
-    const [features, setFeatures] = useState([
-        'Free Wifi'
-    ])
-
+    const [features, setFeatures] = useState([])
     const [images, setImages] = useState([])
-    /*  const [roomDetail, setRoomDetail] = useState({
-          description: "",
-          roomType: "",
-          features: [],
-          images: [],
-      }) */
+
+    useEffect(() => {
+        if (currentRoomDetail) {
+            setFeatures(currentRoomDetail.features);
+            setImages(currentRoomDetail.images);
+        }
+    }, [currentRoomDetail])
 
 
-    /* useEffect(() => {
-         if (currentRoomDetail === null) {
-             setRoomDetail({
-                 description: "",
-                 roomType: "",
-                 features: ["Free Wifi"],
-                 images: [],
-             })
-         }
-         else {
-             setRoomDetail({
-                 id: currentRoomDetail._id,
-                 description: currentRoomDetail.description,
-                 type: currentRoomDetail.roomType,
-                 features: currentRoomDetail.features,
-                 images: currentRoomDetail.images,
-             })
-         }
-     }, [currentRoomDetail]) */
-
-
-
-
-    const validate = (value) => {
-        //  let isExistRoomType = false;
+    const checkRoomType = (value) => {
+        if (actionType === "Update") {
+            return false;
+        }
+        // check if room type is not same as new room type
         const string = value.toLowerCase().split(' ').filter(s => s).join(' ');
         return roomTypeArray.includes(string);
-
     }
 
     const roomDetailModelSchema = Yup.object().shape({
         roomType: Yup.string().min(3, "Please enter minimum 3 characters").required("Please enter a room type").test(
             "test",
             "Please enter another room type",
-            (value) => !validate(value)
+            (value) => !checkRoomType(value)
         ),
         description: Yup.string().required("Please enter a room description"),
         features: Yup
@@ -102,31 +79,36 @@ function RoomDetailModel({ actionType, currentRoomDetail, roomTypeArray }) {
     useEffect(() => {
         values.features = features;
         values.images = images;
-    }, [features, images]);
+    }, [features, images, currentRoomDetail]);
 
     const { values, errors, handleBlur, handleChange, handleSubmit, touched } = useFormik({
         enableReinitialize: true,
         initialValues: {
-            roomType: '',
-            description: '',
-            images: '',
-            features: ''
+            roomType: currentRoomDetail ? currentRoomDetail.roomType : "",
+            description: currentRoomDetail ? currentRoomDetail.description : "",
+            images: currentRoomDetail ? images : "",
+            features: currentRoomDetail ? currentRoomDetail.features : "",
         },
         validationSchema: roomDetailModelSchema,
         onSubmit: (value, action) => {
-            console.log(value)
+            if (actionType === "Add") {
+                dispatch(addRoomDetail(value))
+            }
+            if (actionType === "Update") {
+                value.id = currentRoomDetail._id
+                console.log(value)
+                  dispatch(updateRoomDetail(value))
+            }
             action.resetForm()
         },
     })
 
-    console.log(errors)
-
     const handleFeatureChange = (event, value) => {
-         setFeatures(value)
+        setFeatures(value)
     }
 
     const handleImageUpload = (images) => {
-         setImages(images)
+        setImages(images)
     }
 
     const defaultFeatures = [
@@ -172,8 +154,6 @@ function RoomDetailModel({ actionType, currentRoomDetail, roomTypeArray }) {
                                     id='roomType'
                                     name="roomType"
                                     helperText={errors.roomType && touched.roomType ? (errors.roomType) : null}
-                                    //    onChange={handleRoomTypeChange}
-                                    //   value={roomDetail.roomType}
                                     onBlur={handleBlur("roomType")}
                                     onChange={handleChange}
 
@@ -183,35 +163,28 @@ function RoomDetailModel({ actionType, currentRoomDetail, roomTypeArray }) {
                             <Grid xs={12} md={12} >
                                 <Autocomplete
                                     multiple
-                                    name="features"
-                                    options={defaultFeatures.map((option) => option.title)}
+                                    options={[]}
                                     filterSelectedOptions
-                                     defaultValue={[defaultFeatures[0].title]}
+                                    defaultValue={currentRoomDetail ? currentRoomDetail.features.toString().split(',') : []}
                                     onChange={handleFeatureChange}
-                                    onBlur={handleBlur}
                                     freeSolo
-                                    renderTags={(value, getTagProps) =>
-                                        value.map((option, index) => (
-                                            <Chip label={option} {...getTagProps({ index })} />
-                                        ))
-                                    }
                                     renderInput={(params) => (
                                         <TextField
                                             {...params}
                                             label="Features *"
-                                            id="features"
-                                            name="features"
-                                            helperText={errors.features && touched.features ? (errors.features) : null}
+                                            name='features'
                                         />
                                     )}
                                 />
                                 <p>Note: For add features just type and press enter!</p>
+                                <p>Example: Free wifi, Free breakfast etc.</p>
+                                <p>{errors.features && touched.features ? (errors.features) : ""}</p>
 
                             </Grid>
 
                             <Grid xs={12} md={12} >
                                 <h3>Upload Images *</h3>
-                                <UploadImage handleImageUpload={handleImageUpload} />
+                                <UploadImage handleImageUpload={handleImageUpload} currentRoomDetail={currentRoomDetail} />
                                 <p>Note: Please upload only jpeg, jpg, png, webp format image!</p>
                                 <p>{errors.images && touched.images ? (errors.images) : ""}</p>
                             </Grid>

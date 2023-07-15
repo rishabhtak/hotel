@@ -5,6 +5,7 @@ const { body, validationResult } = require('express-validator');
 const fs = require('fs');
 const path = require('path');
 const { roomImgResize, uploadPhoto } = require("../middleware/uploadImage");
+const updateImage = require("../middleware/updateImage");
 const adminVerify = require('../middleware/adminVerify');
 
 
@@ -28,7 +29,6 @@ router.post('/addroomdetail', adminVerify,
             //create image filename
             let imageName = [];
             const files = req.files;
-            console.log("req.files", files);
             for (const file of files) {
                 const { filename } = file;
                 imageName.push(filename);
@@ -41,7 +41,7 @@ router.post('/addroomdetail', adminVerify,
                 description: description
             })
             const saveRoomDetail = await NewRoomDetail.save();
-            res.json({  message: "Room detail successfully Added",  saveRoomDetail })
+            res.json({ message: "Room detail successfully Added", saveRoomDetail })
         }
         catch (error) {
             res.status(500).send("Internal server error");
@@ -49,7 +49,7 @@ router.post('/addroomdetail', adminVerify,
     })
 
 router.put('/updateroomdetail/:id', adminVerify, uploadPhoto.array("images", 4),
-    roomImgResize, [
+    roomImgResize, updateImage, [
     body('roomType', "Please enter atleast 3 letters").isLength({ min: 3 }),
     body('features', "Please write atleast 1 features").not().isEmpty(),
     body('description', "Please write atleast 5 letters").isLength({ min: 5 }),
@@ -67,16 +67,17 @@ router.put('/updateroomdetail/:id', adminVerify, uploadPhoto.array("images", 4),
             let roomDetail = await RoomDetail.findById(req.params.id);
             if (!roomDetail) { return res.status(404).send("Not Found") }
             // delete old room images
-            if (roomDetail.images.length > 0) {
-                for (const imageName of roomDetail.images) {
-                    fs.unlinkSync(`public/images/rooms/${imageName}`);
+            /*    if (roomDetail.images.length > 0) {
+                    for (const imageName of roomDetail.images) {
+                        fs.unlinkSync(`public/images/rooms/${imageName}`);
+                    }
                 }
-            }
-            else {
-                return res.status(400).json({ message: "Some error occured,Images not removed" })
-            }
+                else {
+                    return res.status(400).json({ message: "Some error occured,Images not removed" })
+                } */
+
             //create image name
-            let imageName = [];
+            let imageName = req.updateImageName;
             const files = req.files;
             for (const file of files) {
                 const { filename } = file;
@@ -91,7 +92,7 @@ router.put('/updateroomdetail/:id', adminVerify, uploadPhoto.array("images", 4),
 
             //update room
             roomDetail = await RoomDetail.findByIdAndUpdate(req.params.id, { $set: newRoomDetail }, { new: true })
-            res.json({  message: "Room detail successfully updated",  roomDetail })
+            res.json({ message: "Room detail successfully updated", roomDetail })
         }
         catch (error) {
             res.status(500).send("Internal server error");

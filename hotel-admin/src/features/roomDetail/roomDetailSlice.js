@@ -33,13 +33,11 @@ export const getRoomDetail = createAsyncThunk(
 export const addRoomDetail = createAsyncThunk(
     'addRoomDetail',
     async (roomDetail, thunkAPI) => {
-        //  console.log( roomDetail.images[0].originFileObj);
         try {
             const formData = new FormData();
-            for (let i = 0; i < roomDetail.images.length; i+=1) {
+            for (let i = 0; i < roomDetail.images.length; i += 1) {
                 formData.append("images", roomDetail.images[i].originFileObj);
             }
-            // formData.append('images', roomDetail.images[0].originFileObj);
             formData.append('roomType', roomDetail.roomType);
             formData.append('features', roomDetail.features);
             formData.append('description', roomDetail.description);
@@ -55,7 +53,6 @@ export const addRoomDetail = createAsyncThunk(
             });
             thunkAPI.dispatch(setOpenModel(false))
             const roomAddDetail = await response.json();
-            console.log(roomAddDetail);
             if (!roomAddDetail.error) {
                 thunkAPI.dispatch(sendMessage({
                     message: "room successfully added",
@@ -78,6 +75,51 @@ export const addRoomDetail = createAsyncThunk(
             }))
             thunkAPI.dispatch(deleteAlert());
             return thunkAPI.rejectWithValue(addRoomDetail.error)
+        }
+
+
+    }
+)
+
+export const updateRoomDetail = createAsyncThunk(
+    'updateRoomDetail',
+    async (roomDetail, thunkAPI) => {
+        try {
+            const formData = new FormData();
+            for (let i = 0; i < roomDetail.images.length; i += 1) {
+                if (roomDetail.images[i].originFileObj) {
+
+                    formData.append("images", roomDetail.images[i].originFileObj);
+                }
+                formData.append("images", roomDetail.images[i].key);
+            }
+            formData.append('roomType', roomDetail.roomType);
+            formData.append('features', roomDetail.features);
+            formData.append('description', roomDetail.description);
+            // api to update Room
+            const response = await fetch(`${host}roomdetail/updateroomdetail/${roomDetail.id}`, {
+                method: 'PUT',
+                headers: {
+                    "auth-token": localStorage.getItem('adminToken')
+                },
+                body: formData
+            });
+            thunkAPI.dispatch(setOpenModel(false))
+            const roomDetailUpdate = await response.json();
+            console.log(roomDetailUpdate)
+            thunkAPI.dispatch(sendMessage({
+                message: "room detail successfully updated",
+                type: "success"
+            }))
+            thunkAPI.dispatch(deleteAlert());
+            return roomDetailUpdate;
+        } catch (error) {
+            thunkAPI.dispatch(sendMessage({
+                message: "something went wrong",
+                type: "error"
+            }))
+            thunkAPI.dispatch(deleteAlert());
+            return error.response.json()
         }
 
 
@@ -109,9 +151,31 @@ export const roomDetailSlice = createSlice({
             })
             .addCase(addRoomDetail.fulfilled, (state, { payload }) => {
                 state.loading = false
-                state.rooms = state.roomDetail.concat(payload.saveRoomDetail)
+                state.roomDetail = state.roomDetail.concat(payload.saveRoomDetail)
             })
             .addCase(addRoomDetail.rejected, (state) => {
+                state.loading = false
+                state.error = true
+            })
+            .addCase(updateRoomDetail.pending, (state) => {
+                state.loading = true
+            })
+            .addCase(updateRoomDetail.fulfilled, (state, { payload }) => {
+                state.loading = false
+                const newRoomDetail = state.roomDetail
+                for (let index = 0; index < newRoomDetail.length; index += 1) {
+                    const element = newRoomDetail[index];
+                    if (element._id === payload.roomDetail._id) {
+                        newRoomDetail[index].roomType = payload.roomDetail.roomType;
+                        newRoomDetail[index].description = payload.roomDetail.description;
+                        newRoomDetail[index].features = payload.roomDetail.features;
+                        newRoomDetail[index].images = payload.roomDetail.images;
+                        break;
+                    }
+                }
+                state.roomDetail = newRoomDetail;
+            })
+            .addCase(updateRoomDetail.rejected, (state) => {
                 state.loading = false
                 state.error = true
             })

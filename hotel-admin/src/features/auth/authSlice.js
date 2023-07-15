@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { sendMessage, deleteAlert } from '../alert/alertSlice'
 
 const host = process.env.REACT_APP_HOST;
+
 const getAdminfromLocalStorage = localStorage.getItem('adminToken')
     ? localStorage.getItem('adminToken')
     : null;

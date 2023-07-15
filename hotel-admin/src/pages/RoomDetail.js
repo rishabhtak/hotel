@@ -46,8 +46,7 @@ const TABLE_HEAD = [
     { id: 'sno', label: 'S.No.', alignRight: false },
     { id: 'roomType', label: 'Room Type', alignRight: false },
     { id: 'features', label: 'Features', alignRight: false },
-    { id: 'description', label: 'description', alignRight: false },
-    { id: '' },
+    { id: 'action', label: 'Actions', alignRight: false },
 ];
 
 

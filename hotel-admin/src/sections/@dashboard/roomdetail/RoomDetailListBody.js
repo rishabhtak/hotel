@@ -60,12 +60,8 @@ function RoomDetailListBody({ roomDetail, handleEdit, sno, handleDelete }) {
                         {sno}
                     </TableCell>
                     <TableCell align="left" style={{ textTransform: 'capitalize' }}>{roomType}</TableCell>
-
                     <TableCell align="left" style={{ textTransform: 'capitalize' }}>{features}</TableCell>
-                    <TableCell align="left">{capitalizeFirstLetter(description)}</TableCell>
-
-
-                    <TableCell align="right">
+                    <TableCell align="left">
                         <IconButton size="large" color="inherit" onClick={handleOpenMenu}>
                             <Iconify icon={'eva:more-vertical-fill'} />
                         </IconButton>
