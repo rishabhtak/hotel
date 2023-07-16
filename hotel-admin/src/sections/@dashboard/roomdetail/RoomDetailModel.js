@@ -1,6 +1,6 @@
 // @mui
 import PropTypes from 'prop-types';
-import { useState, useEffect, memo, useCallback } from 'react';
+import { useState, useEffect, memo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useFormik } from 'formik';
 import ReactQuill from 'react-quill';
@@ -23,7 +23,7 @@ import {
 import UploadImage from '../../../utils/UploadImage';
 
 // import { roomDetailModelSchema } from '../../../schemas';
-import { addRoomDetail, updateRoomDetail } from '../../../features/roomDetail/roomDetailSlice';
+import { addRoomDetail, updateRoomDetail, getRoomDetail } from '../../../features/roomDetail/roomDetailSlice';
 import { setOpenModel } from '../../../features/model/modelSlice';
 
 
@@ -33,11 +33,10 @@ RoomDetailModel.propTypes = {
 }
 
 
-
+const imageURL = "http://localhost:5000/public/images/rooms/";
 
 function RoomDetailModel({ actionType, currentRoomDetail, roomTypeArray }) {
     const { modelOpen } = useSelector(state => state.setModel)
-
     const dispatch = useDispatch()
     const [features, setFeatures] = useState([])
     const [images, setImages] = useState([])
@@ -45,7 +44,13 @@ function RoomDetailModel({ actionType, currentRoomDetail, roomTypeArray }) {
     useEffect(() => {
         if (currentRoomDetail) {
             setFeatures(currentRoomDetail.features);
-            setImages(currentRoomDetail.images);
+            const imageName = currentRoomDetail.images.map((image) => {
+                return {
+                    key: image,
+                    url: imageURL + image
+                }
+            })
+            setImages(imageName);
         }
     }, [currentRoomDetail])
 
@@ -87,7 +92,7 @@ function RoomDetailModel({ actionType, currentRoomDetail, roomTypeArray }) {
             roomType: currentRoomDetail ? currentRoomDetail.roomType : "",
             description: currentRoomDetail ? currentRoomDetail.description : "",
             images: currentRoomDetail ? images : "",
-            features: currentRoomDetail ? currentRoomDetail.features : "",
+            features: currentRoomDetail ? features : "",
         },
         validationSchema: roomDetailModelSchema,
         onSubmit: (value, action) => {
@@ -96,8 +101,7 @@ function RoomDetailModel({ actionType, currentRoomDetail, roomTypeArray }) {
             }
             if (actionType === "Update") {
                 value.id = currentRoomDetail._id
-                console.log(value)
-                  dispatch(updateRoomDetail(value))
+                dispatch(updateRoomDetail(value))
             }
             action.resetForm()
         },
@@ -111,13 +115,16 @@ function RoomDetailModel({ actionType, currentRoomDetail, roomTypeArray }) {
         setImages(images)
     }
 
-    const defaultFeatures = [
-        { title: 'Free Wifi' },
-        { title: 'Free Breakfast' },
-        { title: 'Free Coffee' },
-    ];
+    /*   const defaultFeatures = [
+           { title: 'Free Wifi' },
+           { title: 'Free Breakfast' },
+           { title: 'Free Coffee' },
+       ]; */
 
-    const handleModelClose = () => dispatch(setOpenModel(false));
+    const handleModelClose = () => {
+        dispatch(setOpenModel(false))
+        dispatch(getRoomDetail())
+    }
 
     return (
         <Dialog
@@ -184,7 +191,7 @@ function RoomDetailModel({ actionType, currentRoomDetail, roomTypeArray }) {
 
                             <Grid xs={12} md={12} >
                                 <h3>Upload Images *</h3>
-                                <UploadImage handleImageUpload={handleImageUpload} currentRoomDetail={currentRoomDetail} />
+                                <UploadImage handleImageUpload={handleImageUpload} images={images} />
                                 <p>Note: Please upload only jpeg, jpg, png, webp format image!</p>
                                 <p>{errors.images && touched.images ? (errors.images) : ""}</p>
                             </Grid>
@@ -204,7 +211,6 @@ function RoomDetailModel({ actionType, currentRoomDetail, roomTypeArray }) {
                 <Divider />
                 <CardActions sx={{ justifyContent: 'flex-end' }}>
                     <Button type="submit"
-                        // onClick={handleSubmit}
                         variant="contained">
                         {`${actionType} Room Detail`}
                     </Button>

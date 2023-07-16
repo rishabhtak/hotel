@@ -124,7 +124,7 @@ export default function RoomPage() {
     const [currentRoom, setCurrentRoom] = useState(null)
     const [id, setId] = useState(null)
 
-  
+
     const handleChangePage = (event, newPage) => {
         dispatch(getRooms({
             page: newPage + 1,
@@ -200,8 +200,8 @@ export default function RoomPage() {
                         Add Room
                     </Button>
                 </Stack>
-                {loading ? <PuffLoader cssOverride={override} /> : <><RoomModel actionType={actionType} currentRoom={currentRoom} />
-                    <DeleteDialogBox id={id} type="room"/>
+                {loading ? <PuffLoader cssOverride={override} /> : <>{actionType && <RoomModel actionType={actionType} currentRoom={currentRoom} />}
+                    {id && <DeleteDialogBox id={id} type="room" />}
                     <Card>
                         <RoomListToolbar filterName={filterName} onFilterName={handleFilterByName} />
 

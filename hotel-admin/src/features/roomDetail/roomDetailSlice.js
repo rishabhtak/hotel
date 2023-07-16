@@ -3,12 +3,7 @@ import { sendMessage, deleteAlert } from '../alert/alertSlice'
 import { setOpenModel } from '../model/modelSlice'
 
 const host = process.env.REACT_APP_HOST;
-const initialState = {
-    roomDetail: [],
-    loading: true,
-    error: false,
 
-}
 
 export const getRoomDetail = createAsyncThunk(
     'getRoomDetail',
@@ -96,7 +91,7 @@ export const updateRoomDetail = createAsyncThunk(
             formData.append('roomType', roomDetail.roomType);
             formData.append('features', roomDetail.features);
             formData.append('description', roomDetail.description);
-            // api to update Room
+            // api to update Room detail
             const response = await fetch(`${host}roomdetail/updateroomdetail/${roomDetail.id}`, {
                 method: 'PUT',
                 headers: {
@@ -106,27 +101,64 @@ export const updateRoomDetail = createAsyncThunk(
             });
             thunkAPI.dispatch(setOpenModel(false))
             const roomDetailUpdate = await response.json();
-            console.log(roomDetailUpdate)
-            thunkAPI.dispatch(sendMessage({
-                message: "room detail successfully updated",
-                type: "success"
-            }))
+            if (!roomDetailUpdate.error) {
+                thunkAPI.dispatch(sendMessage({
+                    message: "room detail successfully updated",
+                    type: "success"
+                }))
+                thunkAPI.dispatch(deleteAlert());
+                return roomDetailUpdate;
+            }
             thunkAPI.dispatch(deleteAlert());
-            return roomDetailUpdate;
+            return thunkAPI.rejectWithValue(updateRoomDetail.error)
         } catch (error) {
             thunkAPI.dispatch(sendMessage({
                 message: "something went wrong",
                 type: "error"
             }))
             thunkAPI.dispatch(deleteAlert());
-            return error.response.json()
+            return thunkAPI.rejectWithValue(updateRoomDetail.error)
         }
 
 
     }
 )
 
+export const deleteRoomDetail = createAsyncThunk(
+    'deleteRoomDetail',
+    async (id, thunkAPI) => {
+        try {
+            // api to delete room
+            const response = await fetch(`${host}roomdetail/deleteroomdetail/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    "auth-token": localStorage.getItem('adminToken')
+                },
+            });
+            const roomDetailDelete = await response.json();
+            thunkAPI.dispatch(sendMessage({
+                message: "room successfully deleted",
+                type: "success"
+            }))
+            thunkAPI.dispatch(deleteAlert());
+            return roomDetailDelete;
+        } catch (error) {
+            thunkAPI.dispatch(sendMessage({
+                message: "something went wrong",
+                type: "error"
+            }))
+            thunkAPI.dispatch(deleteAlert());
+            return thunkAPI.rejectWithValue(deleteRoomDetail.error)
+        }
+    }
+)
 
+const initialState = {
+    roomDetail: [],
+    loading: true,
+    error: false,
+
+}
 
 export const roomDetailSlice = createSlice({
     name: 'roomDetail',
@@ -161,21 +193,29 @@ export const roomDetailSlice = createSlice({
                 state.loading = true
             })
             .addCase(updateRoomDetail.fulfilled, (state, { payload }) => {
-                state.loading = false
-                const newRoomDetail = state.roomDetail
-                for (let index = 0; index < newRoomDetail.length; index += 1) {
-                    const element = newRoomDetail[index];
-                    if (element._id === payload.roomDetail._id) {
-                        newRoomDetail[index].roomType = payload.roomDetail.roomType;
-                        newRoomDetail[index].description = payload.roomDetail.description;
-                        newRoomDetail[index].features = payload.roomDetail.features;
-                        newRoomDetail[index].images = payload.roomDetail.images;
-                        break;
-                    }
+                state.loading = false;
+                const roomIndex = state.roomDetail.findIndex(room => room._id === payload.roomDetail._id);
+                if (roomIndex !== -1) {
+                    state.roomDetail[roomIndex] = {
+                        ...state.roomDetail[roomIndex],
+                        ...payload.roomDetail
+                    };
                 }
-                state.roomDetail = newRoomDetail;
             })
             .addCase(updateRoomDetail.rejected, (state) => {
+                state.loading = false
+                state.error = true
+            })
+            .addCase(deleteRoomDetail.pending, (state) => {
+                state.loading = true
+            })
+            .addCase(deleteRoomDetail.fulfilled, (state, { payload }) => {
+                state.loading = false
+                state.roomDetail = state.roomDetail.filter((room) => {
+                    return room._id !== payload.roomDetail._id
+                })
+            })
+            .addCase(deleteRoomDetail.rejected, (state) => {
                 state.loading = false
                 state.error = true
             })

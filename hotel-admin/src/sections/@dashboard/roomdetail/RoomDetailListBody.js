@@ -9,7 +9,6 @@ import {
     IconButton,
 
 } from '@mui/material';
-import { capitalizeFirstLetter } from '../../../utils/formatText'
 import Iconify from '../../../components/iconify';
 
 // ----------------------------------------------------------------------
@@ -19,7 +18,6 @@ RoomDetailListBody.propTypes = {
         _id: PropTypes.string.isRequired,
         roomType: PropTypes.string.isRequired,
         features: PropTypes.array.isRequired,
-        description: PropTypes.string.isRequired,
     }),
     handleEdit: PropTypes.func.isRequired,
     sno: PropTypes.number.isRequired,
@@ -52,7 +50,7 @@ function RoomDetailListBody({ roomDetail, handleEdit, sno, handleDelete }) {
     }
 
     if (roomDetail) {
-        const { roomType, features, description } = roomDetail;
+        const { roomType, features } = roomDetail;
         return (
             <>
                 <TableRow tabIndex={-1} sx={{ '& > *': { borderBottom: 'unset' } }}>

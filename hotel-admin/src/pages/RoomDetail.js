@@ -1,6 +1,5 @@
 import { Helmet } from 'react-helmet-async';
 import { PuffLoader } from 'react-spinners'
-import { useNavigate } from 'react-router-dom';
 
 import { filter } from 'lodash';
 import { useState, useEffect, useCallback } from 'react';
@@ -85,7 +84,6 @@ function applySortFilter(array, comparator, query) {
 
 
 export default function RoomDetailPage() {
-    const navigate = useNavigate();
 
     const override = {
         position: "fixed",
@@ -184,8 +182,8 @@ export default function RoomDetailPage() {
                         Add Room Detail
                     </Button>
                 </Stack>
-                {loading ? <PuffLoader cssOverride={override} /> : <><RoomDetailModel actionType={actionType} currentRoomDetail={currentRoomDetail} roomTypeArray={roomTypeArray} />
-                    <DeleteDialogBox id={id} type="room detail" />
+                {loading ? <PuffLoader cssOverride={override} /> : <>{actionType && <RoomDetailModel actionType={actionType} currentRoomDetail={currentRoomDetail} roomTypeArray={roomTypeArray} />}
+                    {id && <DeleteDialogBox id={id} type="room detail" />}
                     <Card>
                         <RoomDetailListToolbar filterName={filterName} onFilterName={handleFilterByName} />
 

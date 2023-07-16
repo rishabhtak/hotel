@@ -26,21 +26,17 @@ router.post('/addroomdetail', adminVerify,
 
                 return res.status(400).json({ message: "Validation Error", error: errors.array() })
             }
-            //create image filename
-            let imageName = [];
-            const files = req.files;
-            for (const file of files) {
-                const { filename } = file;
-                imageName.push(filename);
-            }
+            //create image name
+            const imageName = req.files.map(file => file.filename);
+
             const { roomType, features, description } = req.body;
-            const NewRoomDetail = new RoomDetail({
-                roomType: roomType,
+            const newRoomDetail = new RoomDetail({
+                roomType,
                 images: imageName,
-                features: features,
-                description: description
+                features,
+                description
             })
-            const saveRoomDetail = await NewRoomDetail.save();
+            const saveRoomDetail = await newRoomDetail.save();
             res.json({ message: "Room detail successfully Added", saveRoomDetail })
         }
         catch (error) {
@@ -131,7 +127,7 @@ router.get('/getRoomDetail', async (req, res) => {
     try {
         const roomDetail = await RoomDetail.find({});
         if (roomDetail.length > 0) {
-            res.json({ roomDetail })
+            res.json({ message: "room successfully deleted", roomDetail })
         }
         else {
             res.json({ message: "No room detail available", roomDetail })

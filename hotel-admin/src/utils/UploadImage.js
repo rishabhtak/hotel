@@ -1,10 +1,13 @@
+import PropTypes from 'prop-types';
 import { useState, useEffect } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
 import { Modal, Upload, message } from 'antd';
 
-// const hostImage = process.env.REACT_APP_HOST_IMAGE;
 
-const imageURL = "http://localhost:5000/public/images/rooms/";
+UploadImage.propTypes = {
+    handleImageUpload: PropTypes.func.isRequired,
+    images: PropTypes.array.isRequired
+}
 
 const getBase64 = (file) =>
     new Promise((resolve, reject) => {
@@ -13,7 +16,7 @@ const getBase64 = (file) =>
         reader.onload = () => resolve(reader.result);
         reader.onerror = (error) => reject(error);
     });
-const UploadImage = ({ handleImageUpload, currentRoomDetail }) => {
+function UploadImage({ handleImageUpload, images }){
     const [previewOpen, setPreviewOpen] = useState(false);
     const [previewImage, setPreviewImage] = useState('');
     const [previewTitle, setPreviewTitle] = useState('');
@@ -21,17 +24,10 @@ const UploadImage = ({ handleImageUpload, currentRoomDetail }) => {
 
 
     useEffect(() => {
-        if (currentRoomDetail) {
-            let images = [];
-            images = currentRoomDetail.images.map((image) => {
-                return {
-                    key: image,
-                    url: imageURL + image
-                }
-            })
+        if (images && images.length) {
             setFileList(images);
         }
-    }, [currentRoomDetail])
+    }, [images])
 
 
 

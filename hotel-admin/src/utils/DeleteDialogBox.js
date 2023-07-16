@@ -1,4 +1,4 @@
-import { memo, useState } from 'react';
+import { memo } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -13,9 +13,13 @@ import {
 
 } from '@mui/material';
 import { deleteRoom } from '../features/room/roomSlice';
+import { deleteRoomDetail } from '../features/roomDetail/roomDetailSlice';
 import { setDialogOpen } from '../features/model/modelSlice'
 
-
+DeleteDialogBox.propTypes = {
+    id: PropTypes.string.isRequired,
+    type: PropTypes.string.isRequired
+}
 
 function DeleteDialogBox({ id, type }) {
     const { dialogOpen } = useSelector(state => state.setModel)
@@ -27,7 +31,13 @@ function DeleteDialogBox({ id, type }) {
 
     const handleConfirmDelete = () => {
         dispatch(setDialogOpen(false))
-        dispatch(deleteRoom(id))
+        if (type === "room") {
+            dispatch(deleteRoom(id))
+        }
+        if (type === "room detail") {
+            dispatch(deleteRoomDetail(id))
+        }
+
     }
 
     return (
