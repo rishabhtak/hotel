@@ -9,11 +9,10 @@ import Room from './pages/Room';
 import User from './pages/User';
 import RoomDetail from './pages/RoomDetail';
 
+
 // ----------------------------------------------------------------------
 
 export default function Router() {
-
-
   const routes = useRoutes([
     {
       path: '/admin',

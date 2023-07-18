@@ -45,6 +45,7 @@ const TABLE_HEAD = [
     { id: 'sno', label: 'S.No.', alignRight: false },
     { id: 'roomType', label: 'Room Type', alignRight: false },
     { id: 'features', label: 'Features', alignRight: false },
+    { id: 'totalRooms', label: 'Total Rooms', alignRight: false },
     { id: 'action', label: 'Actions', alignRight: false },
 ];
 
@@ -91,7 +92,7 @@ export default function RoomDetailPage() {
         top: "50%",
         left: "50%",
         transform: "translate(-50%, -50%)"
-    }
+    };
 
     const dispatch = useDispatch();
     const { roomDetail, loading, error } = useSelector(state => state.roomDetail);
@@ -109,8 +110,8 @@ export default function RoomDetailPage() {
     const [filterName, setFilterName] = useState('');
     const [rowsPerPage, setRowsPerPage] = useState(5);
     const [actionType, setActionType] = useState("");
-    const [currentRoomDetail, setCurrentRoomDetail] = useState(null)
-    const [id, setId] = useState(null)
+    const [currentRoomDetail, setCurrentRoomDetail] = useState(null);
+    const [id, setId] = useState(null);
 
     let roomTypeArray = [];
 
@@ -140,19 +141,19 @@ export default function RoomDetailPage() {
         setActionType("Update")
         setCurrentRoomDetail(roomDetail)
         handleModelOpen()
-    }, [])
+    }, []);
 
     const handleDelete = useCallback((id) => {
         dispatch(setDialogOpen(true))
         setId(id)
-    }, [])
+    }, []);
 
 
     const handleAddRoomDetail = useCallback(() => {
         setActionType("Add")
         setCurrentRoomDetail(null)
         handleModelOpen()
-    }, [])
+    }, []);
 
     const handleRequestSort = useCallback((event, property) => {
         const isAsc = orderBy === property && order === 'asc';

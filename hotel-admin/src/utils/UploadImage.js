@@ -5,7 +5,7 @@ import { Modal, Upload, message } from 'antd';
 
 
 UploadImage.propTypes = {
-    handleImageUpload: PropTypes.func.isRequired,
+    // handleImageUpload: PropTypes.func.isRequired,
     images: PropTypes.array.isRequired
 }
 
@@ -16,7 +16,7 @@ const getBase64 = (file) =>
         reader.onload = () => resolve(reader.result);
         reader.onerror = (error) => reject(error);
     });
-function UploadImage({ handleImageUpload, images }){
+function UploadImage({ onChange, images }) {
     const [previewOpen, setPreviewOpen] = useState(false);
     const [previewImage, setPreviewImage] = useState('');
     const [previewTitle, setPreviewTitle] = useState('');
@@ -43,7 +43,7 @@ function UploadImage({ handleImageUpload, images }){
 
     const handleChange = ({ fileList: newFileList }) => {
         setFileList(newFileList)
-        handleImageUpload(newFileList)
+        onChange(newFileList)
     }
     const props = {
         beforeUpload: (file) => {

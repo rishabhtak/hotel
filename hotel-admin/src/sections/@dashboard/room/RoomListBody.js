@@ -38,19 +38,19 @@ function RoomListBody({ room, handleEdit, sno, handleDelete }) {
 
     const handleOpenMenu = (event) => {
         setOpen(event.currentTarget)
-    }
+    };
 
     const handleEditRoom = (room) => {
         handleEdit(room);
         setOpen(false);
 
-    }
+    };
 
     const handleDeleteRoom = (id) => {
         handleDelete(id)
         setOpen(false);
 
-    }
+    };
 
     if (room) {
         const { type, capacity, size, description, price } = room;

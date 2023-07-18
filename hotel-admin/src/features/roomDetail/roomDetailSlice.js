@@ -23,7 +23,7 @@ export const getRoomDetail = createAsyncThunk(
             return thunkAPI.rejectWithValue(getRoomDetail.error)
         }
     }
-)
+);
 
 export const addRoomDetail = createAsyncThunk(
     'addRoomDetail',
@@ -36,6 +36,7 @@ export const addRoomDetail = createAsyncThunk(
             formData.append('roomType', roomDetail.roomType);
             formData.append('features', roomDetail.features);
             formData.append('description', roomDetail.description);
+            formData.append('totalRooms', roomDetail.totalRooms);
 
 
             // api to add Room detail
@@ -74,7 +75,7 @@ export const addRoomDetail = createAsyncThunk(
 
 
     }
-)
+);
 
 export const updateRoomDetail = createAsyncThunk(
     'updateRoomDetail',
@@ -91,6 +92,7 @@ export const updateRoomDetail = createAsyncThunk(
             formData.append('roomType', roomDetail.roomType);
             formData.append('features', roomDetail.features);
             formData.append('description', roomDetail.description);
+            formData.append('totalRooms', roomDetail.totalRooms);
             // api to update Room detail
             const response = await fetch(`${host}roomdetail/updateroomdetail/${roomDetail.id}`, {
                 method: 'PUT',
@@ -122,7 +124,7 @@ export const updateRoomDetail = createAsyncThunk(
 
 
     }
-)
+);
 
 export const deleteRoomDetail = createAsyncThunk(
     'deleteRoomDetail',
@@ -151,14 +153,14 @@ export const deleteRoomDetail = createAsyncThunk(
             return thunkAPI.rejectWithValue(deleteRoomDetail.error)
         }
     }
-)
+);
 
 const initialState = {
     roomDetail: [],
     loading: true,
     error: false,
 
-}
+};
 
 export const roomDetailSlice = createSlice({
     name: 'roomDetail',
@@ -222,6 +224,6 @@ export const roomDetailSlice = createSlice({
 
 
     },
-})
+});
 
 export default roomDetailSlice.reducer

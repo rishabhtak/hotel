@@ -8,6 +8,10 @@ const RoomDetailSchema = new Schema({
         trim: true,
         lowercase: true
     },
+    totalRooms: {
+        type: Number,
+        required: true,
+    },
     images: {
         type: Array,
         required: true

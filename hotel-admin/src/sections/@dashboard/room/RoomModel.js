@@ -16,9 +16,9 @@ import {
     Button,
 } from '@mui/material';
 import { roomModelSchema } from '../../../schemas';
-
 import { addRoom, updateRoom } from '../../../features/room/roomSlice';
 import { setOpenModel } from '../../../features/model/modelSlice';
+
 
 
 RoomModel.propTypes = {
@@ -29,6 +29,10 @@ RoomModel.propTypes = {
 
 
 function RoomModel({ actionType, currentRoom }) {
+    const { roomDetail } = useSelector(state => state.roomDetail);
+
+    console.log("roomDetail: ", roomDetail)
+
     const { modelOpen } = useSelector(state => state.setModel)
 
     const dispatch = useDispatch()
@@ -42,6 +46,7 @@ function RoomModel({ actionType, currentRoom }) {
 
 
     useEffect(() => {
+
         if (currentRoom === null) {
             setRoom({
                 description: '',
@@ -65,7 +70,7 @@ function RoomModel({ actionType, currentRoom }) {
 
 
     const { values, errors, handleBlur, handleChange, handleSubmit, touched } = useFormik({
-        enableReinitialize: actionType === "Update",
+        enableReinitialize: true,
         initialValues: room,
         validationSchema: roomModelSchema,
         onSubmit: (value, action) => {

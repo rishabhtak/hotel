@@ -25,7 +25,7 @@ app.use('/api/roomdetail', require('./routes/roomdetail'));
 
 
 app.get('/', (req, res) => {
-    res.send('Hello World!')
+    res.send('Server is running')
 })
 
 

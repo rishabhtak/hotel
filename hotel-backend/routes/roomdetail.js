@@ -3,7 +3,6 @@ const RoomDetail = require('../models/RoomDetail');
 const router = express.Router();
 const { body, validationResult } = require('express-validator');
 const fs = require('fs');
-const path = require('path');
 const { roomImgResize, uploadPhoto } = require("../middleware/uploadImage");
 const updateImage = require("../middleware/updateImage");
 const adminVerify = require('../middleware/adminVerify');
@@ -14,6 +13,7 @@ router.post('/addroomdetail', adminVerify,
     roomImgResize,
     [
         body('roomType', "Please enter atleast 3 letters").isLength({ min: 3 }),
+        body('totalRooms', "Please enter total number of rooms").isInt(),
         body('features', "Please write atleast 1 features").not().isEmpty(),
         body('description', "Please write description").not().isEmpty(),
     ],
@@ -28,13 +28,13 @@ router.post('/addroomdetail', adminVerify,
             }
             //create image name
             const imageName = req.files.map(file => file.filename);
-
-            const { roomType, features, description } = req.body;
+            const { roomType, features, description, totalRooms } = req.body;
             const newRoomDetail = new RoomDetail({
                 roomType,
                 images: imageName,
                 features,
-                description
+                description,
+                totalRooms
             })
             const saveRoomDetail = await newRoomDetail.save();
             res.json({ message: "Room detail successfully Added", saveRoomDetail })
@@ -47,12 +47,13 @@ router.post('/addroomdetail', adminVerify,
 router.put('/updateroomdetail/:id', adminVerify, uploadPhoto.array("images", 4),
     roomImgResize, updateImage, [
     body('roomType', "Please enter atleast 3 letters").isLength({ min: 3 }),
+    body('totalRooms', "Please enter total number of rooms").isInt(),
     body('features', "Please write atleast 1 features").not().isEmpty(),
     body('description', "Please write atleast 5 letters").isLength({ min: 5 }),
 ],
     async (req, res) => {
         try {
-            const { roomType, features, description } = req.body;
+            const { roomType, features, description, totalRooms } = req.body;
             //validation result
             const errors = validationResult(req);
             if (!errors.isEmpty()) {
@@ -62,15 +63,6 @@ router.put('/updateroomdetail/:id', adminVerify, uploadPhoto.array("images", 4),
             //find the roomdetail object
             let roomDetail = await RoomDetail.findById(req.params.id);
             if (!roomDetail) { return res.status(404).send("Not Found") }
-            // delete old room images
-            /*    if (roomDetail.images.length > 0) {
-                    for (const imageName of roomDetail.images) {
-                        fs.unlinkSync(`public/images/rooms/${imageName}`);
-                    }
-                }
-                else {
-                    return res.status(400).json({ message: "Some error occured,Images not removed" })
-                } */
 
             //create image name
             let imageName = req.updateImageName;
@@ -85,6 +77,7 @@ router.put('/updateroomdetail/:id', adminVerify, uploadPhoto.array("images", 4),
             if (description) { newRoomDetail.description = description }
             if (features) { newRoomDetail.features = features }
             if (imageName) { newRoomDetail.images = imageName }
+            if (totalRooms) { newRoomDetail.totalRooms = totalRooms }
 
             //update room
             roomDetail = await RoomDetail.findByIdAndUpdate(req.params.id, { $set: newRoomDetail }, { new: true })

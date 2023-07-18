@@ -26,6 +26,7 @@ import {
 
 import { getRooms } from '../features/room/roomSlice';
 import { setOpenModel, setDialogOpen } from '../features/model/modelSlice';
+import { getRoomDetail } from '../features/roomDetail/roomDetailSlice';
 
 
 // components
@@ -104,6 +105,7 @@ export default function RoomPage() {
 
     useEffect(() => {
         if (localStorage.getItem('adminToken')) {
+            dispatch(getRoomDetail())
             dispatch(getRooms({
                 page: 1,
                 limit: 5

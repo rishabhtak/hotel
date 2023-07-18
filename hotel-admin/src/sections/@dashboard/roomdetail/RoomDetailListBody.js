@@ -18,6 +18,7 @@ RoomDetailListBody.propTypes = {
         _id: PropTypes.string.isRequired,
         roomType: PropTypes.string.isRequired,
         features: PropTypes.array.isRequired,
+        totalRooms:PropTypes.number.isRequired,
     }),
     handleEdit: PropTypes.func.isRequired,
     sno: PropTypes.number.isRequired,
@@ -35,22 +36,22 @@ function RoomDetailListBody({ roomDetail, handleEdit, sno, handleDelete }) {
 
     const handleOpenMenu = (event) => {
         setOpen(event.currentTarget)
-    }
+    };
 
     const handleEditRoomDetail = (roomDetail) => {
         handleEdit(roomDetail);
         setOpen(false);
 
-    }
+    };
 
     const handleDeleteRoomDetail = (id) => {
         handleDelete(id)
         setOpen(false);
 
-    }
+    };
 
     if (roomDetail) {
-        const { roomType, features } = roomDetail;
+        const { roomType, features,totalRooms } = roomDetail;
         return (
             <>
                 <TableRow tabIndex={-1} sx={{ '& > *': { borderBottom: 'unset' } }}>
@@ -59,6 +60,7 @@ function RoomDetailListBody({ roomDetail, handleEdit, sno, handleDelete }) {
                     </TableCell>
                     <TableCell align="left" style={{ textTransform: 'capitalize' }}>{roomType}</TableCell>
                     <TableCell align="left" style={{ textTransform: 'capitalize' }}>{features}</TableCell>
+                    <TableCell align="left">{totalRooms}</TableCell>
                     <TableCell align="left">
                         <IconButton size="large" color="inherit" onClick={handleOpenMenu}>
                             <Iconify icon={'eva:more-vertical-fill'} />

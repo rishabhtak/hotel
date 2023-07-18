@@ -2,4 +2,5 @@ hotel-backend/node_modules
 build
 npm-debug.log
 /.env
+old code.txt
 .DS_Store
