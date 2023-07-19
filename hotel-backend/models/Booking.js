@@ -18,35 +18,19 @@ const BookingSchema = new Schema({
         type: Number,
         required: true
     },
-    specialrequest: {
+    specialRequest: {
         type: String,
     },
-    roomsid: {
-        type: Array,
-        required: true
-
-    },
-    startdate: {
+    roomDetails: [],
+    startDate: {
         type: String,
         required: true
     },
-    enddate: {
+    endDate: {
         type: String,
         required: true
     },
-    totalperson: {
-        type: Number,
-        required: true
-    },
-    roomtype: {
-        type: String,
-        required: true
-    },
-    totalroom: {
-        type: Number,
-        required: true
-    },
-    totalprice: {
+    totalPrice: {
         type: Number,
         required: true
     },

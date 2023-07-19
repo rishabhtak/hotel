@@ -45,8 +45,8 @@ import { RoomModel, RoomListToolbar, RoomListHead, RoomListBody } from '../secti
 
 const TABLE_HEAD = [
     { id: 'sno', label: 'S.No.', alignRight: false },
-    { id: 'type', label: 'Room Type', alignRight: false },
-    { id: 'size', label: 'Size', alignRight: false },
+    { id: 'roomType', label: 'Room Type', alignRight: false },
+    { id: 'name', label: 'Name', alignRight: false },
     { id: 'capacity', label: 'Capacity', alignRight: false },
     { id: 'price', label: 'Price', alignRight: false },
     { id: 'description', label: 'Description', alignRight: false },
@@ -81,7 +81,7 @@ function applySortFilter(array, comparator, query) {
         return a[1] - b[1];
     });
     if (query) {
-        return filter(array, (_room) => _room.type.toLowerCase().indexOf(query.toLowerCase()) !== -1);
+        return filter(array, (_room) => _room.name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
     }
     return stabilizedThis.map((el) => el[0]);
 }

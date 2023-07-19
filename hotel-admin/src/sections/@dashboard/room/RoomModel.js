@@ -14,10 +14,16 @@ import {
     CardActions,
     TextField,
     Button,
+    FormControl,
+    MenuItem,
+    InputLabel,
+    Select,
+    FormHelperText
 } from '@mui/material';
 import { roomModelSchema } from '../../../schemas';
 import { addRoom, updateRoom } from '../../../features/room/roomSlice';
 import { setOpenModel } from '../../../features/model/modelSlice';
+import { toTitleCase } from '../../../utils/formatText';
 
 
 
@@ -30,43 +36,39 @@ RoomModel.propTypes = {
 
 function RoomModel({ actionType, currentRoom }) {
     const { roomDetail } = useSelector(state => state.roomDetail);
+    const { modelOpen } = useSelector(state => state.setModel);
 
-    console.log("roomDetail: ", roomDetail)
-
-    const { modelOpen } = useSelector(state => state.setModel)
-
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
     const [room, setRoom] = useState({
         description: '',
-        type: "",
-        size: '',
+        roomType: "",
+        name: '',
         capacity: '',
         price: '',
-    })
+    });
 
 
     useEffect(() => {
-
         if (currentRoom === null) {
             setRoom({
                 description: '',
-                type: "",
-                size: '',
+                roomType: "",
+                name: '',
                 capacity: '',
                 price: '',
-            })
+            });
         }
         else {
             setRoom({
                 id: currentRoom._id,
                 description: currentRoom.description,
-                type: currentRoom.type,
-                size: currentRoom.size,
+                roomType: currentRoom.roomType,
+                name: currentRoom.name,
                 capacity: currentRoom.capacity,
                 price: currentRoom.price,
-            })
+            });
         }
-    }, [currentRoom])
+    }, [currentRoom]);
 
 
     const { values, errors, handleBlur, handleChange, handleSubmit, touched } = useFormik({
@@ -82,7 +84,7 @@ function RoomModel({ actionType, currentRoom }) {
             }
             action.resetForm()
         },
-    })
+    });
 
 
 
@@ -109,15 +111,45 @@ function RoomModel({ actionType, currentRoom }) {
                                     xs={12}
                                     md={6}
                                 >
+                                    <FormControl fullWidth>
+                                        <InputLabel id="roomTypeLabel">Room Type</InputLabel>
+                                        <Select
+                                            labelId="roomTypeLabel"
+                                            id="roomType"
+                                            name='roomType'
+                                            value={values.roomType}
+                                            label="Room Type"
+                                            onChange={handleChange}
+                                            onBlur={handleBlur}
+                                            error={
+                                                Boolean(touched.roomType && errors.roomType)
+                                            }
+
+                                        >
+                                            {roomDetail && roomDetail.map(roomDetail => <MenuItem style={{ textTransform: 'capitalize' }} key={roomDetail._id} value={roomDetail.roomType}>{toTitleCase(roomDetail.roomType)}</MenuItem>)}
+                                        </Select>
+                                        {touched.roomType && errors.roomType ? (
+                                            <FormHelperText
+                                                sx={{ color: "#bf3333", marginLeft: "16px !important" }}
+                                            >
+                                                {touched.roomType && errors.roomType}
+                                            </FormHelperText>
+                                        ) : null}
+                                    </FormControl>
+                                </Grid>
+                                <Grid
+                                    xs={12}
+                                    md={6}
+                                >
                                     <TextField
                                         fullWidth
-                                        label="Room Type"
-                                        helperText={errors.type && touched.type ? (errors.type) : null}
-                                        id='type'
-                                        name="type"
+                                        label="Room Name"
+                                        helperText={errors.name && touched.name ? (errors.name) : null}
+                                        id='name'
+                                        name="name"
                                         onChange={handleChange}
                                         onBlur={handleBlur}
-                                        value={values.type}
+                                        value={values.name}
                                     />
                                 </Grid>
                                 <Grid
@@ -126,21 +158,7 @@ function RoomModel({ actionType, currentRoom }) {
                                 >
                                     <TextField
                                         fullWidth
-                                        label="Room Size"
-                                        helperText={errors.size && touched.size ? (errors.size) : null}
-                                        id='size'
-                                        name="size"
-                                        onChange={handleChange}
-                                        onBlur={handleBlur}
-                                        value={values.size}
-                                    />
-                                </Grid>
-                                <Grid
-                                    xs={12}
-                                    md={6}
-                                >
-                                    <TextField
-                                        fullWidth
+                                        type='number'
                                         label="Price"
                                         id='price'
                                         name="price"
@@ -156,7 +174,8 @@ function RoomModel({ actionType, currentRoom }) {
                                 >
                                     <TextField
                                         fullWidth
-                                        label="Capacity"
+                                        type='number'
+                                        label="Capacity(Max No. of Person)"
                                         id='capacity'
                                         name="capacity"
                                         helperText={errors.capacity && touched.capacity ? (errors.capacity) : null}
@@ -172,7 +191,7 @@ function RoomModel({ actionType, currentRoom }) {
                                 >
                                     <TextField
                                         fullWidth
-                                        label="Description"
+                                        label="Small Information(Optional)"
                                         id='description'
                                         helperText={errors.description && touched.description ? (errors.description) : null}
                                         name="description"

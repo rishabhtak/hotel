@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const RoomSchema = new Schema({
-    type: {
+    roomType: {
         type: String,
         required: true
     },
@@ -10,8 +10,9 @@ const RoomSchema = new Schema({
         type: Number,
         required: true,
     },
-    size: {
+    name: {
         type: String,
+        required: true
     },
     capacity: {
         type: Number,
@@ -20,7 +21,6 @@ const RoomSchema = new Schema({
     },
     description: {
         type: String,
-        required: true,
     },
     date: {
         type: Date,

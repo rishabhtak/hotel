@@ -46,7 +46,7 @@ function RoomDetailListToolbar({filterName, onFilterName }) {
             <StyledSearch
                 value={filterName}
                 onChange={onFilterName}
-                placeholder="Search Room Type..."
+                placeholder="Search Room Name..."
                 startAdornment={
                     <InputAdornment position="start">
                         <Iconify icon="eva:search-fill" sx={{ color: 'text.disabled', width: 20, height: 20 }} />

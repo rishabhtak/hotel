@@ -16,9 +16,9 @@ import Iconify from '../../../components/iconify';
 RoomListBody.propTypes = {
     room: PropTypes.shape({
         _id: PropTypes.string.isRequired,
-        type: PropTypes.string.isRequired,
+        roomType: PropTypes.string.isRequired,
         price: PropTypes.number.isRequired,
-        size: PropTypes.string.isRequired,
+        name: PropTypes.string.isRequired,
         capacity: PropTypes.number.isRequired,
         description: PropTypes.string.isRequired,
     }),
@@ -53,21 +53,18 @@ function RoomListBody({ room, handleEdit, sno, handleDelete }) {
     };
 
     if (room) {
-        const { type, capacity, size, description, price } = room;
+        const { roomType, capacity, name, description, price } = room;
         return (
             <>
                 <TableRow tabIndex={-1} sx={{ '& > *': { borderBottom: 'unset' } }}>
                     <TableCell component="th" scope="row">
                         {sno}
                     </TableCell>
-                    <TableCell align="left" style={{ textTransform: 'capitalize' }}>{type}</TableCell>
-                    <TableCell align="left">{size}</TableCell>
-
+                    <TableCell align="left" style={{ textTransform: 'capitalize' }}>{roomType}</TableCell>
+                    <TableCell align="left" style={{ textTransform: 'capitalize' }}>{name}</TableCell>
                     <TableCell align="left">{capacity}</TableCell>
                     <TableCell align="left">{price}</TableCell>
                     <TableCell align="left" style={{ textTransform: 'capitalize' }}>{description}</TableCell>
-
-
                     <TableCell align="right">
                         <IconButton size="large" color="inherit" onClick={handleOpenMenu}>
                             <Iconify icon={'eva:more-vertical-fill'} />

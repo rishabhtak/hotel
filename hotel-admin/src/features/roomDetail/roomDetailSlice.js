@@ -196,10 +196,10 @@ export const roomDetailSlice = createSlice({
             })
             .addCase(updateRoomDetail.fulfilled, (state, { payload }) => {
                 state.loading = false;
-                const roomIndex = state.roomDetail.findIndex(room => room._id === payload.roomDetail._id);
-                if (roomIndex !== -1) {
-                    state.roomDetail[roomIndex] = {
-                        ...state.roomDetail[roomIndex],
+                const roomDetailIndex = state.roomDetail.findIndex(room => room._id === payload.roomDetail._id);
+                if (roomDetailIndex !== -1) {
+                    state.roomDetail[roomDetailIndex] = {
+                        ...state.roomDetail[roomDetailIndex],
                         ...payload.roomDetail
                     };
                 }

@@ -46,8 +46,8 @@ export const addRoom = createAsyncThunk(
                     "auth-token": localStorage.getItem('adminToken')
                 },
                 body: JSON.stringify({
-                    type: room.type, description: room.description, price: room.price,
-                    capacity: room.capacity, size: room.size
+                    roomType: room.roomType, description: room.description, price: room.price,
+                    capacity: room.capacity, name: room.name
                 })
             });
             thunkAPI.dispatch(setOpenModel(false))
@@ -83,8 +83,8 @@ export const updateRoom = createAsyncThunk(
                     "auth-token": localStorage.getItem('adminToken')
                 },
                 body: JSON.stringify({
-                    type: room.type, description: room.description, price: room.price,
-                    capacity: room.capacity, size: room.size
+                    roomType: room.roomType, description: room.description, price: room.price,
+                    capacity: room.capacity, name: room.name
                 })
             });
             thunkAPI.dispatch(setOpenModel(false))
@@ -174,7 +174,15 @@ export const roomSlice = createSlice({
             })
             .addCase(updateRoom.fulfilled, (state, { payload }) => {
                 state.loading = false
-                const newRoom = state.rooms
+                const roomIndex = state.rooms.findIndex(room => room._id === payload.room._id);
+                if (roomIndex !== -1) {
+                    state.rooms[roomIndex] = {
+                        ...state.rooms[roomIndex],
+                        ...payload.room
+                    };
+                }
+            })
+            /*    const newRoom = state.rooms
                 for (let index = 0; index < newRoom.length; index += 1) {
                     const element = newRoom[index];
                     if (element._id === payload.room._id) {
@@ -187,7 +195,7 @@ export const roomSlice = createSlice({
                     }
                 }
                 state.rooms = newRoom;
-            })
+            }) */
 
             .addCase(updateRoom.rejected, (state) => {
                 state.loading = false

@@ -81,19 +81,17 @@ function RoomDetailModel({ actionType, currentRoomDetail, roomTypeArray }) {
             .required("Features is Required"),
     });
 
-    const { handleSubmit, control, reset, formState: { errors } } = useForm({
+    const { handleSubmit, control, formState: { errors } } = useForm({
         resolver: yupResolver(roomDetailModelSchema)
     }
     );
 
     const onSubmit = (data) => {
         if (actionType === "Add" && currentRoomDetail === null) {
-            console.log(data);
             dispatch(addRoomDetail(data));
         }
         if (actionType === "Update" && currentRoomDetail._id) {
             data.id = currentRoomDetail._id;
-            console.log(data);
             dispatch(updateRoomDetail(data));
 
         }

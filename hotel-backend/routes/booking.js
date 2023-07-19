@@ -11,19 +11,16 @@ router.post('/createbooking', bookingVerify,
         body('name', "Enter a valid name").isLength({ min: 3 }),
         body('email', "Enter a valid email").isEmail(),
         body('phone', "Enter vaild phone number").isInt(),
-        body('specialrequest'),
-        body('roomsid').not().isEmpty(),
-        body('startdate').not().isEmpty(),
-        body('enddate').not().isEmpty(),
-        body('totalperson').not().isEmpty(),
-        body('roomtype').not().isEmpty(),
-        body('totalroom').not().isEmpty(),
-        body('totalprice').not().isEmpty(),
+        body('specialRequest'),
+        body('roomDetails').not().isEmpty(),
+        body('startDate').not().isEmpty(),
+        body('endDate').not().isEmpty(),
+        body('totalPrice').not().isEmpty(),
     ],
     async (req, res) => {
         try {
 
-            const { name, email, phone, specialrequest, roomsid, startdate, enddate, totalperson, roomtype, totalroom, totalprice } = req.body;
+            const { name, email, phone, specialRequest, roomDetails, startDate, endDate, totalPrice } = req.body;
             //validation result
             const errors = validationResult(req);
             if (!errors.isEmpty()) {
@@ -33,12 +30,12 @@ router.post('/createbooking', bookingVerify,
             let saveBooking;
             //if user is not logged in or not have account
             if (!req.user) {
-                const booking = new Booking({ name, email, phone, specialrequest, roomsid, startdate, enddate, totalperson, roomtype, totalroom, totalprice })
+                const booking = new Booking({ name, email, phone, specialRequest, roomDetails, startDate, endDate, totalPrice })
                 saveBooking = await booking.save();
             }
             else {
                 // if user already has account
-                const booking = new Booking({ name, email, phone, specialrequest, roomsid, startdate, enddate, totalperson, roomtype, totalroom, totalprice, user: req.user.id })
+                const booking = new Booking({ name, email, phone, specialRequest, roomDetails, startDate, endDate, totalPrice, user: req.user.id })
                 saveBooking = await booking.save();
             }
             res.json({ message: "Booking succesfully", saveBooking })

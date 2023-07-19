@@ -107,6 +107,7 @@ export default function BookingPage() {
         // eslint-disable-next-line
     }, []);
 
+    console.log(bookings)
     const [open, setOpen] = useState(false);
     const [page, setPage] = useState(0);
     const [order, setOrder] = useState('asc');
