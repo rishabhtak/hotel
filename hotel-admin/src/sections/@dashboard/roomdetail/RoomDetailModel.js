@@ -40,17 +40,16 @@ const imageURL = "http://localhost:5000/public/images/rooms/";
 function RoomDetailModel({ actionType, currentRoomDetail, roomTypeArray }) {
     const { modelOpen } = useSelector(state => state.setModel);
     const dispatch = useDispatch();
-    const [imageName, setImageName] = useState([]);
 
+    let imageName = [];
     useEffect(() => {
         if (currentRoomDetail) {
-            const imageName = currentRoomDetail.images.map((image) => {
+            imageName = currentRoomDetail.images.map((image) => {
                 return {
                     key: image,
                     url: imageURL + image
                 }
             });
-            setImageName(imageName);
         }
     }, [currentRoomDetail])
 
@@ -189,11 +188,11 @@ function RoomDetailModel({ actionType, currentRoomDetail, roomTypeArray }) {
                                 <Controller
                                     name='features'
                                     control={control}
-                                    defaultValue={actionType === "Add" ? [] : currentRoomDetail.features.toString().split(',')}
+                                    defaultValue={!currentRoomDetail ? [] : currentRoomDetail.features.toString().split(',')}
                                     render={({ field: { ref, ...field }, fieldState: { error } }) => (
                                         <Autocomplete
                                             {...field}
-                                            defaultValue={actionType === "Add" ? [] : currentRoomDetail.features.toString().split(',')}
+                                            defaultValue={!currentRoomDetail ? [] : currentRoomDetail.features.toString().split(',')}
                                             multiple
                                             options={[]}
                                             onChange={(event, value) => field.onChange(value)}
