@@ -108,7 +108,7 @@ function RoomDetailModel({ actionType, currentRoomDetail, roomTypeArray }) {
             open={modelOpen}
             onClose={handleModelClose}
             scroll='paper'
-            aria-labelledby={`${actionType} Room Detail`}
+            aria-labelledby={`${actionType.toLowerCase()}roomDetail`}
             sx={{
                 zIndex: 1000,
             }}
@@ -118,7 +118,7 @@ function RoomDetailModel({ actionType, currentRoomDetail, roomTypeArray }) {
                 autoComplete="on"
                 onSubmit={handleSubmit(onSubmit)}
             >
-                <DialogTitle id={`${actionType} Room Detail`}>{`${actionType} Room Detail`}</DialogTitle>
+                <DialogTitle id={`${actionType}roomDetail`}>{`${actionType} Room Detail`}</DialogTitle>
                 <DialogContent dividers>
                     <Box>
                         <Grid

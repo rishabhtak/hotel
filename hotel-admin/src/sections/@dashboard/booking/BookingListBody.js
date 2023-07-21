@@ -13,7 +13,7 @@ import {
     TableCell,
     Typography,
     IconButton,
-    
+
 } from '@mui/material';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
@@ -25,11 +25,12 @@ import { fDate } from '../../../utils/formatTime';
 
 // ----------------------------------------------------------------------
 const TABLE_COLLAPSIBLE = [
-    { id: 'roomtype', label: 'Room Type', alignRight: false },
-    { id: 'totalperson', label: 'Total Person', alignRight: false },
-    { id: 'totalroom', label: 'Total Room', alignRight: false },
-    { id: 'specialrequest', label: 'Special Request', alignRight: false },
-    { id: 'totalprice', label: 'Total Price', alignRight: false },
+    { id: 'roomType', label: 'Room Type', alignLeft: true },
+    { id: 'roomName', label: 'Room Name', alignLeft: true },
+    { id: 'person', label: 'Person', alignLeft: true },
+    { id: 'price', label: 'Price', alignLeft: true },
+    { id: 'totalPrice', label: 'Total Price', alignLeft: true },
+    { id: 'specialRequest', label: 'Special Request', alignLeft: true },
 
 ];
 
@@ -39,13 +40,17 @@ BookingListBody.propTypes = {
         name: PropTypes.string,
         email: PropTypes.string,
         phone: PropTypes.number,
-        startdate: PropTypes.string,
-        enddate: PropTypes.string,
-        roomtype: PropTypes.string,
-        totalperson: PropTypes.number,
-        totalroom: PropTypes.number,
-        specialrequest: PropTypes.string,
-        totalprice: PropTypes.number,
+        startDate: PropTypes.string,
+        endDate: PropTypes.string,
+        specialRequest: PropTypes.string,
+        totalPrice: PropTypes.number,
+        roomDetails: PropTypes.arrayOf(PropTypes.shape({
+            person: PropTypes.number,
+            roomName: PropTypes.string,
+            roomType: PropTypes.string,
+            roomId: PropTypes.string,
+            price: PropTypes.number,
+        }))
     }),
     handleOpenMenu: PropTypes.func,
 };
@@ -54,7 +59,7 @@ function BookingListBody({ row, handleOpenMenu }) {
     const [openCollapse, setOpenCollapse] = useState(false);
 
     if (row) {
-        const { _id, name, email, phone, startdate, enddate, roomtype, totalperson, totalroom, specialrequest, totalprice } = row;
+        const { _id, name, email, phone, startDate, endDate, specialRequest, totalPrice, roomDetails } = row;
         return (
             <>
                 <TableRow tabIndex={-1} sx={{ '& > *': { borderBottom: 'unset' } }}>
@@ -67,22 +72,16 @@ function BookingListBody({ row, handleOpenMenu }) {
                             {openCollapse ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
                         </IconButton>
                     </TableCell>
-                    <TableCell component="th" scope="row" padding="none">
-                        <Stack direction="row" alignItems="center" spacing={2}>
-                            <Typography variant="subtitle2" style={{ textTransform: 'capitalize' }} noWrap>
-                                {name}
-                            </Typography>
-                        </Stack>
+                    <TableCell >
+                        <Typography variant="subtitle2" style={{ textTransform: 'capitalize' }} noWrap>
+                            {name}
+                        </Typography>
                     </TableCell>
-
                     <TableCell align="left">{email}</TableCell>
-
                     <TableCell align="left">{phone}</TableCell>
-
-                    <TableCell align="left"> {fDate(startdate)}</TableCell>
-                    <TableCell align="left">{fDate(enddate)}</TableCell>
-
-                    <TableCell align="right">
+                    <TableCell align="left"> {fDate(startDate)}</TableCell>
+                    <TableCell align="left">{fDate(endDate)}</TableCell>
+                    <TableCell align="left">
                         <IconButton size="large" color="inherit" onClick={handleOpenMenu}>
                             <Iconify icon={'eva:more-vertical-fill'} />
                         </IconButton>
@@ -98,20 +97,25 @@ function BookingListBody({ row, handleOpenMenu }) {
                                         <TableRow>
                                             {TABLE_COLLAPSIBLE.map((tableCollasibleHead) => (
 
-                                                <TableCell key={tableCollasibleHead.id} align={tableCollasibleHead.alignRight ? 'left' : 'right'}>
+                                                <TableCell key={tableCollasibleHead.id} align={tableCollasibleHead.alignLeft ? 'left' : 'right'}>
                                                     {tableCollasibleHead.label}
                                                 </TableCell>
                                             ))}
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
-                                        <TableRow>
-                                            <TableCell align="right" style={{ textTransform: 'capitalize' }}>{roomtype}</TableCell>
-                                            <TableCell align="right">{totalperson}</TableCell>
-                                            <TableCell align="right">{totalroom}</TableCell>
-                                            <TableCell align="center">{specialrequest}</TableCell>
-                                            <TableCell align="right">{totalprice}</TableCell>
-                                        </TableRow>
+                                        {roomDetails.map((roomDetail, index) => (
+                                            <TableRow key={index}>
+                                                <TableCell align="left" style={{ textTransform: 'capitalize' }}>{roomDetail.roomType}</TableCell>
+                                                <TableCell align="left" style={{ textTransform: 'capitalize' }}>{roomDetail.roomName}</TableCell>
+                                                <TableCell align="center">{roomDetail.person}</TableCell>
+                                                <TableCell align="left">{roomDetail.price}</TableCell>
+
+                                                <TableCell align="left">{roomDetails.length - 1 === index ? totalPrice : ""}</TableCell>
+                                                <TableCell align="left">{roomDetails.length - 1 === index ? specialRequest : ""}</TableCell>
+                                            </TableRow>
+                                        ))}
+
                                     </TableBody>
                                 </Table>
                             </Box>

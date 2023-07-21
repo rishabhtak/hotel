@@ -30,7 +30,7 @@ router.post('/addroom', adminVerify,
             res.json({ message: "Room succesfully added", saveRoom })
         }
         catch (error) {
-            res.status(500).send("Internal server error");
+            res.status(500).send({ success: false, error: "Internal server error" });
         }
 
     })
@@ -40,18 +40,23 @@ router.post('/addroom', adminVerify,
 router.get('/getallrooms', async (req, res) => {
     try {
         let success = false;
-        let page = Number(req.query.page);
-        let limit = Number(req.query.limit);
-        let skip = (page - 1) * limit;
+        const page = Number(req.query.page);
+        const limit = Number(req.query.limit);
+        if (isNaN(page) || isNaN(limit) || page <= 0 || limit <= 0) {
+            throw new Error("Invalid page or limit parameters.");
+        }
+        const skip = (page - 1) * limit;
         // let search = req.query.search
-        const count = await Room.find({}).count()
         // const rooms = await Room.find({ roomType: { $regex: search } }).skip(skip).limit(limit);
-        const rooms = await Room.find({}).skip(skip).limit(limit);
+        const [rooms, count] = await Promise.all([
+            Room.find({}).skip(skip).limit(limit),
+            Room.countDocuments({}),
+        ]);
         success = true;
         res.json({ success, rooms, count })
     }
     catch (error) {
-        res.status(500).send("Internal server error");
+        res.status(500).send({ success: false, error: "Internal server error" });
     }
 })
 
@@ -96,7 +101,7 @@ router.post('/getavailableroom', async (req, res) => {
 
     }
     catch (error) {
-        res.status(500).send("Internal server error");
+        res.status(500).send({ success: false, error: "Internal server error" });
     }
 })
 
@@ -125,18 +130,14 @@ router.put('/updateroom/:id', adminVerify, [
             if (name) { newRoom.name = name }
             if (capacity) { newRoom.capacity = capacity }
 
+            //find the room and update
+            let room = await Room.findByIdAndUpdate(req.params.id, { $set: newRoom }, { new: true })
+            if (!room) { return res.status(404).send({ success: false, message: "Room not found" }) }
 
-
-            //find the room
-            let room = await Room.findById(req.params.id);
-            if (!room) { return res.status(404).send("Not Found") }
-
-            //update room
-            room = await Room.findByIdAndUpdate(req.params.id, { $set: newRoom }, { new: true })
             res.json({ message: "Room succesfully updated", room })
         }
         catch (error) {
-            res.status(500).send("Internal server error");
+            res.status(500).send({ success: false, error: "Internal server error" });
         }
 
     })
@@ -146,17 +147,14 @@ router.put('/updateroom/:id', adminVerify, [
 router.delete('/deleteroom/:id', adminVerify,
     async (req, res) => {
         try {
-            //find the room
-            let room = await Room.findById(req.params.id);
-            if (!room) { return res.status(404).send("Not Found") }
+            //find the room and delete
+            const room = await Room.findByIdAndDelete(req.params.id)
+            if (!room) { return res.status(404).send({ success: false, message: "Room not found" }) }
 
-            //delete room
-            room = await Room.findByIdAndDelete(req.params.id)
-            success = true;
-            res.json({ message: "Room succesfully deleted", room })
+            res.json({ success: true, message: "Room succesfully deleted", room })
         }
         catch (error) {
-            res.status(500).send("Internal server error");
+            res.status(500).send({ success: false, error: "Internal server error" });
         }
 
     })

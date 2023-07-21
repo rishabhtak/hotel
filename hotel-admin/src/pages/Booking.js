@@ -6,7 +6,6 @@ import { filter } from 'lodash';
 import { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-
 // @mui
 import {
     Card,
@@ -23,17 +22,20 @@ import {
     Typography,
     TableContainer,
     TablePagination,
-    CircularProgress
 } from '@mui/material';
-import { getBookings } from '../features/booking/bookingSlice';
+import { addDays } from 'date-fns'
+
+import { getAllBookings, getBookingsByDate } from '../features/booking/bookingSlice';
 import { setOpenModel } from '../features/model/modelSlice';
+
 
 // components
 import Iconify from '../components/iconify';
 import Scrollbar from '../components/scrollbar';
 // sections
-import { BookingListHead, BookingListToolbar, BookingListBody, AddBooking } from '../sections/@dashboard/booking';
+import { BookingListHead, BookingListToolbar, BookingListBody, BookingModel } from '../sections/@dashboard/booking';
 // mock
+import DateRangePicker from '../utils/DateRangePicker';
 
 // ----------------------------------------------------------------------
 
@@ -43,7 +45,7 @@ const TABLE_HEAD = [
     { id: 'phone', label: 'Phone', alignRight: false },
     { id: 'startdate', label: 'Start Date', alignRight: false },
     { id: 'enddate', label: 'End Date', alignRight: false },
-    { id: '' },
+    { id: 'action', label: 'Actions', alignRight: false },
 ];
 
 
@@ -93,13 +95,17 @@ export default function BookingPage() {
 
     }
     const dispatch = useDispatch();
-    const { bookings, loading, error } = useSelector(state => state.bookings);
+    const { bookings, bookingsByDate, loading, error } = useSelector(state => state.bookings);
     const { modelOpen } = useSelector(state => state.setModel)
 
 
     useEffect(() => {
         if (localStorage.getItem('adminToken')) {
-            dispatch(getBookings());
+            dispatch(getAllBookings());
+            //   dispatch(getBookingsByDate({
+            //      startDate: new Date(),
+            //       endDate: addDays(new Date(), 5),
+            //   }))
         }
         else {
             navigate('/login')
@@ -107,14 +113,13 @@ export default function BookingPage() {
         // eslint-disable-next-line
     }, []);
 
-    console.log(bookings)
     const [open, setOpen] = useState(false);
     const [page, setPage] = useState(0);
     const [order, setOrder] = useState('asc');
-    const [selected, setSelected] = useState([]);
     const [orderBy, setOrderBy] = useState('name');
     const [filterName, setFilterName] = useState('');
     const [rowsPerPage, setRowsPerPage] = useState(5);
+    const [dateRange, setDateRange] = useState(null);
 
     // const [modelAddBooking, setModelAddBooking] = useState(false);
 
@@ -142,7 +147,7 @@ export default function BookingPage() {
 
     //  const handleModelToggle = useCallback(() => setModelAddBooking(prevShow => !prevShow), [modelAddBooking]);
 
-    const handleModelClose = useCallback(() => dispatch(setOpenModel(false)), [dispatch]);
+   // const handleModelClose = useCallback(() => dispatch(setOpenModel(false)), [dispatch]);
 
     const handleOpenMenu = useCallback((event) => setOpen(event.currentTarget), [open])
 
@@ -157,6 +162,19 @@ export default function BookingPage() {
         setFilterName(event.target.value);
     }, [page, filterName]);
 
+    const inputDateHandler = (date) => {
+        setDateRange(date)
+    };
+
+
+    const submitDateRange = () => {
+        if (dateRange) {
+            dispatch(getBookingsByDate(dateRange.selection));
+
+        }
+
+    }
+
 
     return (
         <>
@@ -165,18 +183,26 @@ export default function BookingPage() {
             </Helmet>
 
             <Container>
-                <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
+                <Stack direction="row" alignItems="center" mb={5}>
                     <Typography variant="h4" gutterBottom>
                         Booking
                     </Typography>
-                    <Button variant="contained" onClick={() => dispatch(setOpenModel(true))} startIcon={<Iconify icon="eva:plus-fill" />}>
-                        New Booking
+                    <div className='searchBooking'>
+                        <DateRangePicker inputDateHandler={inputDateHandler} />
+                        <Button variant="contained" style={{ margin: '5px' }} onClick={submitDateRange}>
+                            Search Bookings
+                        </Button>
+                    </div>
+                    <Button variant="contained" onClick={() => dispatch(setOpenModel(true))}
+                        startIcon={<Iconify icon="eva:plus-fill" />}>
+                        Add Booking
                     </Button>
                 </Stack>
 
+
                 {loading ? <PuffLoader cssOverride={override} /> : <>
-                    <AddBooking open={modelOpen} close={handleModelClose} /><Card>
-                        <BookingListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} />
+                    <BookingModel /><Card>
+                        <BookingListToolbar filterName={filterName} onFilterName={handleFilterByName} />
 
                         <Scrollbar>
                             <TableContainer sx={{ minWidth: 800 }} component={Paper}>

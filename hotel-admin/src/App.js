@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 import { PuffLoader } from 'react-spinners'
-import { BrowserRouter  } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
+import './css/DateRangePicker.css';
+
 // routes
 import Router from './routes';
 // theme
@@ -25,7 +27,7 @@ export default function App() {
   }
 
   useEffect(() => {
-   
+
     window.addEventListener("load", handleLoading);
     return () => window.removeEventListener("load", handleLoading);
   }, [])

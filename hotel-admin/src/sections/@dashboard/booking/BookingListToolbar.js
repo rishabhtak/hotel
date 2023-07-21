@@ -3,7 +3,7 @@ import { memo } from "react";
 
 // @mui
 import { styled, alpha } from '@mui/material/styles';
-import { Toolbar, Tooltip, IconButton, Typography, OutlinedInput, InputAdornment } from '@mui/material';
+import { Toolbar, OutlinedInput, InputAdornment } from '@mui/material';
 // component
 import Iconify from '../../../components/iconify';
 
@@ -32,55 +32,31 @@ const StyledSearch = styled(OutlinedInput)(({ theme }) => ({
   },
 }));
 
+
 // ----------------------------------------------------------------------
 
 BookingListToolbar.propTypes = {
-  numSelected: PropTypes.number,
   filterName: PropTypes.string,
   onFilterName: PropTypes.func,
 };
 
-function BookingListToolbar({ numSelected, filterName, onFilterName }) {
+function BookingListToolbar({ filterName, onFilterName }) {
+
+
   return (
-    <StyledRoot
-      sx={{
-        ...(numSelected > 0 && {
-          color: 'primary.main',
-          bgcolor: 'primary.lighter',
-        }),
-      }}
-    >
-      {numSelected > 0 ? (
-        <Typography component="div" variant="subtitle1">
-          {numSelected} selected
-        </Typography>
-      ) : (
+      <StyledRoot>
         <StyledSearch
           value={filterName}
           onChange={onFilterName}
-          placeholder="Search user..."
+          placeholder="Search User Name..."
           startAdornment={
             <InputAdornment position="start">
               <Iconify icon="eva:search-fill" sx={{ color: 'text.disabled', width: 20, height: 20 }} />
             </InputAdornment>
           }
         />
-      )}
+      </StyledRoot>
 
-      {numSelected > 0 ? (
-        <Tooltip title="Delete">
-          <IconButton>
-            <Iconify icon="eva:trash-2-fill" />
-          </IconButton>
-        </Tooltip>
-      ) : (
-        <Tooltip title="Filter list">
-          <IconButton>
-            <Iconify icon="ic:round-filter-list" />
-          </IconButton>
-        </Tooltip>
-      )}
-    </StyledRoot>
   );
 }
 

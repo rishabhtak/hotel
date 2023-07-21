@@ -24,7 +24,7 @@ router.post('/addroomdetail', adminVerify,
             const errors = validationResult(req);
             if (!errors.isEmpty()) {
 
-                return res.status(400).json({ message: "Validation Error", error: errors.array() })
+                return res.status(400).json({ success: false, message: "Validation Error", error: errors.array() })
             }
             //create image name
             const imageName = req.files.map(file => file.filename);
@@ -37,10 +37,10 @@ router.post('/addroomdetail', adminVerify,
                 totalRooms
             })
             const saveRoomDetail = await newRoomDetail.save();
-            res.json({ message: "Room detail successfully Added", saveRoomDetail })
+            res.json({ success: true, message: "Room detail successfully Added", saveRoomDetail })
         }
         catch (error) {
-            res.status(500).send("Internal server error");
+            res.status(500).send({ success: false, error: "Internal server error" });
         }
     })
 
@@ -62,7 +62,7 @@ router.put('/updateroomdetail/:id', adminVerify, uploadPhoto.array("images", 4),
             }
             //find the roomdetail object
             let roomDetail = await RoomDetail.findById(req.params.id);
-            if (!roomDetail) { return res.status(404).send("Not Found") }
+            if (!roomDetail) { return res.status(404).send({ success: false, message: "Room detail not found" }) }
 
             //create image name
             let imageName = req.updateImageName;
@@ -84,7 +84,7 @@ router.put('/updateroomdetail/:id', adminVerify, uploadPhoto.array("images", 4),
             res.json({ message: "Room detail successfully updated", roomDetail })
         }
         catch (error) {
-            res.status(500).send("Internal server error");
+            res.status(500).send({ success: false, error: "Internal server error" });
         }
 
     })
@@ -95,7 +95,7 @@ router.delete('/deleteroomdetail/:id', adminVerify,
         try {
             //delete the room images
             let roomDetail = await RoomDetail.findById(req.params.id);
-            if (!roomDetail) { return res.status(404).send("Not Found") }
+            if (!roomDetail) { return res.status(404).send({ success: false, message: "Room detail not found" }) }
             roomDetail.images.forEach(filename => {
                 try {
                     fs.unlinkSync(`public/images/rooms/${filename}`)
@@ -110,7 +110,7 @@ router.delete('/deleteroomdetail/:id', adminVerify,
             res.json({ message: "Room detail successfully deleted", roomDetail })
         }
         catch (error) {
-            res.status(500).send("Internal server error");
+            res.status(500).send({ success: false, error: "Internal server error" });
         }
 
     })
@@ -119,16 +119,12 @@ router.delete('/deleteroomdetail/:id', adminVerify,
 router.get('/getRoomDetail', async (req, res) => {
     try {
         const roomDetail = await RoomDetail.find({});
-        if (roomDetail.length > 0) {
-            res.json({ message: "room successfully deleted", roomDetail })
-        }
-        else {
-            res.json({ message: "No room detail available", roomDetail })
-        }
+        if (!roomDetail) { res.json({ message: "No room detail available", roomDetail }) }
+        res.json({ success: true, roomDetail })
 
     }
     catch (error) {
-        res.status(500).send("Internal server error");
+        res.status(500).send({ success: false, error: "Internal server error" });
     }
 })
 

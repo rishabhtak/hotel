@@ -1,0 +1,58 @@
+.searchBooking {
+  margin: auto;
+  width: 50%;
+}
+
+.searchBookingText {
+  margin: 5px;
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+input.inputBox {
+  font-size: 1rem;
+  padding: 8px;
+  border-radius: 3px;
+  border: 1px solid #666;
+}
+
+.calendarWrap {
+  display: inline-block;
+  position: relative;
+}
+
+.calendarElement {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 40px;
+  border: 1px solid #ccc;
+  z-index: 999;
+}
+
+@media only screen and (max-width: 320px) {
+  .searchBooking {
+    display: inline-table;
+    margin-left: 5px;
+  }
+
+  .calendarElement {
+    left: 30%;
+  }
+
+  .rdrCalendarWrapper {
+    width: 140%;
+  }
+}
+
+@media only screen and (max-width: 576px) and (min-width:321px) {
+  .searchBooking {
+    display: inline-table;
+    margin-left: 5px;
+  }
+
+  .calendarElement {
+    left: 40%;
+  }
+
+}

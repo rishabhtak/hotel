@@ -7,7 +7,6 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 require('dotenv').config()
 const adminVerify = require('../middleware/adminVerify');
-const Booking = require('../models/Booking');
 
 
 //Route 1:create a admin using:POST "/api/admin/createadmin" .login reqired
@@ -19,6 +18,7 @@ router.post('/createadmin',
     ],
     async (req, res) => {
         try {
+            // Check for validation errors from the request body
             const errors = validationResult(req);
             if (!errors.isEmpty()) {
                 return res.status(400).json({ message: "Validation Error", error: errors.array() })
@@ -29,7 +29,7 @@ router.post('/createadmin',
                 return res.status(400).json({ error: 'Sorry an admin with this email already exists ' });
             }
 
-            //adding security in password
+            // Hash the password for security
             const salt = await bcrypt.genSalt(10);
             const secPass = await bcrypt.hash(req.body.password, salt)
             // create a admin account
@@ -39,19 +39,18 @@ router.post('/createadmin',
                 password: secPass,
             });
 
-            //admin id
+            // Generate a JWT token containing the admin ID for authentication
             const data = {
                 admin: {
                     id: admin.id
                 }
             }
-            // add jwt token with admin id
             const authToken = jwt.sign(data, process.env.JWT_SECRET);
-            success = true;
-            res.json({ message: "Admin succesfully created", authToken })
+            // Return success response along with the generated token
+            res.json({ success: true, message: "Admin succesfully created", authToken })
         }
         catch (error) {
-            res.status(500).send("Internal server error");
+            res.status(500).send({ success: false, error: "Internal server error" });
         }
 
     })
@@ -77,24 +76,25 @@ router.post('/login',
             if (!admin) {
                 return res.status(400).json({ success, error: 'Please try to login with correct credentials' });
             }
-
+            // Compare the provided password with the hashed password in the database
             const passwordCompare = await bcrypt.compare(password, admin.password);
             if (!passwordCompare) {
                 return res.status(400).json({ success, error: 'Please try to login with correct credentials' });
             }
-            //admin id
+            // If the login credentials are valid, generate a JWT token containing the admin ID for authentication
             const data = {
                 admin: {
                     id: admin.id
                 }
             }
-            // add jwt token with admin id
             const authToken = jwt.sign(data, process.env.JWT_SECRET);
+
+            // Return success response along with the generated token
             success = true;
             res.json({ success, authToken })
         }
         catch (error) {
-            res.status(500).send("Internal server error");
+            res.status(500).send({ success: false, error: "Internal server error" });
         }
     })
 
@@ -102,48 +102,29 @@ router.post('/login',
 
 router.get('/getallusers', adminVerify,
     async (req, res) => {
-        let success = false;
         try {
-            //admin id
+            // Get the admin ID from the request object
             const adminId = req.admin.id;
-            console.log(adminId);
+            // Extract the page and limit parameters from the query string
             let page = Number(req.query.page);
             let limit = Number(req.query.limit);
             let skip = (page - 1) * limit;
-            let users;
             //id admin id found then fetch all user without password
             if (adminId) {
-                const count = await User.find({}).count()
-                users = await User.find({}).skip(skip).limit(limit).select("-password");
-                success = true;
-                res.send({ success, users, count })
+                // Fetch total count and users, skip and limit the results, and exclude the 'password' field
+                const [users, count] = await Promise.all([
+                    User.find({}).skip(skip).limit(limit).select("-password"),
+                    User.countDocuments({}),
+                ]);
+                res.send({ success: true, users, count })
             }
         }
         catch (error) {
-            console.log("error", error);
-            res.status(500).send("Internal server error");
+            res.status(500).send({ success: false, error: "Internal server error" });
         }
 
     })
 
-//Route 4: get all bookings using GET '/admin/getallbooking'
-
-router.get('/getallbookings', adminVerify,
-    async (req, res) => {
-        try {
-            const adminId = req.admin.id;
-            let bookings;
-            if (adminId) {
-                bookings = await Booking.find({});
-                success = true;
-                res.send({ success, bookings })
-            }
-        }
-        catch (error) {
-            res.status(500).send("Internal server error");
-        }
-
-    })
 
 //Route 4: get loggedin admin details. Admin Login required /api/admin/getadmin
 router.get('/getadmin', adminVerify,
@@ -156,7 +137,7 @@ router.get('/getadmin', adminVerify,
             res.send({ success, admin })
         }
         catch (error) {
-            res.status(500).send("Internal server error");
+            res.status(500).send({ success: false, error: "Internal server error" });
         }
 
     })

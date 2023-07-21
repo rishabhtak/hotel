@@ -20,10 +20,10 @@ router.post('/createuser',
     async (req, res) => {
         let success = false;
         try {
-            //validation result
+            // Check for validation errors from the request body
             const errors = validationResult(req);
             if (!errors.isEmpty()) {
-                return res.status(400).json({ message: "Validation Error", error: errors.array() })
+                return res.status(400).json({ success, message: "Validation Error", error: errors.array() })
             }
 
             //check whether the user with this email alrady exists.
@@ -32,7 +32,7 @@ router.post('/createuser',
                 return res.status(400).json({ success, error: 'Sorry a user with this email already exists ' });
             }
 
-            //adding security in password
+            // Hash the password for security
             const salt = await bcrypt.genSalt(10);
             const secPass = await bcrypt.hash(req.body.password, salt)
             // create a user
@@ -43,19 +43,19 @@ router.post('/createuser',
                 phone: req.body.phone
             });
 
-            // add jwt token
+            // Generate a JWT token containing the user ID for authentication
             const data = {
                 user: {
                     id: user.id
                 }
             }
             const authToken = jwt.sign(data, process.env.JWT_SECRET);
+            // Return success response along with the generated token
             success = true;
-            // res.json(user);
             res.json({ success, authToken })
         }
         catch (error) {
-            res.status(500).send("Internal server error");
+            res.status(500).send({ success: false, error: "Internal server error" });
         }
 
     })
@@ -69,7 +69,7 @@ router.post('/login',
     ],
     async (req, res) => {
         let success = false;
-
+        // Check for validation errors from the request body
         try {
             const errors = validationResult(req);
             if (!errors.isEmpty()) {
@@ -82,23 +82,24 @@ router.post('/login',
             if (!user) {
                 return res.status(400).json({ success, error: 'Please try to login with correct credentials' });
             }
+            // Compare the provided password with the hashed password in the database
             const passwordCompare = await bcrypt.compare(password, user.password);
             if (!passwordCompare) {
                 return res.status(400).json({ success, error: 'Please try to login with correct credentials' });
             }
-            // add user id
+            // If the login credentials are valid, generate a JWT token containing the user ID for authentication
             const data = {
                 user: {
                     id: user.id
                 }
             }
-            // add jwt token with user id
             const authToken = jwt.sign(data, process.env.JWT_SECRET);
+            // Return success response along with the generated token
             success = true;
             res.json({ success, authToken })
         }
         catch (error) {
-            res.status(500).send("Internal server error");
+            res.status(500).send({ success: false, error: "Internal server error" });
         }
     })
 
@@ -106,15 +107,13 @@ router.post('/login',
 
 router.get('/getuser', userVerify,
     async (req, res) => {
-        let success = false;
         try {
             const userId = req.user.id;
             const user = await User.findById(userId).select("-password");
-            success = true;
-            res.send({ success, user })
+            res.send({ success: true, user })
         }
         catch (error) {
-            res.status(500).send("Internal server error");
+            res.status(500).send({ success: false, error: "Internal server error" });
         }
 
     })

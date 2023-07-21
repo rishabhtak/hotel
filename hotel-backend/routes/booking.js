@@ -3,6 +3,8 @@ const Booking = require('../models/Booking');
 const router = express.Router();
 const { body, validationResult } = require('express-validator');
 const bookingVerify = require('../middleware/bookingVerify');
+const adminVerify = require('../middleware/adminVerify');
+
 
 
 //Route 1:create a booking using:POST "/api/booking" .no login reqired
@@ -19,30 +21,36 @@ router.post('/createbooking', bookingVerify,
     ],
     async (req, res) => {
         try {
-
             const { name, email, phone, specialRequest, roomDetails, startDate, endDate, totalPrice } = req.body;
             //validation result
             const errors = validationResult(req);
             if (!errors.isEmpty()) {
-
                 return res.status(400).json({ message: "Validation Error", error: errors.array() })
             }
-            let saveBooking;
-            //if user is not logged in or not have account
-            if (!req.user) {
-                const booking = new Booking({ name, email, phone, specialRequest, roomDetails, startDate, endDate, totalPrice })
-                saveBooking = await booking.save();
+            // Create the Booking object
+            const bookingData = {
+                name,
+                email,
+                phone,
+                specialRequest,
+                roomDetails,
+                startDate,
+                endDate,
+                totalPrice,
+            };
+
+            // Add user property if the user is logged in
+            if (req.user) {
+                bookingData.user = req.user.id;
             }
-            else {
-                // if user already has account
-                const booking = new Booking({ name, email, phone, specialRequest, roomDetails, startDate, endDate, totalPrice, user: req.user.id })
-                saveBooking = await booking.save();
-            }
-            res.json({ message: "Booking succesfully", saveBooking })
+
+            // Save the booking
+            const saveBooking = await Booking.create(bookingData);
+            res.json({ message: "Booking successful", saveBooking });
         }
         catch (error) {
             console.log(error)
-            res.status(500).send("Internal server error");
+            res.status(500).send({ success: false, error: "Internal server error" });
         }
 
     })
@@ -52,14 +60,60 @@ router.post('/createbooking', bookingVerify,
 router.get('/getuserbooking', bookingVerify,
     async (req, res) => {
         try {
-            let success = false;
             const bookings = await Booking.find({ user: req.user.id })
-            success = true;
-            res.json({ success, bookings })
+            res.json({ success: true, bookings })
+        }
+        catch (error) {
+            res.status(500).send({ success: false, error: "Internal server error" });
         }
 
+    })
+
+
+//Route 3: get all bookings using GET '/booking/getallbookings'
+
+router.get('/getallbookings', adminVerify,
+    async (req, res) => {
+        try {
+            const adminId = req.admin.id;
+            if (adminId) {
+                const bookings = await Booking.find({});
+                res.send({ success: true, bookings })
+            }
+        }
         catch (error) {
-            res.status(500).send("Internal server error");
+            res.status(500).send({ success: false, error: "Internal server error" });
+        }
+
+    })
+
+//Route 4: get all bookings using GET '/booking/getbookingsbydate'
+
+router.post('/getbookingsbydate', adminVerify,
+    async (req, res) => {
+        try {
+            const adminId = req.admin.id;
+            if (adminId) {
+                const { from, to } = req.body;
+                //find booked rooms by date
+                if (!from || !to) {
+                    return res.status(400).json({ message: "Bad Request: 'from' and 'to' dates are required." });
+                }
+                const bookingsByDate = await Booking.find({
+                    $or: [
+                        { startDate: { $gte: from, $lte: to } },
+                        { endDate: { $gte: from, $lte: to } }
+                    ],
+                }).sort({ startDate: 1 });
+                if (bookingsByDate.length === 0) {
+                    return res.json({ message: "No bookings found for the specified date range.", bookingsByDate });
+                }
+                res.send({ success: true, bookingsByDate })
+            }
+        }
+        catch (error) {
+            console.log(error)
+            res.status(500).send({ success: false, error: "Internal server error" });
         }
 
     })
