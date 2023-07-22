@@ -118,9 +118,20 @@ router.post('/getbookingsbydate', adminVerify,
 
     })
 
+//Route 5: delete bookings using DELETE '/api/booking/deletebooking' Login required
 
+router.delete('/deletebooking/:id', adminVerify,
+    async (req, res) => {
+        try {
+            //find the booking and delete
+            const booking = await Booking.findByIdAndDelete(req.params.id)
+            if (!booking) { return res.status(404).send({ success: false, message: "Booking not found" }) }
 
+            res.json({ success: true, message: "Booking succesfully deleted", booking })
+        }
+        catch (error) {
+            res.status(500).send({ success: false, error: "Internal server error" });
+        }
 
-
-
+    })
 module.exports = router;

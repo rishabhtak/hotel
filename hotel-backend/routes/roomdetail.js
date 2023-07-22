@@ -81,7 +81,7 @@ router.put('/updateroomdetail/:id', adminVerify, uploadPhoto.array("images", 4),
 
             //update room
             roomDetail = await RoomDetail.findByIdAndUpdate(req.params.id, { $set: newRoomDetail }, { new: true })
-            res.json({ message: "Room detail successfully updated", roomDetail })
+            res.json({ message: "Room detail successfully updated", success: true, roomDetail })
         }
         catch (error) {
             res.status(500).send({ success: false, error: "Internal server error" });
@@ -107,7 +107,7 @@ router.delete('/deleteroomdetail/:id', adminVerify,
 
             //delete roomdetail
             roomDetail = await RoomDetail.findByIdAndDelete(req.params.id)
-            res.json({ message: "Room detail successfully deleted", roomDetail })
+            res.json({ message: "Room detail successfully deleted", success:true, roomDetail })
         }
         catch (error) {
             res.status(500).send({ success: false, error: "Internal server error" });

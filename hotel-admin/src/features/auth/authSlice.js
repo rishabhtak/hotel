@@ -27,33 +27,33 @@ export const login = createAsyncThunk(
                 body: JSON.stringify({ email: credentials.email, password: credentials.password })
             });
             const adminLogin = await response.json();
+            const message = adminLogin.message
             if (adminLogin.success) {
                 localStorage.setItem('adminToken', adminLogin.authToken);
-                thunkAPI.dispatch(getAdmin())
+                thunkAPI.dispatch(getAdmin());
                 return adminLogin;
             }
             thunkAPI.dispatch(sendMessage({
-                message: "invalid credentials",
+                message,
                 type: "error"
-            }))
-            thunkAPI.dispatch(deleteAlert());
-            return thunkAPI.rejectWithValue(adminLogin.error)
+            }));
+            return thunkAPI.rejectWithValue(login.error);
         } catch (error) {
             thunkAPI.dispatch(sendMessage({
-                message: "something went wrong,Please try again later",
+                message: "something went wrong, Please try again later",
                 type: "error"
-            }))
+            }));
+            return thunkAPI.rejectWithValue(login.error);
+        } finally {
             thunkAPI.dispatch(deleteAlert());
-            return error.response.json()
         }
-
     }
-)
+);
+
 
 export const getAdmin = createAsyncThunk(
     'getAdmin',
-    async () => {
-
+    async (thunkAPI) => {
         try {
             // api to get users
             const response = await fetch(`${host}admin/getadmin`, {
@@ -64,9 +64,13 @@ export const getAdmin = createAsyncThunk(
                 },
             });
             const admin = await response.json();
-            return admin;
+            if (admin.success) {
+                return admin;
+            }
+            localStorage.removeItem('adminToken');
+            return thunkAPI.rejectWithValue(getAdmin.error);
         } catch (error) {
-            return error.response.json()
+            return thunkAPI.rejectWithValue(getAdmin.error);
         }
     }
 )

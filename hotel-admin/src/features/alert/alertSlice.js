@@ -10,7 +10,6 @@ export const alertSlice = createSlice({
         sendMessage: (state, { payload }) => {
             state.message = payload.message
             state.type = payload.type
-
         },
     },
 })

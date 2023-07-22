@@ -74,12 +74,12 @@ router.post('/login',
             //check whether the email and password is correct or not.
             let admin = await Admin.findOne({ email });
             if (!admin) {
-                return res.status(400).json({ success, error: 'Please try to login with correct credentials' });
+                return res.status(400).json({ success, message: 'Please try to login with correct credentials' });
             }
             // Compare the provided password with the hashed password in the database
             const passwordCompare = await bcrypt.compare(password, admin.password);
             if (!passwordCompare) {
-                return res.status(400).json({ success, error: 'Please try to login with correct credentials' });
+                return res.status(400).json({ success, message: 'Please try to login with correct credentials' });
             }
             // If the login credentials are valid, generate a JWT token containing the admin ID for authentication
             const data = {
@@ -129,12 +129,11 @@ router.get('/getallusers', adminVerify,
 //Route 4: get loggedin admin details. Admin Login required /api/admin/getadmin
 router.get('/getadmin', adminVerify,
     async (req, res) => {
-        let success = false;
         try {
             const adminId = req.admin.id;
             const admin = await Admin.findById(adminId).select("-password");
-            success = true;
-            res.send({ success, admin })
+            if (!admin) { return res.status(404).send({ success: false, message: "Admin not found" }) }
+            res.send({ success: true, admin })
         }
         catch (error) {
             res.status(500).send({ success: false, error: "Internal server error" });

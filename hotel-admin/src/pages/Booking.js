@@ -24,16 +24,17 @@ import {
     TablePagination,
 } from '@mui/material';
 import { addDays } from 'date-fns'
+import DeleteDialogBox from '../utils/DeleteDialogBox';
+
 
 import { getAllBookings, getBookingsByDate } from '../features/booking/bookingSlice';
-import { setOpenModel } from '../features/model/modelSlice';
+import { setDialogOpen } from '../features/model/modelSlice';
 
 
 // components
-import Iconify from '../components/iconify';
 import Scrollbar from '../components/scrollbar';
 // sections
-import { BookingListHead, BookingListToolbar, BookingListBody, BookingModel } from '../sections/@dashboard/booking';
+import { BookingListHead, BookingListToolbar, BookingListBody } from '../sections/@dashboard/booking';
 // mock
 import DateRangePicker from '../utils/DateRangePicker';
 
@@ -96,8 +97,6 @@ export default function BookingPage() {
     }
     const dispatch = useDispatch();
     const { bookings, bookingsByDate, loading, error } = useSelector(state => state.bookings);
-    const { modelOpen } = useSelector(state => state.setModel)
-
 
     useEffect(() => {
         if (localStorage.getItem('adminToken')) {
@@ -113,21 +112,13 @@ export default function BookingPage() {
         // eslint-disable-next-line
     }, []);
 
-    const [open, setOpen] = useState(false);
     const [page, setPage] = useState(0);
     const [order, setOrder] = useState('asc');
     const [orderBy, setOrderBy] = useState('name');
     const [filterName, setFilterName] = useState('');
     const [rowsPerPage, setRowsPerPage] = useState(5);
     const [dateRange, setDateRange] = useState(null);
-
-    // const [modelAddBooking, setModelAddBooking] = useState(false);
-
-
-    const handleCloseMenu = () => {
-        setOpen(false);
-    };
-
+    const [id, setId] = useState(null)
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -138,18 +129,9 @@ export default function BookingPage() {
         setRowsPerPage(parseInt(event.target.value, 10));
     };
 
-
-    // const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - bookings.length) : 0;
-
     const filteredBooking = applySortFilter(bookings, getComparator(order, orderBy), filterName);
 
     const isNotFound = !filteredBooking.length && !!filterName;
-
-    //  const handleModelToggle = useCallback(() => setModelAddBooking(prevShow => !prevShow), [modelAddBooking]);
-
-   // const handleModelClose = useCallback(() => dispatch(setOpenModel(false)), [dispatch]);
-
-    const handleOpenMenu = useCallback((event) => setOpen(event.currentTarget), [open])
 
     const handleRequestSort = useCallback((event, property) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -165,6 +147,11 @@ export default function BookingPage() {
     const inputDateHandler = (date) => {
         setDateRange(date)
     };
+
+    const handleDelete = useCallback((id) => {
+        dispatch(setDialogOpen(true))
+        setId(id)
+    }, [])
 
 
     const submitDateRange = () => {
@@ -193,15 +180,12 @@ export default function BookingPage() {
                             Search Bookings
                         </Button>
                     </div>
-                    <Button variant="contained" onClick={() => dispatch(setOpenModel(true))}
-                        startIcon={<Iconify icon="eva:plus-fill" />}>
-                        Add Booking
-                    </Button>
                 </Stack>
 
 
                 {loading ? <PuffLoader cssOverride={override} /> : <>
-                    <BookingModel /><Card>
+                    {id && <DeleteDialogBox id={id} type="booking" />}
+                    <Card>
                         <BookingListToolbar filterName={filterName} onFilterName={handleFilterByName} />
 
                         <Scrollbar>
@@ -222,9 +206,9 @@ export default function BookingPage() {
                                                     <TableCell colSpan={7} align='center'>No Data Available</TableCell>
                                                 </TableRow>
                                             ) :
-                                                filteredBooking.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
+                                                filteredBooking.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((booking) => {
                                                     return (
-                                                        <BookingListBody row={row} key={row._id} handleOpenMenu={handleOpenMenu} />
+                                                        <BookingListBody booking={booking} key={booking._id} handleDelete={handleDelete} />
                                                     );
                                                 })
 
@@ -266,38 +250,9 @@ export default function BookingPage() {
                             onPageChange={handleChangePage}
                             onRowsPerPageChange={handleChangeRowsPerPage}
                         />
-                    </Card></>}
-
+                    </Card>
+                </>}
             </Container >
-
-            <Popover
-                open={Boolean(open)}
-                anchorEl={open}
-                onClose={handleCloseMenu}
-                anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
-                transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-                PaperProps={{
-                    sx: {
-                        p: 1,
-                        width: 140,
-                        '& .MuiMenuItem-root': {
-                            px: 1,
-                            typography: 'body2',
-                            borderRadius: 0.75,
-                        },
-                    },
-                }}
-            >
-                <MenuItem>
-                    <Iconify icon={'eva:edit-fill'} sx={{ mr: 2 }} />
-                    Edit
-                </MenuItem>
-
-                <MenuItem sx={{ color: 'error.main' }}>
-                    <Iconify icon={'eva:trash-2-outline'} sx={{ mr: 2 }} />
-                    Delete
-                </MenuItem>
-            </Popover>
         </>
     );
 }

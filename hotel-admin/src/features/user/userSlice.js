@@ -14,7 +14,7 @@ const initialState = {
 
 export const getUsers = createAsyncThunk(
     'getUsers',
-    async (query) => {
+    async (query, thunkAPI) => {
 
         try {
             // api to get users
@@ -27,9 +27,9 @@ export const getUsers = createAsyncThunk(
             });
             const allUsers = await response.json();
             return allUsers;
-         
+
         } catch (error) {
-            return error.response.json()
+            return thunkAPI.rejectWithValue(error)
         }
     }
 )

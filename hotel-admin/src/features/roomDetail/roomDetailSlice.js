@@ -20,7 +20,7 @@ export const getRoomDetail = createAsyncThunk(
             const allRoomDetail = await response.json();
             return allRoomDetail;
         } catch (error) {
-            return thunkAPI.rejectWithValue(getRoomDetail.error)
+            return thunkAPI.rejectWithValue(error)
         }
     }
 );
@@ -49,19 +49,17 @@ export const addRoomDetail = createAsyncThunk(
             });
             thunkAPI.dispatch(setOpenModel(false))
             const roomAddDetail = await response.json();
-            if (!roomAddDetail.error) {
+            if (roomAddDetail.success) {
                 thunkAPI.dispatch(sendMessage({
-                    message: "room successfully added",
+                    message: "room detail successfully added",
                     type: "success"
                 }))
-                thunkAPI.dispatch(deleteAlert());
                 return roomAddDetail;
             }
             thunkAPI.dispatch(sendMessage({
                 message: "something went wrong",
                 type: "error"
             }))
-            thunkAPI.dispatch(deleteAlert());
             return thunkAPI.rejectWithValue(addRoomDetail.error)
 
         } catch (error) {
@@ -69,10 +67,11 @@ export const addRoomDetail = createAsyncThunk(
                 message: "something went wrong",
                 type: "error"
             }))
-            thunkAPI.dispatch(deleteAlert());
-            return thunkAPI.rejectWithValue(addRoomDetail.error)
+            return thunkAPI.rejectWithValue(error)
         }
-
+        finally {
+            thunkAPI.dispatch(deleteAlert());
+        }
 
     }
 );
@@ -103,25 +102,28 @@ export const updateRoomDetail = createAsyncThunk(
             });
             thunkAPI.dispatch(setOpenModel(false))
             const roomDetailUpdate = await response.json();
-            if (!roomDetailUpdate.error) {
+            if (roomDetailUpdate.success) {
                 thunkAPI.dispatch(sendMessage({
                     message: "room detail successfully updated",
                     type: "success"
                 }))
-                thunkAPI.dispatch(deleteAlert());
                 return roomDetailUpdate;
             }
-            thunkAPI.dispatch(deleteAlert());
+            thunkAPI.dispatch(sendMessage({
+                message: "something went wrong",
+                type: "error"
+            }))
             return thunkAPI.rejectWithValue(updateRoomDetail.error)
         } catch (error) {
             thunkAPI.dispatch(sendMessage({
                 message: "something went wrong",
                 type: "error"
             }))
-            thunkAPI.dispatch(deleteAlert());
-            return thunkAPI.rejectWithValue(updateRoomDetail.error)
+            return thunkAPI.rejectWithValue(error)
         }
-
+        finally {
+            thunkAPI.dispatch(deleteAlert());
+        }
 
     }
 );
@@ -138,19 +140,28 @@ export const deleteRoomDetail = createAsyncThunk(
                 },
             });
             const roomDetailDelete = await response.json();
+            if (roomDetailDelete.success) {
+                thunkAPI.dispatch(sendMessage({
+                    message: "room successfully deleted",
+                    type: "success"
+                }))
+                return roomDetailDelete;
+            }
             thunkAPI.dispatch(sendMessage({
-                message: "room successfully deleted",
-                type: "success"
+                message: "something went wrong",
+                type: "error"
             }))
-            thunkAPI.dispatch(deleteAlert());
-            return roomDetailDelete;
+            return thunkAPI.rejectWithValue(deleteRoomDetail.error)
+
         } catch (error) {
             thunkAPI.dispatch(sendMessage({
                 message: "something went wrong",
                 type: "error"
             }))
+            return thunkAPI.rejectWithValue(error)
+        }
+        finally {
             thunkAPI.dispatch(deleteAlert());
-            return thunkAPI.rejectWithValue(deleteRoomDetail.error)
         }
     }
 );

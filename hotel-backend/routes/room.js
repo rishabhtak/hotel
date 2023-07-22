@@ -27,7 +27,7 @@ router.post('/addroom', adminVerify,
             //add room
             const rooms = new Room({ roomType, price, name, capacity, description })
             const saveRoom = await rooms.save();
-            res.json({ message: "Room succesfully added", saveRoom })
+            res.json({ message: "Room succesfully added", success:true,saveRoom })
         }
         catch (error) {
             res.status(500).send({ success: false, error: "Internal server error" });
@@ -105,7 +105,7 @@ router.post('/getavailableroom', async (req, res) => {
     }
 })
 
-//Route 4: update room details using PUT '/api/room/updateroom' Admin Login required
+//Route 4: update room using PUT '/api/room/updateroom' Admin Login required
 
 router.put('/updateroom/:id', adminVerify, [
     body('roomType', "Enter a valid room type").isLength({ min: 3 }),
@@ -132,9 +132,13 @@ router.put('/updateroom/:id', adminVerify, [
 
             //find the room and update
             let room = await Room.findByIdAndUpdate(req.params.id, { $set: newRoom }, { new: true })
-            if (!room) { return res.status(404).send({ success: false, message: "Room not found" }) }
+            if (!room) {
+                return res.status(404).send({
+                    success: false, message: "Room not found"
+                })
+            }
 
-            res.json({ message: "Room succesfully updated", room })
+            res.json({ message: "Room succesfully updated",success:true, room })
         }
         catch (error) {
             res.status(500).send({ success: false, error: "Internal server error" });

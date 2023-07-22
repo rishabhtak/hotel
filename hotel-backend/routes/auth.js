@@ -80,12 +80,12 @@ router.post('/login',
             //check whether the email and password is correct or not.
             let user = await User.findOne({ email });
             if (!user) {
-                return res.status(400).json({ success, error: 'Please try to login with correct credentials' });
+                return res.status(400).json({ success, message: 'Please try to login with correct credentials' });
             }
             // Compare the provided password with the hashed password in the database
             const passwordCompare = await bcrypt.compare(password, user.password);
             if (!passwordCompare) {
-                return res.status(400).json({ success, error: 'Please try to login with correct credentials' });
+                return res.status(400).json({ success, message: 'Please try to login with correct credentials' });
             }
             // If the login credentials are valid, generate a JWT token containing the user ID for authentication
             const data = {
@@ -99,7 +99,7 @@ router.post('/login',
             res.json({ success, authToken })
         }
         catch (error) {
-            res.status(500).send({ success: false, error: "Internal server error" });
+            res.status(500).send({ success: false, message: "Internal server error" });
         }
     })
 

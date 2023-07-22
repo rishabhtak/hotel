@@ -4,8 +4,9 @@ import PropTypes from 'prop-types';
 // @mui
 import {
     Table,
-    Stack,
     Collapse,
+    Popover,
+    MenuItem,
     Box,
     TableHead,
     TableBody,
@@ -35,7 +36,7 @@ const TABLE_COLLAPSIBLE = [
 ];
 
 BookingListBody.propTypes = {
-    row: PropTypes.shape({
+    booking: PropTypes.shape({
         _id: PropTypes.string,
         name: PropTypes.string,
         email: PropTypes.string,
@@ -52,14 +53,30 @@ BookingListBody.propTypes = {
             price: PropTypes.number,
         }))
     }),
-    handleOpenMenu: PropTypes.func,
+    handleDelete: PropTypes.func
 };
 
-function BookingListBody({ row, handleOpenMenu }) {
+function BookingListBody({ booking, handleDelete }) {
     const [openCollapse, setOpenCollapse] = useState(false);
+    const [open, setOpen] = useState(false);
 
-    if (row) {
-        const { _id, name, email, phone, startDate, endDate, specialRequest, totalPrice, roomDetails } = row;
+    const handleOpenMenu = (event) => {
+        setOpen(event.currentTarget)
+    };
+
+    const handleCloseMenu = () => {
+        setOpen(false);
+    };
+
+    const handleDeleteBooking = (id) => {
+        handleDelete(id)
+        setOpen(false);
+
+    };
+
+
+    if (booking) {
+        const { name, email, phone, startDate, endDate, specialRequest, totalPrice, roomDetails } = booking;
         return (
             <>
                 <TableRow tabIndex={-1} sx={{ '& > *': { borderBottom: 'unset' } }}>
@@ -122,6 +139,29 @@ function BookingListBody({ row, handleOpenMenu }) {
                         </Collapse>
                     </TableCell>
                 </TableRow >
+                <Popover
+                    open={Boolean(open)}
+                    anchorEl={open}
+                    onClose={handleCloseMenu}
+                    anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
+                    transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+                    PaperProps={{
+                        sx: {
+                            p: 1,
+                            width: 140,
+                            '& .MuiMenuItem-root': {
+                                px: 1,
+                                typography: 'body2',
+                                borderRadius: 0.75,
+                            },
+                        },
+                    }}
+                >
+                    <MenuItem sx={{ color: 'error.main' }} onClick={() => handleDeleteBooking(booking._id)}>
+                        <Iconify icon={'eva:trash-2-outline'} sx={{ mr: 2 }} />
+                        Delete
+                    </MenuItem>
+                </Popover>
             </>
         )
     }

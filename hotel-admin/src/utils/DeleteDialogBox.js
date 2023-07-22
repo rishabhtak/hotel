@@ -14,6 +14,7 @@ import {
 } from '@mui/material';
 import { deleteRoom } from '../features/room/roomSlice';
 import { deleteRoomDetail } from '../features/roomDetail/roomDetailSlice';
+import { deleteBooking } from '../features/booking/bookingSlice';
 import { setDialogOpen } from '../features/model/modelSlice'
 
 DeleteDialogBox.propTypes = {
@@ -36,6 +37,9 @@ function DeleteDialogBox({ id, type }) {
         }
         if (type === "room detail") {
             dispatch(deleteRoomDetail(id))
+        }
+        if (type === "booking") {
+            dispatch(deleteBooking(id))
         }
 
     }
