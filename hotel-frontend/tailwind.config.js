@@ -6,7 +6,14 @@ module.exports = withMT({
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
-  theme: {},
+  theme: {
+    extend: {
+      colors: {
+        'navbar-color': 'rgb(15,23,43,1)',
+        'button-color': 'rgb(254,161,22)',
+      },
+    },
+  },
   plugins: [],
 });
 
