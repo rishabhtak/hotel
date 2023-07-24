@@ -33,7 +33,6 @@ export const getAllBookings = createAsyncThunk(
 export const getBookingsByDate = createAsyncThunk(
     'getBookingsByDate',
     async (date, thunkAPI) => {
-        console.log(date)
         try {
             const response = await fetch(`${host}booking/getBookingsByDate`, {
                 method: 'POST',
@@ -113,7 +112,6 @@ export const bookingSlice = createSlice({
                 state.loading = true
             })
             .addCase(getBookingsByDate.fulfilled, (state, { payload }) => {
-                console.log(payload)
                 state.loading = false
                 state.bookingsByDate = payload.bookingsByDate
             })

@@ -105,12 +105,11 @@ function BookingListBody({ booking, handleDelete }) {
                     </TableCell>
                 </TableRow>
                 <TableRow>
-                    <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+                    <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={7}>
                         <Collapse in={openCollapse} timeout="auto" unmountOnExit>
                             <Box sx={{ margin: 1 }}>
-                                <Table size="small" aria-label="purchases">
+                                <Table size="small" aria-label="roomDetail">
                                     <TableHead>
-
                                         <TableRow>
                                             {TABLE_COLLAPSIBLE.map((tableCollasibleHead) => (
 

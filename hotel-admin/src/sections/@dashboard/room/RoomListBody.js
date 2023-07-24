@@ -65,7 +65,7 @@ function RoomListBody({ room, handleEdit, sno, handleDelete }) {
                     <TableCell align="left">{capacity}</TableCell>
                     <TableCell align="left">{price}</TableCell>
                     <TableCell align="left" style={{ textTransform: 'capitalize' }}>{description}</TableCell>
-                    <TableCell align="right">
+                    <TableCell align="left">
                         <IconButton size="large" color="inherit" onClick={handleOpenMenu}>
                             <Iconify icon={'eva:more-vertical-fill'} />
                         </IconButton>

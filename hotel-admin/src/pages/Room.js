@@ -50,7 +50,8 @@ const TABLE_HEAD = [
     { id: 'capacity', label: 'Capacity', alignRight: false },
     { id: 'price', label: 'Price', alignRight: false },
     { id: 'description', label: 'Description', alignRight: false },
-    { id: '' },
+    { id: 'action', label: 'Actions', alignRight: false },
+
 ];
 
 
@@ -89,6 +90,7 @@ function applySortFilter(array, comparator, query) {
 
 
 export default function RoomPage() {
+
     const navigate = useNavigate();
 
     const override = {
@@ -101,7 +103,7 @@ export default function RoomPage() {
 
     const dispatch = useDispatch();
     const { rooms, loading, error, count } = useSelector(state => state.rooms);
-    // const { modelOpen } = useSelector(state => state.setModel)
+    console.log(count, rooms)
 
     useEffect(() => {
         if (localStorage.getItem('adminToken')) {
@@ -126,14 +128,12 @@ export default function RoomPage() {
     const [currentRoom, setCurrentRoom] = useState(null)
     const [id, setId] = useState(null)
 
-
     const handleChangePage = (event, newPage) => {
         dispatch(getRooms({
             page: newPage + 1,
             limit: rowsPerPage
         }));
         setPage(newPage);
-
     };
 
     const handleChangeRowsPerPage = (event) => {
@@ -186,6 +186,7 @@ export default function RoomPage() {
     }, []);
 
 
+
     return (
         <>
             <Helmet>
@@ -226,7 +227,7 @@ export default function RoomPage() {
                                         ) :
                                             filteredRoom.map((room, index) => {
                                                 return (
-                                                    <RoomListBody room={room} sno={index + 1} key={room._id} handleEdit={handleEdit} handleDelete={handleDelete} />
+                                                    <RoomListBody room={room} sno={page === 0 ? (index + 1) : ((page + 1) - 1) * rowsPerPage + (index + 1)} key={room._id} handleEdit={handleEdit} handleDelete={handleDelete} />
                                                 );
                                             })
                                         }
