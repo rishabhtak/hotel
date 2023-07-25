@@ -11,7 +11,7 @@ module.exports = withMT({
       colors: {
         'navbar-color': 'rgb(15,23,43,1)',
         'button-color': 'rgb(254,161,22)',
-      },
+      }
     },
   },
   plugins: [],

@@ -4,12 +4,14 @@ import { useState, useEffect } from "react";
 import {
   Navbar,
   MobileNav,
+  Collapse,
   Typography,
   Button,
   IconButton,
   Card,
 } from "@material-tailwind/react";
 import HomeCarousel from "./HomeCarousel";
+import Link from "next/link";
 
 
 
@@ -31,9 +33,9 @@ export default function NavbarLayout() {
         color="blue-gray"
         className="p-1 font-normal text-white text-lg"
       >
-        <a href="/" className="flex items-center">
+        <Link href="/" className="flex items-center hover-underline-animation">
           Home
-        </a>
+        </Link>
       </Typography>
       <Typography
         as="li"
@@ -41,9 +43,9 @@ export default function NavbarLayout() {
         color="blue-gray"
         className="p-1 font-normal text-white text-lg"
       >
-        <a href="#" className="flex items-center">
+        <Link href="/" className="flex items-center hover-underline-animation">
           Account
-        </a>
+        </Link>
       </Typography>
       <Typography
         as="li"
@@ -51,19 +53,19 @@ export default function NavbarLayout() {
         color="blue-gray"
         className="p-1 font-normal text-white text-lg"
       >
-        <a href="#" className="flex items-center">
+        <Link href="/" className="flex items-center hover-underline-animation">
           Blocks
-        </a>
+        </Link>
       </Typography>
       <Typography
         as="li"
         variant="small"
         color="blue-gray"
-        className="p-1 font-normal text-white text-lg"
+        className="p-1 font-normal text-white text-lg "
       >
-        <a href="#" className="flex items-center">
+        <Link href="/" className="flex items-center hover-underline-animation">
           Docs
-        </a>
+        </Link>
       </Typography>
     </ul>
   );
@@ -73,13 +75,12 @@ export default function NavbarLayout() {
       <Navbar
         className="bg-navbar-color border-none h-max max-w-full rounded-none py-2 px-4 lg:px-8 lg:py-4">
         <div className="container mx-auto flex items-center justify-between text-blue-gray-900">
-          <Typography
-            as="a"
-            href="#"
-            className="mr-4 cursor-pointer py-1.5 font-medium text-white text-2xl hover:text-black"
+          <Link
+            href="/"
+            className="mr-4 cursor-pointer py-1.5 font-medium text-white text-2xl"
           >
             Logo
-          </Typography>
+          </Link>
           <div className="hidden lg:block">{navList}</div>
           <Button variant="gradient" size="sm" className="hidden lg:inline-block">
             <span>Buy Now</span>
@@ -122,14 +123,14 @@ export default function NavbarLayout() {
             )}
           </IconButton>
         </div>
-        <MobileNav open={openNav}>
+        <Collapse open={openNav}>
           <div className="container mx-auto">
             {navList}
             <Button variant="gradient" size="sm" fullWidth className="mb-2">
               <span>Buy Now</span>
             </Button>
           </div>
-        </MobileNav>
+        </Collapse>
       </Navbar>
     </div>
   );

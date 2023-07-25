@@ -1,6 +1,6 @@
 "use client";
-
 import './globals.css'
+import 'animate.css';
 import { Inter } from 'next/font/google'
 import { ThemeProvider } from "@material-tailwind/react";
 import NavbarLayout from "@/app/components/NavbarLayout"
