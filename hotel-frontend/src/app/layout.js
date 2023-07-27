@@ -1,11 +1,10 @@
 "use client";
 import './globals.css'
 import 'animate.css';
-import { Inter } from 'next/font/google'
 import { ThemeProvider } from "@material-tailwind/react";
-import NavbarLayout from "@/app/components/NavbarLayout"
+import NavbarLayout from "@/app/components/NavbarLayout";
+import Footer from './components/Footer';
 
-const inter = Inter({ subsets: ['latin'] })
 
 export const metadata = {
   title: 'Hotel Frontend',
@@ -15,10 +14,11 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body>
+      <body style={{ backgroundColor: '#f8fafc' }}>
         <ThemeProvider>
           <NavbarLayout />
           {children}
+          <Footer />
         </ThemeProvider>
       </body>
     </html>

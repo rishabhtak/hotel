@@ -3,14 +3,11 @@
 import { useState, useEffect } from "react";
 import {
   Navbar,
-  MobileNav,
   Collapse,
   Typography,
   Button,
   IconButton,
-  Card,
 } from "@material-tailwind/react";
-import HomeCarousel from "./HomeCarousel";
 import Link from "next/link";
 
 
@@ -132,6 +129,7 @@ export default function NavbarLayout() {
           </div>
         </Collapse>
       </Navbar>
+      
     </div>
   );
 }

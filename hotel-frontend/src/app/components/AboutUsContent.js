@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import Image from "next/image";
 import WOW from 'wowjs';
 
+
 function AboutUsContent() {
     useEffect(() => {
         new WOW.WOW({
@@ -16,7 +17,7 @@ function AboutUsContent() {
                 <div className="flex flex-col justify-center md:pr-8 xl:pr-0 lg:max-w-lg">
                     <div className="max-w-xl mb-6">
                         <h2 className="max-w-lg mb-6 font-sans text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl sm:leading-none">
-                            Welcome To <span style={{ color: '#0087ca' }}>Hotel</span>
+                            Welcome To <span className="text-blueText-color">Hotel</span>
                         </h2>
                         <p className="text-base text-justify text-gray-700 md:text-lg">
                             Where luxury meets comfort, and every moment is crafted to perfection. Nestled in the heart of our exquisite hotel promises an unforgettable experience that will leave you captivated and yearning for more.

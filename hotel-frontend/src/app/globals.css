@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+    --blue-color : #0087ca;
+}
+
 /* Start Home Section */
 
 
@@ -13,7 +17,7 @@
 }
 
 .hover-underline-animation:hover {
-    color: #0087ca;
+    color: var(--blue-color);
 }
 
 .hover-underline-animation::after {
@@ -24,7 +28,7 @@
     height: 2px;
     bottom: 0;
     left: 0;
-    background-color: #0087ca;
+    background-color: var(--blue-color);
     transform-origin: bottom right;
     transition: transform 0.25s ease-out;
 }
@@ -35,7 +39,7 @@
 }
 
 
-/* animation for carousel*/
+/* animation for carousel text and button */
 
 .slide-in-top {
     -webkit-animation: slide-in-top 1s cubic-bezier(.25, .46, .45, .94) 0.5s both;
@@ -135,3 +139,5 @@
         opacity: 1;
     }
 }
+
+/* End Home Section */
