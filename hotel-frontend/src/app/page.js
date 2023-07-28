@@ -1,17 +1,19 @@
-import HomeCarousel from "./components/HomeCarousel";
-import TeamMembers from "./components/TeamMembers";
+import HomeCarousel from "./components/Home/HomeCarousel";
 import dynamic from 'next/dynamic'
 
-const RoomCard = dynamic(() => import('./components/RoomCard'), {
+const RoomCard = dynamic(() => import('./components/Home/RoomCard'), {
   ssr: false,
-})
-const AboutUsContent = dynamic(() => import('./components/AboutUsContent'), {
+});
+const AboutUsContent = dynamic(() => import('./components/Home/AboutUsContent'), {
   ssr: false,
-})
-const Counter = dynamic(() => import('./components/Counter'), {
+});
+const Counter = dynamic(() => import('./components/Home/Counter'), {
   ssr: false,
-})
-const ServiceCard = dynamic(() => import('./components/ServiceCard'), {
+});
+const ServiceCard = dynamic(() => import('./components/Home/ServiceCard'), {
+  ssr: false,
+});
+const TeamMembers = dynamic(() => import('./components/Home/TeamMembers'), {
   ssr: false,
 })
 export default function Home() {

@@ -1,4 +1,3 @@
-
 'use client';
 import { useState, useEffect } from "react";
 import {
@@ -50,8 +49,8 @@ export default function NavbarLayout() {
         color="blue-gray"
         className="p-1 font-normal text-white text-lg"
       >
-        <Link href="/" className="flex items-center hover-underline-animation">
-          Blocks
+        <Link href="/about" className="flex items-center hover-underline-animation">
+          About Us
         </Link>
       </Typography>
       <Typography
@@ -60,8 +59,8 @@ export default function NavbarLayout() {
         color="blue-gray"
         className="p-1 font-normal text-white text-lg "
       >
-        <Link href="/" className="flex items-center hover-underline-animation">
-          Docs
+        <Link href="/contact" className="flex items-center hover-underline-animation">
+          Contact Us
         </Link>
       </Typography>
     </ul>

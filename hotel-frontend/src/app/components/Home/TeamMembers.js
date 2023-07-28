@@ -3,7 +3,6 @@ import { useEffect } from "react";
 import WOW from 'wowjs';
 import {
     Typography,
-    Button,
     Tooltip,
     Card,
     CardHeader,
@@ -39,7 +38,7 @@ function TeamMembers() {
             animationDelay: '0.5s'
         },
         {
-            id: 2,
+            id: 4,
             name: 'alex kent',
             img: '/team-2.jpg',
             animationDelay: '0.7s'
@@ -54,7 +53,7 @@ function TeamMembers() {
             </div>
             <div className="flex flex-wrap -m-5">
                 {TeamData.map((element) => (
-                    <div className=" p-5 lg:p-2 sm:w-1/2 lg:w-1/2 xl:w-1/4 wow animate__animated animate__fadeInUp" data-wow-delay={element.animationDelay}>
+                    <div key={element.id} className=" p-5 lg:p-2 sm:w-1/2 lg:w-1/2 xl:w-1/4 wow animate__animated animate__fadeInUp" data-wow-delay={element.animationDelay}>
                         <Card key={element.id} className="lg:w-auto">
                             <CardHeader floated={false} className="h-50">
                                 <Image src={element.img} alt="team1" width={400} height={400} />

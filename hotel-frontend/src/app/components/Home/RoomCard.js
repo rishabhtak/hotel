@@ -49,7 +49,7 @@ export default function RoomCard() {
                 {cardContent.map((element) => (
                     <div key={element.id} className="p-2 sm:w-1/2 lg:w-1/3">
                         <div className="h-full shadow-lg overflow-hidden bg-lime-50 wow animate__animated animate__fadeInUp" data-wow-delay={element.animationDelay}>
-                            <Image className="lg:h-56 md:h-36 w-full" src={element.img} alt={element.alt} width={500} height={300} />
+                            <Image className="h-56 w-full" src={element.img} alt={element.alt} width={500} height={300} />
                             <div className="p-6">
                                 <div className="mb-3 flex items-center justify-between">
                                     <Typography variant="h4" color="blue-gray">

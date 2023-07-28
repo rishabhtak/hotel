@@ -34,7 +34,7 @@ function ServiceCard() {
     ];
     return (
         <div className="container px-6 py-16 mx-auto">
-            <h2 class="font-semibold text-center capitalize text-3xl sm:text-5xl">Experience Our <span className="text-blueText-color">Services</span>
+            <h2 className="font-semibold text-center capitalize text-3xl sm:text-5xl">Experience Our <span className="text-blueText-color">Services</span>
             </h2>
             <div className="grid grid-cols-1 gap-8 mt-12 xl:gap-12 md:grid-cols-2 xl:grid-cols-3">
                 {serviceCardData.map((element) => (

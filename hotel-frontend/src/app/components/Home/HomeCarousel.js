@@ -12,7 +12,7 @@ export default function HomeCarousel() {
     else {
       setActiveSliderIndex(activeIndex + 1)
     }
-  }
+  };
   const sliderPrevious = (activeIndex) => {
     if (activeIndex === 0) {
       setActiveSliderIndex(2)
@@ -20,7 +20,7 @@ export default function HomeCarousel() {
     else {
       setActiveSliderIndex(activeIndex - 1)
     }
-  }
+  };
 
   return (
     <Carousel autoplay loop transition={{ duration: 1 }} prevArrow={({ handlePrev, activeIndex }) => (
