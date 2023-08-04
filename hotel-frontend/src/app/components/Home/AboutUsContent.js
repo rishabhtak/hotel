@@ -23,7 +23,7 @@ function AboutUsContent() {
                             Where luxury meets comfort, and every moment is crafted to perfection. Nestled in the heart of our exquisite hotel promises an unforgettable experience that will leave you captivated and yearning for more.
                         </p>
                         <p className="text-base text-justify text-gray-700 md:text-lg my-10">
-                            At Hotel, we believe in creating a haven of tranquility and indulgence, where guests can escape the ordinary and immerse themselves in an ambiance of opulence. From the moment you step foot into our elegant lobby, you'll be enveloped in an atmosphere of warmth and hospitality, where our attentive staff is dedicated to making your stay exceptional in every way.
+                            At Hotel, we believe in creating a haven of tranquility and indulgence, where guests can escape the ordinary and immerse themselves in an ambiance of opulence. From the moment you step foot into our elegant lobby, you&apos;ll be enveloped in an atmosphere of warmth and hospitality, where our attentive staff is dedicated to making your stay exceptional in every way.
                         </p>
                     </div>
                 </div>
@@ -37,7 +37,7 @@ function AboutUsContent() {
                             height={400}
                             alt="about1"
                         />
-                        <img
+                        <Image
                             className="object-cover w-20 h-20 rounded shadow-lg sm:h-32 xl:h-40 sm:w-32 xl:w-40 wow animate__animated animate__zoomIn"
                             data-wow-delay="0.3s"
                             src="/about-3.jpg"
@@ -47,7 +47,7 @@ function AboutUsContent() {
                         />
                     </div>
                     <div className="px-3">
-                        <img
+                        <Image
                             className="object-cover w-40 h-40 rounded shadow-lg sm:h-64 xl:h-80 sm:w-64 xl:w-80 wow animate__animated animate__zoomIn"
                             data-wow-delay="0.5s"
                             src="/about-2.jpg"

@@ -1,7 +1,10 @@
 import React from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation'
 
 function Footer() {
+    const pathname = usePathname();
+
     return (
         <footer className="bg-navbar-color">
             <div className="container px-6 py-12 mx-auto">
@@ -42,9 +45,11 @@ function Footer() {
                     <div>
                         <p className="font-semibold text-white">Quick Link</p>
                         <div className="flex flex-col items-start mt-5 space-y-2">
-                            <Link href="#" className="text-white hover-underline-animation">Home</Link>
-                            <Link href="#" className="text-white hover-underline-animation">Home</Link>
-                            <Link href="#" className="text-white hover-underline-animation">Home</Link>
+                            <Link href="/" className={`text-white ${pathname === '/' ? 'link-active' : 'hover-underline-animation'}`}>Home</Link>
+                            <Link href="/rooms" className={`text-white ${pathname === '/rooms' ? 'link-active' : 'hover-underline-animation'}`}>Rooms</Link>
+                            <Link href="/services" className={`text-white ${pathname === '/services' ? 'link-active' : 'hover-underline-animation'}`}>Services</Link>
+                            <Link href="/about" className={`text-white ${pathname === '/about' ? 'link-active' : 'hover-underline-animation'}`}>About Us</Link>
+                            <Link href="/contact" className={`text-white ${pathname === '/contact' ? 'link-active' : 'hover-underline-animation'}`}>Contact Us</Link>
                         </div>
                     </div>
                     <div>

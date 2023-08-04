@@ -9,7 +9,7 @@ export default function Breadcrumb({ img, pageName }) {
             <Image
                 width={1366}
                 height={768}
-                className="h-[25rem] w-full object-cover object-center"
+                className="h-[30rem] w-full object-cover object-center"
                 src={img}
                 alt="hotel image"
             />

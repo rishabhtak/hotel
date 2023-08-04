@@ -25,6 +25,8 @@ export default function HomeCarousel() {
   return (
     <Carousel autoplay loop transition={{ duration: 1 }} prevArrow={({ handlePrev, activeIndex }) => (
       <IconButton
+        role="button"
+        aria-label="previous slide"
         variant="text"
         color="white"
         size="lg"
@@ -49,6 +51,8 @@ export default function HomeCarousel() {
     )}
       nextArrow={({ handleNext, activeIndex }) => (
         <IconButton
+          role="button"
+          aria-label="next slide"
           variant="text"
           color="white"
           size="lg"
@@ -89,6 +93,7 @@ export default function HomeCarousel() {
     >
       <div className="relative h-full w-full">
         <Image
+          priority
           src="/slider1.jpg"
           alt="image 1"
           width={1366}
@@ -118,6 +123,7 @@ export default function HomeCarousel() {
       <div className="relative h-full w-full">
         <Image
           src="/slider2.jpg"
+          priority
           alt="image 2"
           width={1366}
           height={768}
@@ -145,6 +151,7 @@ export default function HomeCarousel() {
       </div>
       <div className="relative h-full w-full">
         <Image
+          priority
           src="/slider3.jpg"
           alt="image 3"
           width={1366}
