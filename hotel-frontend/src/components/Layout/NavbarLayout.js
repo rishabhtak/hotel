@@ -10,9 +10,6 @@ import {
 import Link from "next/link";
 import { usePathname } from 'next/navigation'
 
-
-
-
 export default function NavbarLayout() {
   const pathname = usePathname();
   const [openNav, setOpenNav] = useState(false);
@@ -81,9 +78,7 @@ export default function NavbarLayout() {
             Logo
           </Link>
           <div className="hidden lg:block">{navList}</div>
-          <Button variant="gradient" size="sm" className="hidden lg:inline-block">
-            <span>Login</span>
-          </Button>
+          <Link href="/login" className="hidden lg:inline-block p-1 font-normal text-white text-lg mr-5">Login</Link>
           <IconButton
             variant="text"
             className="ml-auto h-6 w-6 text-white hover:bg-transparent focus:bg-transparent active:bg-transparent lg:hidden"

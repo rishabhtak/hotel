@@ -1,7 +1,7 @@
-import Breadcrumb from '@/components/Layout/Breadcrumb';
+import Breadcrumb from '@/components/layout/Breadcrumb';
 import dynamic from 'next/dynamic';
 
-const ServiceCard = dynamic(() => import('@/components/Services/ServicesCard'), {
+const ServiceCard = dynamic(() => import('@/components/services/ServicesCard'), {
   ssr: false,
 })
 

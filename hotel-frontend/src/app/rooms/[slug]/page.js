@@ -1,7 +1,7 @@
 'use client';
-import Breadcrumb from "@/components/Layout/Breadcrumb";
+import Breadcrumb from "@/components/layout/Breadcrumb";
 import { MdMeetingRoom, MdPersonOutline } from "react-icons/md";
-import RoomCarousel from "@/components/Rooms/RoomCarousel";
+import RoomCarousel from "@/components/rooms/RoomCarousel";
 import {
     Typography,
     Button,

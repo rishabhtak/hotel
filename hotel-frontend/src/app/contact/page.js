@@ -1,11 +1,11 @@
 import dynamic from 'next/dynamic'
-import Breadcrumb from '@/components/Layout/Breadcrumb'
+import Breadcrumb from '@/components/layout/Breadcrumb'
 
-const ContactCard = dynamic(() => import('@/components/Contact/ContactCard'), {
+const ContactCard = dynamic(() => import('@/components/contact/ContactCard'), {
     ssr: false,
 })
 
-const ContactForm = dynamic(() => import('@/components/Contact/ContactForm'), {
+const ContactForm = dynamic(() => import('@/components/contact/ContactForm'), {
     ssr: false,
 })
 
