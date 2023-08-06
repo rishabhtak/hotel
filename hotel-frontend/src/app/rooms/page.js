@@ -1,7 +1,7 @@
-import Breadcrumb from "../components/Layout/Breadcrumb";
+import Breadcrumb from "@/components/Layout/Breadcrumb";
 import dynamic from 'next/dynamic';
 
-const RoomCard = dynamic(() => import('../components/Rooms/RoomCard'), {
+const RoomCard = dynamic(() => import('@/components/Rooms/RoomCard'), {
   ssr: false,
 })
 

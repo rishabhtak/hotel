@@ -3,10 +3,10 @@ import { Suspense } from "react";
 import './globals.css'
 import 'animate.css';
 import { ThemeProvider } from "@material-tailwind/react";
-import NavbarLayout from "@/app/components/Layout/NavbarLayout";
-import Footer from './components/Layout/Footer';
+import NavbarLayout from "@/components/Layout/NavbarLayout";
+import Footer from '@/components/Layout/Footer';
 import { FloatingWhatsApp } from 'react-floating-whatsapp';
-import ScrollTop from './components/Layout/ScrollTop';
+import ScrollTop from '@/components/Layout/ScrollTop';
 import Loading from './loading';
 
 

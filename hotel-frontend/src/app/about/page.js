@@ -1,7 +1,7 @@
-import Breadcrumb from '../components/Layout/Breadcrumb'
+import Breadcrumb from '@/components/Layout/Breadcrumb'
 import dynamic from 'next/dynamic'
 
-const AboutContent = dynamic(() => import('../components/About/AboutContent'), {
+const AboutContent = dynamic(() => import('@/components/About/AboutContent'), {
     ssr: false,
 })
 export default function About() {
