@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@heroicons/react": "^2.0.18",
-    "@hookform/resolvers": "^3.1.1",
+    "@hookform/resolvers": "^3.2.0",
     "@material-tailwind/react": "2.0.6",
     "animate.css": "^4.1.1",
     "autoprefixer": "10.4.14",
@@ -22,7 +22,7 @@
     "react-countup": "^6.4.2",
     "react-dom": "18.2.0",
     "react-floating-whatsapp": "^5.0.8",
-    "react-hook-form": "^7.45.3",
+    "react-hook-form": "^7.45.4",
     "react-icons": "^4.10.1",
     "react-scroll-to-top": "^3.0.0",
     "server-only": "^0.0.1",

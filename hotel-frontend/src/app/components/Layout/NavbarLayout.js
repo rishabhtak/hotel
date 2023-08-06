@@ -1,110 +1,19 @@
 'use client';
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
   Navbar,
   Collapse,
   Typography,
   Button,
-  Menu,
-  MenuHandler,
-  Avatar,
-  MenuList,
-  MenuItem,
   IconButton,
 } from "@material-tailwind/react";
-import {
-  ChevronDownIcon,
-  Cog6ToothIcon,
-  InboxArrowDownIcon,
-  LifebuoyIcon,
-  PowerIcon,
-} from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { usePathname } from 'next/navigation'
 
 
-// profile menu component
-const profileMenuItems = [
-
-  {
-    label: "Edit Profile",
-    icon: Cog6ToothIcon,
-  },
-  {
-    label: "Booking History",
-    icon: InboxArrowDownIcon,
-  },
-  {
-    label: "Sign Out",
-    icon: PowerIcon,
-  },
-];
-
-function ProfileMenu() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-  const closeMenu = () => setIsMenuOpen(false);
-
-  return (
-    <Menu open={isMenuOpen} handler={setIsMenuOpen} placement="bottom-end">
-      <MenuHandler>
-        <Button
-          variant="text"
-          color="blue-gray"
-          className="flex items-center gap-1 rounded-full py-0.5 pr-2 pl-0.5"
-        >
-          <Avatar
-            variant="circular"
-            size="sm"
-            alt="tania andrew"
-            className="border border-blue-500 p-0.5"
-            src="/user.png"
-          />
-
-          <ChevronDownIcon
-            strokeWidth={2.5}
-            className={`h-3 w-3 transition-transform ${isMenuOpen ? "rotate-180" : ""
-              }`}
-          />
-        </Button>
-      </MenuHandler>
-      <MenuList className="p-1">
-        {profileMenuItems.map(({ label, icon }, key) => {
-          const isLastItem = key === profileMenuItems.length - 1;
-          return (
-            <MenuItem
-              key={label}
-              onClick={closeMenu}
-              className={`flex items-center gap-2 rounded ${isLastItem
-                ? "hover:bg-red-500/10 focus:bg-red-500/10 active:bg-red-500/10"
-                : ""
-                }`}
-            >
-              {React.createElement(icon, {
-                className: `h-4 w-4 ${isLastItem ? "text-red-500" : ""}`,
-                strokeWidth: 2,
-              })}
-              <Typography
-                as="span"
-                variant="small"
-                className="font-normal"
-                color={isLastItem ? "red" : "inherit"}
-              >
-                {label}
-              </Typography>
-            </MenuItem>
-          );
-        })}
-      </MenuList>
-    </Menu>
-  );
-}
-
 
 
 export default function NavbarLayout() {
-  const profile = true;
-
   const pathname = usePathname();
   const [openNav, setOpenNav] = useState(false);
 
@@ -172,9 +81,9 @@ export default function NavbarLayout() {
             Logo
           </Link>
           <div className="hidden lg:block">{navList}</div>
-          {profile ? <ProfileMenu /> : <Link href="/login" className="hidden lg:inline-block p-1 font-normal text-white text-lg mr-5">Login</Link>}
-
-
+          <Button variant="gradient" size="sm" className="hidden lg:inline-block">
+            <span>Login</span>
+          </Button>
           <IconButton
             variant="text"
             className="ml-auto h-6 w-6 text-white hover:bg-transparent focus:bg-transparent active:bg-transparent lg:hidden"
@@ -216,9 +125,9 @@ export default function NavbarLayout() {
         <Collapse open={openNav}>
           <div className="container mx-auto">
             {navList}
-            <Link href="/login" className="mb-2 p-1 font-normal text-white text-lg">
-              Login
-            </Link>
+            <Button variant="gradient" size="sm" fullWidth className="mb-2">
+              <span>Login</span>
+            </Button>
           </div>
         </Collapse>
       </Navbar>

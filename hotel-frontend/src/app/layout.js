@@ -15,13 +15,12 @@ export const metadata = {
   description: 'Hotel Frontend',
 }
 
-export default function RootLayout({ children, auth }) {
+export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body style={{ backgroundColor: '#f8fafc' }}>
         <ThemeProvider>
           <NavbarLayout />
-          {auth}
           <Suspense fallback={<Loading />}>
             {children}
           </Suspense>
