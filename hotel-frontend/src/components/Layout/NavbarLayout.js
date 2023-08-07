@@ -63,6 +63,14 @@ export default function NavbarLayout() {
           Contact Us
         </Link>
       </Typography>
+      <Typography
+        as="li"
+        className="p-1 font-normal text-white text-md"
+      >
+        <Link href="/booking" className={`flex items-center uppercase ${pathname === '/contact' ? 'link-active' : 'hover-underline-animation'}`}>
+          booking
+        </Link>
+      </Typography>
     </ul >
   );
 
@@ -78,7 +86,7 @@ export default function NavbarLayout() {
             Logo
           </Link>
           <div className="hidden lg:block">{navList}</div>
-          <Link href="/login" className="hidden lg:inline-block p-1 font-normal text-white text-lg mr-5">Login</Link>
+          {pathname !== "/login" && pathname !== "/signup" ? <Link href="/login" className="hidden lg:inline-block p-1 font-normal text-white text-lg mr-5">Login</Link> : <span className="invisible mr-8">Login</span>}
           <IconButton
             variant="text"
             className="ml-auto h-6 w-6 text-white hover:bg-transparent focus:bg-transparent active:bg-transparent lg:hidden"
@@ -120,13 +128,10 @@ export default function NavbarLayout() {
         <Collapse open={openNav}>
           <div className="container mx-auto">
             {navList}
-            <Button variant="gradient" size="sm" fullWidth className="mb-2">
-              <span>Login</span>
-            </Button>
+            {pathname !== "/login" ? <Link href="/login" className="font-normal text-white text-lg mr-5">Login</Link> : ""}
           </div>
         </Collapse>
       </Navbar>
-
-    </div>
+    </div >
   );
 }

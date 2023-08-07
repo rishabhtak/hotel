@@ -12,33 +12,51 @@ import {
     Typography,
 } from "@material-tailwind/react";
 
+const passwordRules = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
 
-const loginSchema = Yup.object().shape({
+const signupSchema = Yup.object().shape({
+    fullname: Yup.string().min(3, "Please enter minimum 3 characters").required("Please enter name"),
     email: Yup.string().email().required("Please enter email address"),
-    password: Yup.string().required("Please enter a password")
+    password: Yup.string().matches(passwordRules, { message: "Password must have min 8 characters including uppercase letter, lowercase letter, numeric digit" }).required("Please enter a password")
 })
 
 
-export default function LoginForm() {
+export default function SignUpForm() {
     const [isPasswordHidden, setPasswordHidden] = useState(true)
     const { register, handleSubmit, formState: { errors },
     } = useForm({
-        resolver: yupResolver(loginSchema),
+        resolver: yupResolver(signupSchema),
     })
     const onSubmit = (data) => console.log(data)
 
 
     return (
-        <Card className="mx-auto w-full max-w-[24rem]" style={{zIndex:1000}}>
+        <Card className="mx-auto w-full max-w-[24rem]">
             <form onSubmit={handleSubmit(onSubmit)}>
                 <CardBody className="flex flex-col gap-4">
+                    <div>
+                        <label htmlFor="fullname" className="text-gray-600">
+                            Full Name
+                        </label>
+                        <div className="relative max-w-xs mt-2">
+                            <input
+                                type="text"
+                                name="fullname"
+                                id="fullname"
+                                placeholder="Enter your full name"
+                                className="w-full pr-12 pl-3 py-2 bg-transparent outline-none border focus:border-indigo-600 shadow-sm rounded-lg"
+                                {...register("fullname")}
+                            />
+                        </div>
+                        <p>{errors.fullname?.message}</p>
+                    </div>
                     <div>
                         <label htmlFor="email" className="text-gray-600">
                             Email Address
                         </label>
                         <div className="relative max-w-xs mt-2">
                             <input
-                                type="text"
+                                type="email"
                                 name="email"
                                 id="email"
                                 placeholder="Enter your email address"
@@ -84,19 +102,18 @@ export default function LoginForm() {
                 </CardBody>
                 <CardFooter className="pt-0">
                     <Button variant="gradient"
-                        //   onClick={handleOpen}
                         type="submit"
                         fullWidth>
-                        Sign In
+                        Sign Up
                     </Button>
                     <Typography variant="small" className="mt-6 flex justify-center">
-                        Don&apos;t have an account?
-                        <Link href="/signup"
+                        Already have an account?
+                        <Link href="/login"
                             variant="small"
                             color="blue"
                             className="ml-1 font-bold"
                         >
-                            Sign up
+                            Sign In
                         </Link>
                     </Typography>
                 </CardFooter>

@@ -12,7 +12,7 @@ import {
 } from "@material-tailwind/react";
 import { FaFacebook, FaTwitter, FaInstagram } from "react-icons/fa6";
 import Image from "next/image";
-function TeamMembers() {
+export default function TeamMembers() {
     useEffect(() => {
         new WOW.WOW({
             live: false
@@ -110,4 +110,3 @@ function TeamMembers() {
     )
 }
 
-export default TeamMembers
