@@ -5,7 +5,7 @@ import {
 } from "@material-tailwind/react";
 import WOW from 'wowjs';
 
-function ServiceCard() {
+export default function ServiceCard() {
     useEffect(() => {
         new WOW.WOW({
             live: false
@@ -51,5 +51,3 @@ function ServiceCard() {
         </div>
     )
 }
-
-export default ServiceCard

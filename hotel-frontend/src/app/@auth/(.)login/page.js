@@ -1,7 +1,7 @@
 import Modal from '@/components/modal/Modal'
 import LoginForm from '@/components/auth/LoginForm'
 
-export default async function Login() {
+export default function LoginModal() {
     return (
         <Modal>
             <LoginForm />
