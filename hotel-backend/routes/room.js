@@ -27,7 +27,7 @@ router.post('/addroom', adminVerify,
             //add room
             const rooms = new Room({ roomType, price, name, capacity, description })
             const saveRoom = await rooms.save();
-            res.json({ message: "Room succesfully added", success:true,saveRoom })
+            res.json({ message: "Room succesfully added", success: true, saveRoom })
         }
         catch (error) {
             res.status(500).send({ success: false, error: "Internal server error" });
@@ -73,6 +73,7 @@ router.post('/getavailableroom', async (req, res) => {
                 { endDate: { $gte: from, $lte: to } }
             ],
         })
+
         const rooms = await Room.find();
         // Create an empty object to store the totalrooms of each roomtype
         const quantity = {};
@@ -89,9 +90,10 @@ router.post('/getavailableroom', async (req, res) => {
             // Iterate through each booking and update the roomTypeTotals object
             bookedRooms.forEach((booking) => {
                 booking.roomDetails.forEach((roomDetail) => {
-                    const { roomtype } = roomDetail;
-                    if (quantity[roomtype]) {
-                        quantity[roomtype] -= 1;
+                    const { roomType } = roomDetail;
+                    console.log(roomType)
+                    if (quantity[roomType]) {
+                        quantity[roomType] -= 1;
                     }
                 });
             });
@@ -138,7 +140,7 @@ router.put('/updateroom/:id', adminVerify, [
                 })
             }
 
-            res.json({ message: "Room succesfully updated",success:true, room })
+            res.json({ message: "Room succesfully updated", success: true, room })
         }
         catch (error) {
             res.status(500).send({ success: false, error: "Internal server error" });
