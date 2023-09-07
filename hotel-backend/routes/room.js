@@ -91,7 +91,6 @@ router.post('/getavailableroom', async (req, res) => {
             bookedRooms.forEach((booking) => {
                 booking.roomDetails.forEach((roomDetail) => {
                     const { roomType } = roomDetail;
-                    console.log(roomType)
                     if (quantity[roomType]) {
                         quantity[roomType] -= 1;
                     }
