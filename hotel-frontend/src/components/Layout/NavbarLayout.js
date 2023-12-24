@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import { useState, useEffect } from "react";
 import {
   Navbar,
@@ -8,9 +8,11 @@ import {
   IconButton,
 } from "@material-tailwind/react";
 import Link from "next/link";
-import { usePathname } from 'next/navigation'
+import { usePathname } from "next/navigation";
+import { useSelector } from "react-redux";
 
 export default function NavbarLayout() {
+  const { loginData } = useSelector((state) => state.auth);
   const pathname = usePathname();
   const [openNav, setOpenNav] = useState(false);
 
@@ -23,61 +25,78 @@ export default function NavbarLayout() {
 
   const navList = (
     <ul className="mb-4 mt-2 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6">
-      <Typography
-        as="li"
-        className="p-1 font-normal text-white text-md"
-      >
-        <Link href="/" className={`flex items-center uppercase ${pathname === '/' ? 'link-active' : 'hover-underline-animation'}`}>
+      <Typography as="li" className="p-1 font-normal text-white text-md">
+        <Link
+          href="/"
+          className={`flex items-center uppercase ${
+            pathname === "/" ? "link-active" : "hover-underline-animation"
+          }`}
+        >
           Home
         </Link>
       </Typography>
-      <Typography
-        as="li"
-        className="p-1 font-normal text-white text-md"
-      >
-        <Link href="/rooms" className={`flex items-center uppercase ${pathname === '/rooms' ? 'link-active' : 'hover-underline-animation'}`}>
+      <Typography as="li" className="p-1 font-normal text-white text-md">
+        <Link
+          href="/rooms"
+          className={`flex items-center uppercase ${
+            pathname === "/rooms" ? "link-active" : "hover-underline-animation"
+          }`}
+        >
           Rooms
         </Link>
       </Typography>
-      <Typography
-        as="li"
-        className="p-1 font-normal text-white text-md"
-      >
-        <Link href="/services" className={`flex items-center uppercase ${pathname === '/services' ? 'link-active' : 'hover-underline-animation'}`}>
+      <Typography as="li" className="p-1 font-normal text-white text-md">
+        <Link
+          href="/services"
+          className={`flex items-center uppercase ${
+            pathname === "/services"
+              ? "link-active"
+              : "hover-underline-animation"
+          }`}
+        >
           Services
         </Link>
       </Typography>
-      <Typography
-        as="li"
-        className="p-1 font-normal text-white text-md"
-      >
-        <Link href="/about" className={`flex items-center uppercase ${pathname === '/about' ? 'link-active' : 'hover-underline-animation'}`}>
+      <Typography as="li" className="p-1 font-normal text-white text-md">
+        <Link
+          href="/about"
+          className={`flex items-center uppercase ${
+            pathname === "/about" ? "link-active" : "hover-underline-animation"
+          }`}
+        >
           About Us
         </Link>
       </Typography>
-      <Typography
-        as="li"
-        className="p-1 font-normal text-white text-md"
-      >
-        <Link href="/contact" className={`flex items-center uppercase ${pathname === '/contact' ? 'link-active' : 'hover-underline-animation'}`}>
+      <Typography as="li" className="p-1 font-normal text-white text-md">
+        <Link
+          href="/contact"
+          className={`flex items-center uppercase ${
+            pathname === "/contact"
+              ? "link-active"
+              : "hover-underline-animation"
+          }`}
+        >
           Contact Us
         </Link>
       </Typography>
-      <Typography
-        as="li"
-        className="p-1 font-normal text-white text-md"
-      >
-        <Link href="/booking" className={`flex items-center uppercase ${pathname === '/contact' ? 'link-active' : 'hover-underline-animation'}`}>
+      <Typography as="li" className="p-1 font-normal text-white text-md">
+        <Link
+          href="/booking"
+          className={`flex items-center uppercase ${
+            pathname === "/contact"
+              ? "link-active"
+              : "hover-underline-animation"
+          }`}
+        >
           booking
         </Link>
       </Typography>
-    </ul >
+    </ul>
   );
 
   return (
     <div>
-      <Navbar
-        className="bg-navbar-color border-none h-max max-w-full rounded-none py-2 px-4 lg:px-8 lg:py-4">
+      <Navbar className="bg-navbar-color border-none h-max max-w-full rounded-none py-2 px-4 lg:px-8 lg:py-4">
         <div className="container mx-auto flex items-center justify-between text-blue-gray-900">
           <Link
             href="/"
@@ -86,7 +105,24 @@ export default function NavbarLayout() {
             Logo
           </Link>
           <div className="hidden lg:block">{navList}</div>
-          {pathname !== "/login" && pathname !== "/signup" ? <Link href="/login" className="hidden lg:inline-block p-1 font-normal text-white text-lg mr-5">Login</Link> : <span className="invisible mr-8">Login</span>}
+          {loginData ? (
+            <Link
+              href="/user/bookings"
+              className="hidden lg:inline-block p-1 font-normal text-white text-lg mr-5"
+            >
+              My Bookings
+            </Link>
+          ) : pathname !== "/login" && pathname !== "/signup" ? (
+            <Link
+              href="/login"
+              className="hidden lg:inline-block p-1 font-normal text-white text-lg mr-5"
+            >
+              Login
+            </Link>
+          ) : (
+            <span className="invisible mr-8">Login</span>
+          )}
+
           <IconButton
             variant="text"
             className="ml-auto h-6 w-6 text-white hover:bg-transparent focus:bg-transparent active:bg-transparent lg:hidden"
@@ -128,10 +164,26 @@ export default function NavbarLayout() {
         <Collapse open={openNav}>
           <div className="container mx-auto">
             {navList}
-            {pathname !== "/login" ? <Link href="/login" className="font-normal text-white text-lg mr-5">Login</Link> : ""}
+            {loginData ? (
+              <Link
+                href="/user/bookings"
+                className="font-normal text-white text-lg mr-5"
+              >
+                My Bookings
+              </Link>
+            ) : pathname !== "/login" ? (
+              <Link
+                href="/login"
+                className="font-normal text-white text-lg mr-5"
+              >
+                Login
+              </Link>
+            ) : (
+              ""
+            )}
           </div>
         </Collapse>
       </Navbar>
-    </div >
+    </div>
   );
 }

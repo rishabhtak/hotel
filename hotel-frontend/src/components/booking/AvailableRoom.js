@@ -1,59 +1,92 @@
-'use client'
-import {
-    Button,
-    Select,
-    Option
-} from "@material-tailwind/react";
+"use client";
+import { Select, Option } from "@material-tailwind/react";
+import { useDispatch, useSelector } from "react-redux";
+import React, { useEffect, useState, useMemo } from "react";
+import { toTitleCase } from "../utils/formatText";
+import BookingDetails from "./BookingDetails";
 import AvailableRoomCard from "./AvailableRoomCard";
-import { useDispatch, useSelector } from 'react-redux';
-import { useEffect, useState, useCallback } from 'react';
-import { toTitleCase } from '../utils/formatText';
 
 export default function AvailableRoom() {
-    const dispatch = useDispatch();
-    const { rooms, quantity, loading, error, roomCounter } = useSelector(state => state.availableRooms);
+  const dispatch = useDispatch();
+  const {
+    rooms,
+    quantity,
+    loading,
+    error,
+    roomCounter,
+    counter,
+    selectedDate,
+  } = useSelector((state) => state.availableRooms);
+  const MemoizedAvailableRoomCard = useMemo(
+    () => React.memo(AvailableRoomCard),
+    []
+  );
+  const [roomType, setRoomType] = useState(null);
+  const [showRooms, setShowRooms] = useState(null);
+  const [totalQuantity, setTotalQuantity] = useState(null);
 
-    const [roomType, setRoomType] = useState(null);
-    const [showRooms, setShowRooms] = useState(null);
-    const [totalQuantity, setTotalQuantity] = useState(null);
+  useEffect(() => {
+    if (Object.keys(quantity).length !== 0) {
+      setRoomType(Object.keys(quantity));
+    }
+    if (selectedDate === null) {
+      setShowRooms(null);
+    }
+  }, [quantity, selectedDate]);
+
+  const handleRoomType = (value) => {
+    setShowRooms(value);
+    setTotalQuantity(quantity);
+  };
 
 
-
-    useEffect(() => {
-        if (Object.keys(quantity).length !== 0) {
-            setRoomType(Object.keys(quantity))
-        }
-    }, [quantity])
-
-
-
-    const handleRoomType = (value) => {
-        setShowRooms(value)
-        setTotalQuantity(quantity)
-    };
-
-    // console.log(newRoomCounter)
-    return (
-        <div className="p-24 m-4">
-
-            <section className="bg-blue-gray-50 w-full h-full">
-                {loading ? <div>Loading</div> : <>
-                    <div className="w-72 flex flex-col items-center justify-center mx-auto py-5">
-                        {roomType && <Select onChange={handleRoomType} label="Select Room Type">
-                            {roomType.map((element, index) => (
-                                <Option key={index} value={element}>{toTitleCase(element)}</Option>
-                            ))}
-                        </Select>}
-                    </div>
-                    <div className='grid grid-cols-12 gap-4'>
-                        {rooms.length !== 0 ? <div className="col-span-7">
-                            {rooms.map((element) => {
-                                return showRooms === element.roomType ? <AvailableRoomCard key={element._id} room={element} totalQuantity={totalQuantity} /> : ""
-                            })}
-                        </div> : <div className="col-span-7 py-16">No data to show</div>}
-                    </div>
-                </>}
-            </section >
-        </div >)
+  return (
+    <div className="mt-24 p-4 md:p-8 md:mt-0 m-4 bg-gray-100">
+      <section className="container mx-auto bg-white rounded-md shadow-md p-4 md:p-8">
+        {loading ? (
+          <div>Loading...</div>
+        ) : (
+          <>
+            <div className="flex items-center justify-center mb-4 md:mb-8 md:mt-4">
+              {roomType && selectedDate && (
+                <Select
+                  onChange={handleRoomType}
+                  label="Select Room Type"
+                  color="blue"
+                >
+                  {roomType.map((element, index) => (
+                    <Option key={index} value={element}>
+                      {toTitleCase(element)}
+                    </Option>
+                  ))}
+                </Select>
+              )}
+            </div>
+            <div className="grid grid-cols-12 gap-4">
+              {rooms.length !== 0 && selectedDate ? (
+                <div className="col-span-12 md:col-span-7 space-y-4">
+                  {rooms.map((element) => {
+                    return showRooms === element.roomType ? (
+                      <MemoizedAvailableRoomCard
+                        key={element._id}
+                        room={element}
+                        totalQuantity={totalQuantity}
+                      />
+                    ) : null;
+                  })}
+                </div>
+              ) : (
+                <div className="col-span-12 py-8 text-center text-gray-600">
+                  Please Select Date
+                </div>
+              )}
+              {counter.length !== 0 && selectedDate && (
+                <BookingDetails bookingDetails={counter} />
+              )}
+            </div>
+          </>
+        )}
+      </section>
+    </div>
+  );
 }
-
