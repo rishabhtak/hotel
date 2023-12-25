@@ -23,24 +23,20 @@ router.post(
       // Check for validation errors from the request body
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
-        return res
-          .status(400)
-          .json({
-            success,
-            message: "Validation Error",
-            error: errors.array(),
-          });
+        return res.status(400).json({
+          success,
+          message: "Validation Error",
+          error: errors.array(),
+        });
       }
 
       //check whether the user with this email alrady exists.
       let user = await User.findOne({ email: req.body.email });
       if (user) {
-        return res
-          .status(400)
-          .json({
-            success,
-            message: "Sorry a user with this email already exists ",
-          });
+        return res.status(400).json({
+          success,
+          message: "Sorry a user with this email already exists ",
+        });
       }
 
       // Hash the password for security
@@ -65,7 +61,9 @@ router.post(
       success = true;
       res.json({ success, authToken });
     } catch (error) {
-      res.status(500).send({ success: false, message: "Internal server error" });
+      res
+        .status(500)
+        .send({ success: false, message: "Internal server error" });
     }
   }
 );
@@ -84,35 +82,29 @@ router.post(
     try {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
-        return res
-          .status(400)
-          .json({
-            success,
-            message: "Validation Error",
-            error: errors.array(),
-          });
+        return res.status(400).json({
+          success,
+          message: "Validation Error",
+          error: errors.array(),
+        });
       }
 
       const { email, password } = req.body;
       //check whether the email and password is correct or not.
       let user = await User.findOne({ email });
       if (!user) {
-        return res
-          .status(400)
-          .json({
-            success,
-            message: "Please try to login with correct credentials",
-          });
+        return res.status(400).json({
+          success,
+          message: "Please try to login with correct credentials",
+        });
       }
       // Compare the provided password with the hashed password in the database
       const passwordCompare = await bcrypt.compare(password, user.password);
       if (!passwordCompare) {
-        return res
-          .status(400)
-          .json({
-            success,
-            message: "Please try to login with correct credentials",
-          });
+        return res.status(400).json({
+          success,
+          message: "Please try to login with correct credentials",
+        });
       }
       // If the login credentials are valid, generate a JWT token containing the user ID for authentication
       const data = {
@@ -140,7 +132,8 @@ router.get("/getuser", userVerify, async (req, res) => {
     const user = await User.findById(userId).select("-password");
     res.send({ success: true, user });
   } catch (error) {
-    res.status(500).send({ success: false, error: "Internal server error" });
+    console.log(error);
+    res.status(500).send({ success: false, error: error });
   }
 });
 

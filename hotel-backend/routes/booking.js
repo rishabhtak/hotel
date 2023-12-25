@@ -69,11 +69,12 @@ router.post(
   }
 );
 
-//Route 2: get user room booking history if he have account using GET '/api/booking/getuserbooking'
+//Route 2: get user booking history if he have account using GET '/api/booking/getuserbooking'
 
 router.get("/getuserbooking", bookingVerify, async (req, res) => {
   try {
-    const bookings = await Booking.find({ user: req.user.id });
+    const bookings = await Booking.find({ userId: req.user.id });
+    console.log(bookings);
     res.json({ success: true, bookings });
   } catch (error) {
     res.status(500).send({ success: false, error: "Internal server error" });

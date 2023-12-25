@@ -5,6 +5,7 @@ import Link from "next/link";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { signup } from "@/redux/features/auth/authSlice";
 import { useDispatch, useSelector } from "react-redux";
+import { redirect } from "next/navigation";
 
 import * as Yup from "yup";
 import {
@@ -42,13 +43,15 @@ export default function SignUpForm() {
   const [message, setMessage] = useState(null);
 
   useEffect(() => {
-    if (success) {
-      console.log("Successfully signup");
+    if (localStorage.getItem("userToken")) {
+      redirect("/");
+    } else if (success) {
       setMessage("Successfully registerd, now you can login");
     } else {
       setMessage(loginMessage);
     }
   }, [loginMessage, success]);
+
   const {
     register,
     handleSubmit,

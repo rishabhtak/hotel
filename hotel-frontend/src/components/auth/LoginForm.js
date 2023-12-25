@@ -6,7 +6,6 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "@/redux/features/auth/authSlice";
-import { useRouter } from "next/navigation";
 import { redirect } from "next/navigation";
 
 import {
@@ -23,18 +22,18 @@ const loginSchema = Yup.object().shape({
 });
 
 export default function LoginForm() {
-  const { loginData, loginMessage } = useSelector(
-    (state) => state.auth
-  );
-  const router = useRouter();
   const dispatch = useDispatch();
   const [isPasswordHidden, setPasswordHidden] = useState(true);
   const [message, setMessage] = useState(null);
+  const { loginData, loginMessage } = useSelector((state) => state.auth);
+
+  console.log("login");
 
   useEffect(() => {
-    if (loginData) {
-      console.log("Successfully logged in");
-      router.push("/");
+    if (localStorage.getItem("userToken")) {
+      redirect("/");
+    } else if (loginData) {
+      redirect.push("/");
     } else {
       setMessage(loginMessage);
     }
@@ -50,8 +49,6 @@ export default function LoginForm() {
   const onSubmit = (credentials) => {
     dispatch(login(credentials));
   };
-
-  console.log(loginData);
 
   return (
     <Card className="mx-auto w-full max-w-[24rem]" style={{ zIndex: 1000 }}>

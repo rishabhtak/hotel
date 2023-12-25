@@ -2,12 +2,8 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 const ls = typeof window !== "undefined" ? window.localStorage : null;
 
-const getUserfromLocalStorage = () => {
-  return ls?.getItem("userToken") || null;
-};
-
 const initialState = {
-  userToken: getUserfromLocalStorage(),
+  userToken: null,
   loading: false,
   error: false,
   success: false,
@@ -63,7 +59,7 @@ export const signup = createAsyncThunk(
       );
       const res = await response.json();
       if (res.success) {
-        console.log("sign" + JSON.stringify(res, null, 2));
+        //   console.log("sign" + JSON.stringify(res, null, 2));
         return res;
       }
       return thunkAPI.rejectWithValue(res);
@@ -87,7 +83,7 @@ export const getUser = createAsyncThunk("getUser", async (thunkAPI) => {
     if (login.success) {
       return login;
     }
-    ls.removeItem("userToken");
+  //  ls.removeItem("userToken");
     return thunkAPI.rejectWithValue(login);
   } catch (error) {
     return thunkAPI.rejectWithValue(login);
@@ -132,7 +128,6 @@ export const authSlice = createSlice({
         state.loading = true;
       })
       .addCase(getUser.fulfilled, (state, { payload }) => {
-        console.log(payload);
         state.loading = false;
         state.loginData = payload.user;
         state.success = true;

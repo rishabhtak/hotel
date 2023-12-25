@@ -9,18 +9,24 @@ import {
 } from "@material-tailwind/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { getUser } from "@/redux/features/auth/authSlice";
 
 export default function NavbarLayout() {
   const { loginData } = useSelector((state) => state.auth);
   const pathname = usePathname();
   const [openNav, setOpenNav] = useState(false);
+  const dispatch = useDispatch();
+  console.log("navbar" + JSON.stringify(loginData, null, 2));
 
   useEffect(() => {
     window.addEventListener(
       "resize",
       () => window.innerWidth >= 960 && setOpenNav(false)
     );
+    if (localStorage.getItem("userToken")) {
+      dispatch(getUser());
+    }
   }, []);
 
   const navList = (

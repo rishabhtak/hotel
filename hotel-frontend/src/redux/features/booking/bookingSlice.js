@@ -1,8 +1,9 @@
 import { createSlice, createAsyncThunk, createAction } from "@reduxjs/toolkit";
-import { redirect } from "next/navigation";
+
+const ls = typeof window !== "undefined" ? window.localStorage : null;
 
 const initialState = {
-  bookingData: [],
+  userBookings: [],
   customerData: null,
   loading: false,
   error: false,
@@ -47,6 +48,33 @@ export const createBooking = createAsyncThunk(
   }
 );
 
+export const getUserBookings = createAsyncThunk(
+  "getUserBookings",
+  async (thunkAPI) => {
+    try {
+      // api to get user's bookings
+      const response = await fetch(
+        `http://localhost:5000/api/booking/getuserbooking`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "auth-token": ls?.getItem("userToken"),
+          },
+        }
+      );
+      const res = await response.json();
+      console.log(res);
+      if (res.success) {
+        return res;
+      }
+      return thunkAPI.rejectWithValue(res);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(res);
+    }
+  }
+);
+
 export const bookingSlice = createSlice({
   name: "booking",
   initialState,
@@ -56,17 +84,29 @@ export const bookingSlice = createSlice({
       .addCase(createBooking.pending, (state) => {
         state.loading = true;
       })
-      .addCase(createBooking.fulfilled, (state, { payload }) => {
+      .addCase(createBooking.fulfilled, (state) => {
         state.loading = false;
         state.success = true;
-        redirect("/confirmbooking");
       })
       .addCase(createBooking.rejected, (state) => {
         state.loading = false;
         state.error = true;
       })
-      .addCase(customerDetails, (state, action) => {
-        state.customerData = action.payload;
+      .addCase(customerDetails, (state, { payload }) => {
+        state.customerData = payload;
+      })
+      .addCase(getUserBookings.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getUserBookings.fulfilled, (state, { payload }) => {
+        console.log(payload);
+        state.loading = false;
+        state.success = true;
+        state.userBookings = payload.bookings;
+      })
+      .addCase(getUserBookings.rejected, (state) => {
+        state.loading = false;
+        state.error = true;
       });
   },
 });

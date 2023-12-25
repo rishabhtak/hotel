@@ -17,7 +17,6 @@ export default function CheckAvailabilty() {
   });
 
   const handleValueChange = (newValue) => {
-    console.log(newValue);
     if (isAfter(new Date(newValue.endDate), new Date(newValue.startDate))) {
       setValue(newValue);
       dispatch(updateDate(newValue));

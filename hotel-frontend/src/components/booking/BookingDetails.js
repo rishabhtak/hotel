@@ -8,11 +8,10 @@ const BookingDetails = ({ bookingDetails }) => {
   const dispatch = useDispatch();
   const { loginData } = useSelector((state) => state.auth);
   const { success, error } = useSelector((state) => state.booking);
-  console.log(loginData);
   const { counter, selectedDate } = useSelector(
     (state) => state.availableRooms
   );
-  const { bookingData, customerData } = useSelector((state) => state.booking);
+  const { customerData } = useSelector((state) => state.booking);
   const pathname = usePathname();
   // Calculate total price and total quantity of rooms
   const { totalPrice, totalRooms } = bookingDetails.reduce(
@@ -37,7 +36,6 @@ const BookingDetails = ({ bookingDetails }) => {
       totalPrice: totalPrice,
       totalRooms: totalRooms,
     };
-    console.log(bookingData);
     dispatch(createBooking(bookingData));
   };
 

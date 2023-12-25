@@ -33,6 +33,7 @@ export const getAllBookings = createAsyncThunk(
 export const getBookingsByDate = createAsyncThunk(
     'getBookingsByDate',
     async (date, thunkAPI) => {
+        console.log(date)
         try {
             const response = await fetch(`${host}booking/getBookingsByDate`, {
                 method: 'POST',
@@ -41,7 +42,7 @@ export const getBookingsByDate = createAsyncThunk(
                     "auth-token": localStorage.getItem('adminToken')
                 },
                 body: JSON.stringify({
-                    from: date.startDate, to: date.endDate
+                    from: date.startDate.toISOString(), to: date.endDate.toISOString()
                 })
             });
             const bookingsByDate = await response.json();

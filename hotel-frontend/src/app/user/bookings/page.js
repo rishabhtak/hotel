@@ -1,7 +1,6 @@
-import React from "react";
-
+import UserBookingDetails from "@/components/UserBookingDetails";
 const page = () => {
-  return <div>Bookings Details</div>;
+  return <UserBookingDetails />;
 };
 
 export default page;
