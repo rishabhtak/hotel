@@ -42,16 +42,18 @@ router.post(
 router.get("/getallrooms", async (req, res) => {
   try {
     let success = false;
-    const page = Number(req.query.page);
+    /* const page = Number(req.query.page);
     const limit = Number(req.query.limit);
     if (isNaN(page) || isNaN(limit) || page <= 0 || limit <= 0) {
       throw new Error("Invalid page or limit parameters.");
-    }
-    const skip = (page - 1) * limit;
+    } */
+    //  const skip = (page - 1) * limit;
     // let search = req.query.search
     // const rooms = await Room.find({ roomType: { $regex: search } }).skip(skip).limit(limit);
     const [rooms, count] = await Promise.all([
-      Room.find({}).skip(skip).limit(limit),
+      // Room.find({}).skip(skip).limit(limit),
+      Room.find({}),
+      ,
       Room.countDocuments({}),
     ]);
     success = true;

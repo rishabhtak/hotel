@@ -28,8 +28,8 @@ import { fDate } from '../../../utils/formatTime';
 const TABLE_COLLAPSIBLE = [
     { id: 'roomType', label: 'Room Type', alignLeft: true },
     { id: 'roomName', label: 'Room Name', alignLeft: true },
-    { id: 'person', label: 'Person', alignLeft: true },
-    { id: 'price', label: 'Price', alignLeft: true },
+    { id: 'count', label: 'Total Rooms', alignLeft: true },
+    { id: 'price', label: 'Price/1 Night', alignLeft: true },
     { id: 'totalPrice', label: 'Total Price', alignLeft: true },
     { id: 'specialRequest', label: 'Special Request', alignLeft: true },
 
@@ -46,8 +46,8 @@ BookingListBody.propTypes = {
         specialRequest: PropTypes.string,
         totalPrice: PropTypes.number,
         roomDetails: PropTypes.arrayOf(PropTypes.shape({
-            person: PropTypes.number,
-            roomName: PropTypes.string,
+            count: PropTypes.number,
+            name: PropTypes.string,
             roomType: PropTypes.string,
             roomId: PropTypes.string,
             price: PropTypes.number,
@@ -123,8 +123,8 @@ function BookingListBody({ booking, handleDelete }) {
                                         {roomDetails.map((roomDetail, index) => (
                                             <TableRow key={index}>
                                                 <TableCell align="left" style={{ textTransform: 'capitalize' }}>{roomDetail.roomType}</TableCell>
-                                                <TableCell align="left" style={{ textTransform: 'capitalize' }}>{roomDetail.roomName}</TableCell>
-                                                <TableCell align="center">{roomDetail.person}</TableCell>
+                                                <TableCell align="left" style={{ textTransform: 'capitalize' }}>{roomDetail.name}</TableCell>
+                                                <TableCell align="center">{roomDetail.count}</TableCell>
                                                 <TableCell align="left">{roomDetail.price}</TableCell>
 
                                                 <TableCell align="left">{roomDetails.length - 1 === index ? totalPrice : ""}</TableCell>

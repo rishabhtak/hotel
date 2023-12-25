@@ -5,11 +5,10 @@ import { useNavigate } from 'react-router-dom';
 import { alpha } from '@mui/material/styles';
 import { Box, Divider, Typography, Stack, MenuItem, Avatar, IconButton, Popover } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAdmin } from '../../../features/auth/authSlice'
+import { getAdmin } from '../../../features/auth/authSlice';
 
 // mocks_
 import account from '../../../_mock/account';
-
 
 // ----------------------------------------------------------------------
 
@@ -29,7 +28,7 @@ const MENU_OPTIONS = [
 export default function AccountPopover() {
   const dispatch = useDispatch();
 
-  const { admin } = useSelector(state => state.admin);
+  const { admin } = useSelector((state) => state.admin);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -50,7 +49,7 @@ export default function AccountPopover() {
   const handleLogout = () => {
     navigate('/login');
     localStorage.removeItem('adminToken');
-  }
+  };
 
   return (
     <>
@@ -95,22 +94,22 @@ export default function AccountPopover() {
       >
         <Box sx={{ my: 1.5, px: 2.5 }}>
           <Typography variant="subtitle2" style={{ textTransform: 'capitalize' }} noWrap>
-            {admin.name ? admin.name : "Admin"}
+            {admin.name ? admin.name : 'Admin'}
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-            {admin.email ? admin.email : ""}
+            {admin.email ? admin.email : ''}
           </Typography>
         </Box>
 
         <Divider sx={{ borderStyle: 'dashed' }} />
 
-        <Stack sx={{ p: 1 }}>
+        {/* <Stack sx={{ p: 1 }}>
           {MENU_OPTIONS.map((option) => (
             <MenuItem key={option.label} onClick={handleClose}>
               {option.label}
             </MenuItem>
           ))}
-        </Stack>
+        </Stack> */}
 
         <Divider sx={{ borderStyle: 'dashed' }} />
 
