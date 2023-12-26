@@ -5,6 +5,8 @@ import { useDispatch } from "react-redux";
 import {
   getAvailableRooms,
   updateDate,
+  updateFlag,
+  flagAvailable,
 } from "@/redux/features/rooms/availableRoomSlice";
 import { addDays, format, isAfter } from "date-fns";
 
@@ -15,19 +17,33 @@ export default function CheckAvailabilty() {
     startDate: null,
     endDate: null,
   });
+  const [buttonDisabled, setButtonDisabled] = useState(false);
 
   const handleValueChange = (newValue) => {
     if (isAfter(new Date(newValue.endDate), new Date(newValue.startDate))) {
       setValue(newValue);
-      dispatch(updateDate(newValue));
+      dispatch(updateFlag(false));
+      setButtonDisabled(true);
     } else {
       newValue.endDate = format(
         addDays(new Date(newValue.endDate), 1),
         "yyyy-MM-dd"
       );
       setValue(newValue);
-      dispatch(updateDate(newValue));
+      dispatch(updateFlag(false));
+      setButtonDisabled(true);
     }
+  };
+
+  const handleAvailabilityChange = () => {
+    dispatch(getAvailableRooms(value));
+    dispatch(updateDate(value));
+    dispatch(updateFlag(true));
+    setValue({
+      startDate: null,
+      endDate: null,
+    });
+    setButtonDisabled(false);
   };
 
   return (
@@ -47,9 +63,13 @@ export default function CheckAvailabilty() {
             />
           </div>
           <button
-            disabled={value.startDate === null && value.endDate === null}
-            onClick={() => dispatch(getAvailableRooms(value))}
-            className="w-full px-6 py-2.5 text-lg font-medium tracking-wider text-white transition-colors duration-300 transform md:w-auto md:mx-6 focus:outline-none bg-button-color rounded-lg focus:ring focus:ring-gray-300 focus:ring-opacity-80"
+            disabled={!buttonDisabled}
+            onClick={handleAvailabilityChange}
+            className={`w-full px-6 py-2.5 text-lg font-medium tracking-wider transition-colors duration-300 transform md:w-auto md:mx-6 focus:outline-none ${
+              buttonDisabled
+                ? "bg-button-color text-white"
+                : "bg-blue-gray-50 text-black cursor-not-allowed"
+            } rounded-lg focus:ring focus:ring-gray-300 focus:ring-opacity-80`}
           >
             Check Availability
           </button>

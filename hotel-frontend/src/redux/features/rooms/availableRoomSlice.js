@@ -1,11 +1,8 @@
-import {
-  createSlice,
-  createAsyncThunk,
-  createAction,
-} from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, createAction } from "@reduxjs/toolkit";
 
 const initialState = {
   rooms: [],
+  flagAvailable: false,
   quantity: {},
   roomCounter: {},
   counter: [],
@@ -17,6 +14,7 @@ const initialState = {
 export const increment = createAction("increment");
 export const decrement = createAction("decrement");
 export const updateDate = createAction("updateDate");
+export const updateFlag = createAction("updateFlag");
 
 export const getAvailableRooms = createAsyncThunk(
   "getAvailableRooms",
@@ -102,7 +100,6 @@ export const availableRoomSlice = createSlice({
         }
       })
       .addCase(updateDate, (state, action) => {
-        console.log(action.payload);
         if (action.payload.startDate === null) {
           state.selectedDate = null;
           state.counter = [];
@@ -114,6 +111,9 @@ export const availableRoomSlice = createSlice({
           state.roomCounter = {};
           state.quantity = {};
         }
+      })
+      .addCase(updateFlag, (state, action) => {
+        state.flagAvailable = action.payload;
       });
   },
 });

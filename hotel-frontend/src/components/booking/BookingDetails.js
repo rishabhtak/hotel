@@ -1,13 +1,14 @@
 "use client";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { createBooking } from "../../redux/features/booking/bookingSlice";
 import { useDispatch, useSelector } from "react-redux";
+import { format, parseISO } from "date-fns";
 
 const BookingDetails = ({ bookingDetails }) => {
+  const router = useRouter();
   const dispatch = useDispatch();
   const { loginData } = useSelector((state) => state.auth);
-  const { success, error } = useSelector((state) => state.booking);
   const { counter, selectedDate } = useSelector(
     (state) => state.availableRooms
   );
@@ -23,7 +24,7 @@ const BookingDetails = ({ bookingDetails }) => {
     },
     { totalPrice: 0, totalRooms: 0 }
   );
-  const handleBooking = () => {
+  const handleBooking = async () => {
     const bookingData = {
       userId: loginData?._id,
       name: customerData?.name,
@@ -36,10 +37,19 @@ const BookingDetails = ({ bookingDetails }) => {
       totalPrice: totalPrice,
       totalRooms: totalRooms,
     };
-    dispatch(createBooking(bookingData));
+    try {
+      const res = await dispatch(createBooking(bookingData));
+      if (res.payload.success) {
+        router.push(`/confirmbooking?bookingId=${res.payload.saveBooking._id}`);
+      } else {
+        router.push("/bookingfailed");
+      }
+    } catch (error) {
+      router.push("/bookingfailed");
+    }
   };
 
-   return (
+  return (
     <div className="col-span-12 md:col-span-5 bg-white rounded-lg shadow-lg p-4 md:p-6 my-8">
       <h2 className="text-2xl font-bold mb-4 text-gray-800">Booking Details</h2>
       {bookingDetails.map((booking, index) => (
@@ -60,6 +70,10 @@ const BookingDetails = ({ bookingDetails }) => {
         </div>
       ))}
       <div className="mt-4 p-4 border-solid border-2 border-gray-300 rounded">
+        <p className="text-lg font-bold text-orange-200">
+          Date: {format(parseISO(selectedDate.startDate), "dd-MM-yyyy")} to{" "}
+          {format(parseISO(selectedDate.endDate), "dd-MM-yyyy")}
+        </p>
         <p className="text-lg font-bold text-green-500">
           Total Price: ₹{totalPrice}
         </p>
@@ -73,7 +87,7 @@ const BookingDetails = ({ bookingDetails }) => {
             href="/checkout"
             className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-full"
           >
-            Continue to Checkout
+            Checkout
           </Link>
         )}
         {pathname === "/checkout" && (

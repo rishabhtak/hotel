@@ -17,7 +17,6 @@ export default function NavbarLayout() {
   const pathname = usePathname();
   const [openNav, setOpenNav] = useState(false);
   const dispatch = useDispatch();
-  console.log("navbar" + JSON.stringify(loginData, null, 2));
 
   useEffect(() => {
     window.addEventListener(

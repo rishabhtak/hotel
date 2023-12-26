@@ -63,7 +63,6 @@ router.post(
       const saveBooking = await Booking.create(bookingData);
       res.json({ success: true, message: "Booking successful", saveBooking });
     } catch (error) {
-      console.log(error);
       res.status(500).send({ success: false, error: "Internal server error" });
     }
   }

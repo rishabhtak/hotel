@@ -64,7 +64,6 @@ export const getUserBookings = createAsyncThunk(
         }
       );
       const res = await response.json();
-      console.log(res);
       if (res.success) {
         return res;
       }
@@ -99,7 +98,6 @@ export const bookingSlice = createSlice({
         state.loading = true;
       })
       .addCase(getUserBookings.fulfilled, (state, { payload }) => {
-        console.log(payload);
         state.loading = false;
         state.success = true;
         state.userBookings = payload.bookings;

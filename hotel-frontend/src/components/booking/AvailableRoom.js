@@ -16,6 +16,7 @@ export default function AvailableRoom() {
     roomCounter,
     counter,
     selectedDate,
+    flagAvailable,
   } = useSelector((state) => state.availableRooms);
   const MemoizedAvailableRoomCard = useMemo(
     () => React.memo(AvailableRoomCard),
@@ -29,16 +30,15 @@ export default function AvailableRoom() {
     if (Object.keys(quantity).length !== 0) {
       setRoomType(Object.keys(quantity));
     }
-    if (selectedDate === null) {
+    if (!flagAvailable) {
       setShowRooms(null);
     }
-  }, [quantity, selectedDate]);
+  }, [quantity, flagAvailable]);
 
   const handleRoomType = (value) => {
     setShowRooms(value);
     setTotalQuantity(quantity);
   };
-
 
   return (
     <div className="mt-24 p-4 md:p-8 md:mt-0 m-4 bg-gray-100">
@@ -48,7 +48,7 @@ export default function AvailableRoom() {
         ) : (
           <>
             <div className="flex items-center justify-center mb-4 md:mb-8 md:mt-4">
-              {roomType && selectedDate && (
+              {roomType && selectedDate && flagAvailable && (
                 <Select
                   onChange={handleRoomType}
                   label="Select Room Type"
@@ -63,7 +63,7 @@ export default function AvailableRoom() {
               )}
             </div>
             <div className="grid grid-cols-12 gap-4">
-              {rooms.length !== 0 && selectedDate ? (
+              {rooms.length !== 0 && selectedDate && flagAvailable ? (
                 <div className="col-span-12 md:col-span-7 space-y-4">
                   {rooms.map((element) => {
                     return showRooms === element.roomType ? (
@@ -80,7 +80,7 @@ export default function AvailableRoom() {
                   Please Select Date
                 </div>
               )}
-              {counter.length !== 0 && selectedDate && (
+              {counter.length !== 0 && selectedDate && flagAvailable && (
                 <BookingDetails bookingDetails={counter} />
               )}
             </div>
