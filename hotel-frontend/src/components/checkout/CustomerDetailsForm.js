@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { customerDetails } from "../../redux/features/booking/bookingSlice";
 
 const CustomerDetailsForm = () => {

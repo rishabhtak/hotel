@@ -27,8 +27,6 @@ export default function LoginForm() {
   const [message, setMessage] = useState(null);
   const { loginData, loginMessage } = useSelector((state) => state.auth);
 
-  console.log("login");
-
   useEffect(() => {
     if (localStorage.getItem("userToken")) {
       redirect("/");

@@ -88,7 +88,7 @@ export default function NavbarLayout() {
         <Link
           href="/booking"
           className={`flex items-center uppercase ${
-            pathname === "/contact"
+            pathname === "/booking"
               ? "link-active"
               : "hover-underline-animation"
           }`}

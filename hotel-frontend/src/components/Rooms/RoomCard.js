@@ -1,185 +1,97 @@
-'use client';
+"use client";
 import { useEffect } from "react";
-import WOW from 'wowjs';
+import WOW from "wowjs";
 import {
-    Card,
-    CardHeader,
-    CardBody,
-    Typography,
-    Button,
+  Card,
+  CardHeader,
+  CardBody,
+  Typography,
+  Button,
 } from "@material-tailwind/react";
-import Image from 'next/image';
+import Image from "next/image";
+import { useDispatch, useSelector } from "react-redux";
+import { getRoomDetail } from "@/redux/features/roomdetail/roomDetailSlice";
+import Link from "next/link";
 
 export default function RoomCard() {
-    useEffect(() => {
-        new WOW.WOW({
-            live: false
-        }).init();
-    }, []);
-    return (
-        <section className="py-16 m-4 md:m-8 flex flex-col items-center">
-            <Card className="w-full max-w-[60em] md:flex-row wow animate__animated animate__lightSpeedInLeft" data-wow-delay="0.1s">
-                <CardHeader
-                    shadow={false}
-                    floated={false}
-                    className="m-0 md:w-2/5 shrink-0 rounded-b-none md:rounded-r-none md:rounded-l-lg"
-                >
-                    <Image
-                        src="/room-1.jpg"
-                        alt="room1-image"
-                        width={500}
-                        height={300}
-                        className="h-full w-full object-cover"
-                    />
-                </CardHeader>
-                <CardBody className='bg-lime-50'>
-                    <div className='flex items-center justify-between'>
-                        <Typography variant="h6" color="blue" className="mb-4 uppercase">
-                            deluxe room
-                        </Typography>
-                        <div>
-                            <Typography className="text-xs">
-                                Starting from/night
-                            </Typography>
-                            <Typography
-                                className="flex justify-center text-xl font-bold"
-                            >
-                                &#x20b9; 2000*
-                            </Typography>
-                        </div>
-                    </div>
-                    <Typography className="mb-8 font-normal">
-                        Enter a freshly updated and thoughtfully furnished peaceful home surrounded by ancient trees, stone walls, and open meadows.
-                    </Typography>
-                    <Typography variant="h6" className="capitalize">
-                        features :-
-                    </Typography>
-                    <div className="grid grid-cols-2 lg:grid-cols-3 gap-1 mt-2">
-                        <p className="capitalize">free wifi</p>
-                        <p className="capitalize">mini bar</p>
-                        <p className="capitalize">Tea/Coffee maker</p>
-                        <p className="capitalize">Mini Fridge</p>
-                        <p className="capitalize">Safe Deposit Locker</p>
+  const roomName = {
+    "royal suite": 5000,
+    "super deluxe": 3000,
+    deluxe: 2000,
+  };
+  const { roomDetail } = useSelector((state) => state.roomDetail);
 
-                    </div>
-                    <div className="grid sm:flex justify-center md:justify-between my-5 gap-7">
-                        <Button size="md" color="white" className="bg-button-color">
-                            Book Now
-                        </Button>
-                        <Button size="md" color="white">
-                            Room Details
-                        </Button>
-                    </div>
-                </CardBody>
-            </Card>
-            <Card className="mt-5 w-full max-w-[60em] md:flex-row wow animate__animated animate__lightSpeedInLeft" data-wow-delay="0.3s">
-                <CardHeader
-                    shadow={false}
-                    floated={false}
-                    className="m-0 md:w-2/5 shrink-0 rounded-b-none md:rounded-r-none md:rounded-l-lg"
-                >
-                    <Image
-                        src="/room-2.jpg"
-                        alt="room2-image"
-                        width={500}
-                        height={300}
-                        className="h-full w-full object-cover"
-                    />
-                </CardHeader>
-                <CardBody className='bg-lime-50'>
-                    <div className='flex items-center justify-between'>
-                        <Typography variant="h6" color="blue" className="mb-4 uppercase">
-                            super deluxe room
-                        </Typography>
-                        <div>
-                            <Typography className="text-xs">
-                                Starting from/night
-                            </Typography>
-                            <Typography
-                                className="flex justify-center text-xl font-bold"
-                            >
-                                &#x20b9; 3000*
-                            </Typography>
-                        </div>
-                    </div>
-                    <Typography className="mb-8 font-normal">
-                        Enter a freshly updated and thoughtfully furnished peaceful home surrounded by ancient trees, stone walls, and open meadows.
-                    </Typography>
-                    <Typography variant="h6" className="capitalize">
-                        features :-
-                    </Typography>
-                    <div className="grid grid-cols-2 lg:grid-cols-3 gap-1 mt-2">
-                        <p className="capitalize">free wifi</p>
-                        <p className="capitalize">mini bar</p>
-                        <p className="capitalize">Tea/Coffee maker</p>
-                        <p className="capitalize">Mini Fridge</p>
-                        <p className="capitalize">Safe Deposit Locker</p>
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getRoomDetail());
+    new WOW.WOW({
+      live: false,
+    }).init();
+  }, []);
 
-                    </div>
-                    <div className="grid sm:flex justify-center md:justify-between my-5 gap-7">
-                        <Button size="md" color="white" className="bg-button-color">
-                            Book Now
-                        </Button>
-                        <Button size="md" color="white">
-                            Room Details
-                        </Button>
-                    </div>
-                </CardBody>
-            </Card>
-            <Card className="mt-5 w-full max-w-[60em] md:flex-row wow animate__animated animate__lightSpeedInLeft" data-wow-delay="0.5s">
-                <CardHeader
-                    shadow={false}
-                    floated={false}
-                    className="m-0 md:w-2/5 shrink-0 rounded-b-none md:rounded-r-none md:rounded-l-lg"
+  return (
+    <section className="py-16 m-4 md:m-8 flex flex-col items-center gap-5">
+      {roomDetail &&
+        roomDetail?.map((elem) => (
+          <Card
+            key={elem._id}
+            className="w-full max-w-[60em] md:flex-row wow animate__animated animate__lightSpeedInLeft"
+            data-wow-delay="0.1s"
+          >
+            <CardHeader
+              shadow={false}
+              floated={false}
+              className="m-0 md:w-2/5 shrink-0 rounded-b-none md:rounded-r-none md:rounded-l-lg"
+            >
+              <Image
+                src={`${process.env.NEXT_PUBLIC_IMAGE}${elem.images[0]}`}
+                alt={elem.roomType}
+                width={500}
+                height={300}
+                className="h-full w-full object-cover"
+              />
+            </CardHeader>
+            <CardBody className="bg-lime-50">
+              <div className="flex items-center justify-between">
+                <Typography
+                  variant="h6"
+                  color="blue"
+                  className="mb-4 uppercase"
                 >
-                    <Image
-                        src="/room-3.jpg"
-                        alt="room3-image"
-                        width={500}
-                        height={300}
-                        className="h-full w-full object-cover"
-                    />
-                </CardHeader>
-                <CardBody className='bg-lime-50'>
-                    <div className='flex items-center justify-between'>
-                        <Typography variant="h6" color="blue" className="mb-4 uppercase">
-                            Executive Suite
-                        </Typography>
-                        <div>
-                            <Typography className="text-xs">
-                                Starting from/night
-                            </Typography>
-                            <Typography
-                                className="flex justify-center text-xl font-bold"
-                            >
-                                &#x20b9; 5000*
-                            </Typography>
-                        </div>
-                    </div>
-                    <Typography className="mb-8 font-normal">
-                        Enter a freshly updated and thoughtfully furnished peaceful home surrounded by ancient trees, stone walls, and open meadows.
-                    </Typography>
-                    <Typography variant="h6" className="capitalize">
-                        features :-
-                    </Typography>
-                    <div className="grid grid-cols-2 lg:grid-cols-3 gap-1 mt-2">
-                        <p className="capitalize">free wifi</p>
-                        <p className="capitalize">mini bar</p>
-                        <p className="capitalize">Tea/Coffee maker</p>
-                        <p className="capitalize">Mini Fridge</p>
-                        <p className="capitalize">Safe Deposit Locker</p>
-
-                    </div>
-                    <div className="grid sm:flex justify-center md:justify-between my-5 gap-7">
-                        <Button size="md" color="white" className="bg-button-color">
-                            Book Now
-                        </Button>
-                        <Button size="md" color="white">
-                            Room Details
-                        </Button>
-                    </div>
-                </CardBody>
-            </Card>
-        </section>
-    );
+                  {elem.roomType}
+                </Typography>
+                <div>
+                  <Typography className="text-xs">
+                    Starting from/night
+                  </Typography>
+                  <Typography className="flex justify-center text-xl font-bold">
+                    &#x20b9; {roomName[elem.roomType]}*
+                  </Typography>
+                </div>
+              </div>
+              <Typography className="mb-8 font-normal">
+                Enter a freshly updated and thoughtfully furnished peaceful home
+                surrounded by ancient trees, stone walls, and open meadows.
+              </Typography>
+              <Typography variant="h6" className="capitalize">
+                features :-
+              </Typography>
+              <div className="grid grid-cols-2 lg:grid-cols-3 gap-1 mt-2">
+                {elem.features[0].split(",").map((feature,index) => (
+                  <p key={index} className="capitalize">{feature}</p>
+                ))}
+              </div>
+              <div className="grid sm:flex justify-center md:justify-between my-5 gap-7">
+                <Button size="md" color="white" className="bg-button-color">
+                  <Link href="/booking">Book Now</Link>
+                </Button>
+                <Button size="md" color="white">
+                  <Link href={`/rooms/${elem.roomType.replace(/\s+/g, "-")}`}>Room Details</Link>
+                </Button>
+              </div>
+            </CardBody>
+          </Card>
+        ))}
+    </section>
+  );
 }

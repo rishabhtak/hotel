@@ -1,23 +1,14 @@
 "use client";
 import { Select, Option } from "@material-tailwind/react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import React, { useEffect, useState, useMemo } from "react";
 import { toTitleCase } from "../utils/formatText";
 import BookingDetails from "./BookingDetails";
 import AvailableRoomCard from "./AvailableRoomCard";
 
 export default function AvailableRoom() {
-  const dispatch = useDispatch();
-  const {
-    rooms,
-    quantity,
-    loading,
-    error,
-    roomCounter,
-    counter,
-    selectedDate,
-    flagAvailable,
-  } = useSelector((state) => state.availableRooms);
+  const { rooms, quantity, loading, counter, selectedDate, flagAvailable } =
+    useSelector((state) => state.availableRooms);
   const MemoizedAvailableRoomCard = useMemo(
     () => React.memo(AvailableRoomCard),
     []

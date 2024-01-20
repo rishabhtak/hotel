@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import {  useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { getUserBookings } from "@/redux/features/booking/bookingSlice";
 import Link from "next/link";
@@ -7,11 +7,9 @@ import { format, parseISO } from "date-fns";
 import { redirect } from "next/navigation";
 
 const UserBookingDetails = () => {
-  const { loginData } = useSelector((state) => state.auth);
   const { userBookings } = useSelector((state) => state.booking);
 
   const dispatch = useDispatch();
-  // console.log(loginData, userBookings);
 
   const handleLogout = () => {
     localStorage.removeItem("userToken");

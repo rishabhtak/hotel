@@ -1,22 +1,21 @@
 "use client";
 // Import necessary dependencies and styles
-import { Button, Select, Option } from "@material-tailwind/react";
-import { useEffect, useState } from "react";
+import { Button } from "@material-tailwind/react";
+import { useState } from "react";
 import {
   increment,
   decrement,
 } from "../../redux/features/rooms/availableRoomSlice";
 import { useDispatch, useSelector } from "react-redux";
 
-export default function AvailableRoomCard({ room, totalQuantity }) {
+export default function AvailableRoomCard({ room }) {
   const dispatch = useDispatch();
   const [roomList, setRoomList] = useState([]);
   const [count, setCount] = useState(0);
 
-  const { quantity, loading, error, counter, selectedDate } = useSelector(
+  const { quantity, loading, error, counter } = useSelector(
     (state) => state.availableRooms
   );
-
 
   const handleAddRoomList = (room) => {
     const addRoom = [...roomList, room];
@@ -52,7 +51,7 @@ export default function AvailableRoomCard({ room, totalQuantity }) {
   if (error) {
     return (
       <div className="p-4 border-solid border-2 border-indigo-600 mt-2">
-        Sorry room can't be loaded, Please try again later
+        Sorry room can&apos;t be loaded, Please try again later
       </div>
     );
   }
