@@ -32,8 +32,8 @@ const BookingDetails = ({ bookingDetails }) => {
       phone: customerData?.phone,
       specialRequest: customerData?.specialRequest,
       roomDetails: counter,
-      startDate: new Date(selectedDate.startDate).toISOString(),
-      endDate: new Date(selectedDate.endDate).toISOString(),
+      startDate: new Date(selectedDate?.startDate).toISOString(),
+      endDate: new Date(selectedDate?.endDate).toISOString(),
       totalPrice: totalPrice,
       totalRooms: totalRooms,
     };
