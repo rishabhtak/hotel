@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 // @mui
 import { alpha } from '@mui/material/styles';
-import { Box, Divider, Typography, Stack, MenuItem, Avatar, IconButton, Popover } from '@mui/material';
+import { Box, Divider, Typography, Avatar, IconButton, Popover } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAdmin } from '../../../features/auth/authSlice';
 
