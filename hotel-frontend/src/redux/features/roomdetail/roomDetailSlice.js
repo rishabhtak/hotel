@@ -6,20 +6,19 @@ const initialState = {
   error: false,
 };
 
+const host = process.env.NEXT_PUBLIC_HOST;
+
 export const getRoomDetail = createAsyncThunk(
   "getRoomDetail",
   async (thunkAPI) => {
     try {
       // api to get room detail
-      const response = await fetch(
-        `http://localhost:5000/api/roomdetail/getroomdetail`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await fetch(`${host}roomdetail/getroomdetail`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
       const allRoomDetail = await response.json();
       return allRoomDetail;
     } catch (error) {

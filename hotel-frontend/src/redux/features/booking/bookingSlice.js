@@ -9,6 +9,9 @@ const initialState = {
   error: false,
 };
 
+const host = process.env.NEXT_PUBLIC_HOST;
+
+
 export const customerDetails = createAction("customerDetails");
 
 export const createBooking = createAsyncThunk(
@@ -16,7 +19,7 @@ export const createBooking = createAsyncThunk(
   async (bookingData, thunkAPI) => {
     try {
       const response = await fetch(
-        "http://localhost:5000/api/booking/createbooking",
+        `${host}booking/createbooking`,
         {
           method: "POST",
           headers: {
@@ -54,7 +57,7 @@ export const getUserBookings = createAsyncThunk(
     try {
       // api to get user's bookings
       const response = await fetch(
-        `http://localhost:5000/api/booking/getuserbooking`,
+        `${host}booking/getuserbooking`,
         {
           method: "GET",
           headers: {

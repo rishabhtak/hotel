@@ -11,6 +11,9 @@ const initialState = {
   error: false,
 };
 
+const host = process.env.NEXT_PUBLIC_HOST;
+
+
 export const increment = createAction("increment");
 export const decrement = createAction("decrement");
 export const updateDate = createAction("updateDate");
@@ -22,7 +25,7 @@ export const getAvailableRooms = createAsyncThunk(
     try {
       // api to get rooms
       const response = await fetch(
-        `http://localhost:5000/api/room/getavailableroom`,
+        `${host}room/getavailableroom`,
         {
           method: "POST",
           headers: {

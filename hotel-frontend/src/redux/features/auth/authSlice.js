@@ -11,11 +11,14 @@ const initialState = {
   loginMessage: "",
 };
 
+const host = process.env.NEXT_PUBLIC_HOST;
+
+
 export const login = createAsyncThunk(
   "login",
   async (credentials, thunkAPI) => {
     try {
-      const response = await fetch("http://localhost:5000/api/auth/login", {
+      const response = await fetch(`${host}auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -43,7 +46,7 @@ export const signup = createAsyncThunk(
   async (credentials, thunkAPI) => {
     try {
       const response = await fetch(
-        "http://localhost:5000/api/auth/createuser",
+        `${host}auth/createuser`,
         {
           method: "POST",
           headers: {
@@ -72,7 +75,7 @@ export const signup = createAsyncThunk(
 export const getUser = createAsyncThunk("getUser", async (thunkAPI) => {
   try {
     // api to get user
-    const response = await fetch("http://localhost:5000/api/auth/getuser", {
+    const response = await fetch(`${host}auth/getuser`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -83,7 +86,7 @@ export const getUser = createAsyncThunk("getUser", async (thunkAPI) => {
     if (login.success) {
       return login;
     }
-  //  ls.removeItem("userToken");
+    //  ls.removeItem("userToken");
     return thunkAPI.rejectWithValue(login);
   } catch (error) {
     return thunkAPI.rejectWithValue(login);
