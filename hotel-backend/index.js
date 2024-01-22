@@ -13,6 +13,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 // app.use("/", express.static(__dirname));
+app.use(express.static(path.resolve(__dirname, "build")));
 
 //available routes
 
@@ -22,11 +23,9 @@ app.use("/api/admin", require("./routes/admin"));
 app.use("/api/room", require("./routes/room"));
 app.use("/api/roomdetail", require("./routes/roomdetail"));
 
-
-app.get("/", (req, res) => {
+app.get("*", (req, res) => {
   // res.send("Server is running");
-  app.use(express.static(path.resolve(__dirname, "admin", "build")));
-  res.sendFile(path.resolve(__dirname, "admin", "build", "index.html"));
+  res.send(path.resolve("build", "index.html"));
 });
 
 app.listen(port, () => {
