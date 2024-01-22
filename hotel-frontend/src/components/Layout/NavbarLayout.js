@@ -10,7 +10,7 @@ import {
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useSelector, useDispatch } from "react-redux";
-import { getUser } from "@/redux/features/auth/authSlice";
+import { getUser } from "../../redux/features/auth/authSlice";
 
 export default function NavbarLayout() {
   const { loginData } = useSelector((state) => state.auth);

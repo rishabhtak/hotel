@@ -10,7 +10,7 @@ import {
 } from "@material-tailwind/react";
 import Image from "next/image";
 import { useDispatch, useSelector } from "react-redux";
-import { getRoomDetail } from "@/redux/features/roomdetail/roomDetailSlice";
+import { getRoomDetail } from "../../redux/features/roomdetail/roomDetailSlice";
 import Link from "next/link";
 
 export default function RoomCard() {

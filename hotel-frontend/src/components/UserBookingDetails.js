@@ -1,7 +1,7 @@
 "use client";
 import {  useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { getUserBookings } from "@/redux/features/booking/bookingSlice";
+import { getUserBookings } from "../redux/features/booking/bookingSlice";
 import Link from "next/link";
 import { format, parseISO } from "date-fns";
 import { redirect } from "next/navigation";

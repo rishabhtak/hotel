@@ -1,4 +1,4 @@
-import Breadcrumb from '@/components/layout/Breadcrumb'
+import Breadcrumb from '../../components/layout/Breadcrumb'
 import dynamic from 'next/dynamic'
 
 const AboutContent = dynamic(() => import('@/components/about/AboutContent'), {

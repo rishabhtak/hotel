@@ -1,6 +1,6 @@
 "use client";
-import CustomerDetailsForm from "@/components/checkout/CustomerDetailsForm";
-import BookingDetails from "@/components/booking/BookingDetails";
+import CustomerDetailsForm from "../../components/checkout/CustomerDetailsForm";
+import BookingDetails from "../../components/booking/BookingDetails";
 import { useSelector } from "react-redux";
 import { redirect } from "next/navigation";
 

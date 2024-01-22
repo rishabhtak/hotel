@@ -3,12 +3,12 @@ import { Suspense } from "react";
 import "./globals.css";
 import "animate.css";
 import { ThemeProvider } from "@material-tailwind/react";
-import NavbarLayout from "@/components/layout/NavbarLayout";
-import Footer from "@/components/layout/Footer";
+import NavbarLayout from "../components/layout/NavbarLayout";
+import Footer from "../components/layout/Footer";
 import { FloatingWhatsApp } from "react-floating-whatsapp";
-import ScrollTop from "@/components/layout/ScrollTop";
+import ScrollTop from "../components/layout/ScrollTop";
 import Loading from "./loading";
-import { ReduxProvider } from "@/redux/provider";
+import { ReduxProvider } from "../redux/provider";
 
 
 export default function RootLayout({ children }) {

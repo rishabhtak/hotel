@@ -1,4 +1,4 @@
-import Checkout from "@/components/checkout/Checkout";
+import Checkout from "../../components/checkout/Checkout";
 
 const page = () => {
   return <Checkout />;

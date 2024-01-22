@@ -1,4 +1,4 @@
-import HomeCarousel from "@/components/home/HomeCarousel";
+import HomeCarousel from "../components/home/HomeCarousel";
 import dynamic from 'next/dynamic'
 
 const RoomCard = dynamic(() => import('@/components/home/RoomCard'), {

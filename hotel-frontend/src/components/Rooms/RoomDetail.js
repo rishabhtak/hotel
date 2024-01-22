@@ -1,14 +1,14 @@
 "use client";
 import React, { useEffect } from "react";
-import Breadcrumb from "@/components/layout/Breadcrumb";
+import Breadcrumb from "../layout/Breadcrumb";
 import { MdMeetingRoom, MdPersonOutline } from "react-icons/md";
-import RoomCarousel from "@/components/rooms/RoomCarousel";
+import RoomCarousel from "./RoomCarousel";
 import { Typography, Button } from "@material-tailwind/react";
 import { useDispatch, useSelector } from "react-redux";
-import { getRoomTypeDetail } from "@/redux/features/roomTypeDetail/roomTypeDetailSlice";
+import { getRoomTypeDetail } from "../../redux/features/roomTypeDetail/roomTypeDetailSlice";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import Loading from "@/app/loading";
+import Loading from "../../app/loading";
 
 export default function RoomDetail({ params }) {
   const { roomTypeDetail, loading } = useSelector(

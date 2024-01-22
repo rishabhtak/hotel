@@ -1,4 +1,4 @@
-import UserBookingDetails from "@/components/UserBookingDetails";
+import UserBookingDetails from "../../../components/UserBookingDetails";
 const page = () => {
   return <UserBookingDetails />;
 };

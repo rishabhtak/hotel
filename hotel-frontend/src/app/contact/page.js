@@ -1,5 +1,5 @@
 import dynamic from 'next/dynamic'
-import Breadcrumb from '@/components/layout/Breadcrumb'
+import Breadcrumb from '../../components/layout/Breadcrumb'
 
 const ContactCard = dynamic(() => import('@/components/contact/ContactCard'), {
     ssr: false,

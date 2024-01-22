@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import Link from "next/link";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { signup } from "@/redux/features/auth/authSlice";
+import { signup } from "../../redux/features/auth/authSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { redirect } from "next/navigation";
 

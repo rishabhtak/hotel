@@ -5,7 +5,7 @@ import Link from "next/link";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
-import { login } from "@/redux/features/auth/authSlice";
+import { login } from "../../redux/features/auth/authSlice";
 import { redirect } from "next/navigation";
 
 import {
