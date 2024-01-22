@@ -37,7 +37,7 @@ const roomImgResize = async (req, res, next) => {
     await Promise.all(
         req.files.map(async (file) => {
             await sharp(file.path)
-                .resize(500, 500)
+                .resize(1500, 1000)
                 .toFormat("webp")
                 .webp({ quality: 90 })
                 .toFile(`public/images/rooms/${file.filename}`);
