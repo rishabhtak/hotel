@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ["hotel-backend-h62d.onrender.com"],
+    domains: ["hotel-backend-jrld.onrender.com"],
   },
   reactStrictMode: true,
 };
