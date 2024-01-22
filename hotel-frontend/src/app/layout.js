@@ -10,10 +10,6 @@ import ScrollTop from "@/components/layout/ScrollTop";
 import Loading from "./loading";
 import { ReduxProvider } from "@/redux/provider";
 
-export const metadata = {
-  title: "Hotel Frontend",
-  description: "Hotel Frontend",
-};
 
 export default function RootLayout({ children }) {
   return (
