@@ -14,7 +14,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 // app.use("/", express.static(__dirname));
 app.use(express.static(path.resolve(__dirname, "build")));
-app.use("/static/images/", express.static(__dirname + "/public/images/rooms/"));
+app.use(
+  "/static/images/",
+  express.static(path.resolve(__dirname + "/public/images/rooms/"))
+);
 
 //available routes
 
