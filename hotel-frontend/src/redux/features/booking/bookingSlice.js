@@ -41,7 +41,6 @@ export const createBooking = createAsyncThunk(
       );
       const res = await response.json();
       if (res.success) {
-        console.log(res);
         return res;
       }
       return thunkAPI.rejectWithValue(res);

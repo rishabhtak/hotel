@@ -73,7 +73,6 @@ router.post(
 router.get("/getuserbooking", bookingVerify, async (req, res) => {
   try {
     const bookings = await Booking.find({ userId: req.user.id });
-    console.log(bookings);
     res.json({ success: true, bookings });
   } catch (error) {
     res.status(500).send({ success: false, error: "Internal server error" });
@@ -122,7 +121,6 @@ router.post("/getbookingsbydate", adminVerify, async (req, res) => {
       res.send({ success: true, bookingsByDate });
     }
   } catch (error) {
-    console.log(error);
     res.status(500).send({ success: false, error: "Internal server error" });
   }
 });

@@ -132,7 +132,6 @@ router.get("/getuser", userVerify, async (req, res) => {
     const user = await User.findById(userId).select("-password");
     res.send({ success: true, user });
   } catch (error) {
-    console.log(error);
     res.status(500).send({ success: false, error: error });
   }
 });

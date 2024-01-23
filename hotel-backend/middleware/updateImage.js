@@ -5,7 +5,6 @@ const fs = require('fs');
 const updateImage = async (req, res, next) => {
     try {
         const data = req.body.images;
-        console.log(data);
         const oldImages = await RoomDetail.findById(req.params.id);
         let imageName = [];
         if (data === "undefined" || data === null || data === undefined) {
