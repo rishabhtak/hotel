@@ -1,11 +1,15 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ["https://hotel-backend-jrld.onrender.com"],
+    domains: ["hotel-backend-jrld.onrender.com"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "hotel-backend-jrld.onrender.com",
+      },
+    ],
   },
   reactStrictMode: true,
 };
-
-
 
 module.exports = nextConfig;

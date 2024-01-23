@@ -29,6 +29,12 @@ export default function RoomCard() {
     }).init();
   }, []);
 
+  const imageLoader = ({ src, width, quality }) => {
+    return `${process.env.NEXT_PUBLIC_IMAGE}${src}?w=${width}&q=${
+      quality || 75
+    }`;
+  };
+
   return (
     <section className="py-16 m-4 md:m-8 flex flex-col items-center gap-5">
       {roomDetail &&
@@ -44,7 +50,8 @@ export default function RoomCard() {
               className="m-0 md:w-2/5 shrink-0 rounded-b-none md:rounded-r-none md:rounded-l-lg"
             >
               <Image
-                src={`${process.env.NEXT_PUBLIC_IMAGE}${elem.images[0]}`}
+                loader={imageLoader}
+                src={elem.images[0]}
                 alt={elem.roomType}
                 width={500}
                 height={300}
@@ -77,8 +84,10 @@ export default function RoomCard() {
                 features :-
               </Typography>
               <div className="grid grid-cols-2 lg:grid-cols-3 gap-1 mt-2">
-                {elem.features[0].split(",").map((feature,index) => (
-                  <p key={index} className="capitalize">{feature}</p>
+                {elem.features[0].split(",").map((feature, index) => (
+                  <p key={index} className="capitalize">
+                    {feature}
+                  </p>
                 ))}
               </div>
               <div className="grid sm:flex justify-center md:justify-between my-5 gap-7">
@@ -86,7 +95,9 @@ export default function RoomCard() {
                   <Link href="/booking">Book Now</Link>
                 </Button>
                 <Button size="md" color="white">
-                  <Link href={`/rooms/${elem.roomType.replace(/\s+/g, "-")}`}>Room Details</Link>
+                  <Link href={`/rooms/${elem.roomType.replace(/\s+/g, "-")}`}>
+                    Room Details
+                  </Link>
                 </Button>
               </div>
             </CardBody>
