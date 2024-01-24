@@ -14,7 +14,7 @@ export default function RoomCarousel({ images }) {
       {images?.map((image, index) => (
         <div key={index} className="relative">
           <Image
-            src={`${process.env.NEXT_PUBLIC_IMAGE}${image}`}
+            src={image}
             alt="image 1"
             width={1500}
             height={1000}
