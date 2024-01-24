@@ -19,6 +19,7 @@ export default function RoomCarousel({ images }) {
       {images?.map((image, index) => (
         <div key={index} className="relative">
           <Image
+            loader={imageLoader}
             src={image}
             alt="image 1"
             width={1500}
