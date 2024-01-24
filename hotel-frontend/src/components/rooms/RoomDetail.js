@@ -25,11 +25,6 @@ export default function RoomDetail({ params }) {
     return notFound();
   }
 
-  const imageData = [
-    "https://res.cloudinary.com/dmhxdpc8o/image/upload/v1706034065/hotel/qxpvdsxhdgwped4flrwg.webp",
-    "https://res.cloudinary.com/dmhxdpc8o/image/upload/v1706034076/hotel/qkxkh36wrzavvuz9t6wx.webp",
-    "https://res.cloudinary.com/dmhxdpc8o/image/upload/v1706034073/hotel/gx0ii0kix0wb56z21pxb.webp",
-  ];
   return (
     <>
       {roomTypeDetail &&
@@ -56,7 +51,7 @@ export default function RoomDetail({ params }) {
                   </div>
                 </div>
               </div>
-              <RoomCarousel images={imageData} />
+              <RoomCarousel images={elem.images} />
             </section>
             <div
               style={{
