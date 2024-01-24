@@ -19,6 +19,8 @@ export default function RoomDetail({ params }) {
     dispatch(getRoomTypeDetail(params.replace(/-/g, " ")));
   }, []);
 
+  console.log(roomTypeDetail);
+
   if (loading) {
     return <Loading />;
   } else if (roomTypeDetail.length === 0) {
