@@ -29,16 +29,21 @@ export default function RoomCard() {
     }).init();
   }, []);
 
-  const imageLoader = ({ src, width, quality }) => {
+  /* const imageLoader = ({ src, width, quality }) => {
     return `${process.env.NEXT_PUBLIC_IMAGE}${src}?w=${width}&q=${
       quality || 75
     }`;
-  };
+  }; */
+  const imageData = [
+    "https://res.cloudinary.com/dmhxdpc8o/image/upload/v1706034076/hotel/qkxkh36wrzavvuz9t6wx.webp",
+    "https://res.cloudinary.com/dmhxdpc8o/image/upload/v1706034073/hotel/gx0ii0kix0wb56z21pxb.webp",
+    "https://res.cloudinary.com/dmhxdpc8o/image/upload/v1706034065/hotel/qxpvdsxhdgwped4flrwg.webp",
+  ];
 
   return (
     <section className="py-16 m-4 md:m-8 flex flex-col items-center gap-5">
       {roomDetail &&
-        roomDetail?.map((elem) => (
+        roomDetail?.map((elem, idx) => (
           <Card
             key={elem._id}
             className="w-full max-w-[60em] md:flex-row wow animate__animated animate__lightSpeedInLeft"
@@ -50,8 +55,7 @@ export default function RoomCard() {
               className="m-0 md:w-2/5 shrink-0 rounded-b-none md:rounded-r-none md:rounded-l-lg"
             >
               <Image
-                loader={imageLoader}
-                src={elem.images[0]}
+                src={imageData[idx]}
                 alt={elem.roomType}
                 width={500}
                 height={300}

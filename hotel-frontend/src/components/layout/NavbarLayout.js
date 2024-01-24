@@ -85,7 +85,7 @@ export default function NavbarLayout() {
         </Link>
       </Typography>
       <Typography as="li" className="p-1 font-normal text-white text-md">
-        <Link
+        <a
           href="/booking"
           className={`flex items-center uppercase ${
             pathname === "/booking"
@@ -94,7 +94,7 @@ export default function NavbarLayout() {
           }`}
         >
           booking
-        </Link>
+        </a>
       </Typography>
     </ul>
   );
