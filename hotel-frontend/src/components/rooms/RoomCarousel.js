@@ -3,11 +3,11 @@ import { Carousel } from "@material-tailwind/react";
 import Image from "next/image";
 
 export default function RoomCarousel({ images }) {
-  /* const imageLoader = ({ src, width, quality }) => {
+  const imageLoader = ({ src, width, quality }) => {
     return `${process.env.NEXT_PUBLIC_IMAGE}${src}?w=${width}&q=${
       quality || 75
     }`;
-  };*/
+  };
   return (
     <Carousel
       autoplay
@@ -19,6 +19,7 @@ export default function RoomCarousel({ images }) {
       {images?.map((image, index) => (
         <div key={index} className="relative">
           <Image
+            loader={imageLoader}
             src={image}
             alt="image 1"
             width={1500}
