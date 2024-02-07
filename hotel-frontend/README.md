@@ -29,7 +29,7 @@ Features :
 
 Technical Details :
 
-- Nextjs 13 with Tailwind CSS
+- Nextjs 13 with Tailwind CSS and Material Tailwind
 - Reactjs 18 with MaterialUI
 - Redux Toolkit with Async Thunk
 - React Router v6
