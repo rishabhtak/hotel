@@ -15,8 +15,8 @@ Code Repositories:
 - Reacts [Admin] - https://github.com/rishabhtak/hotel/tree/main/hotel-admin
 - Nodejs [Backend] - https://github.com/rishabhtak/hotel/tree/main/hotel-backend
 
-![Project Image](https://github.com/)
-![Project Image](https://github.com/)
+![Project Image](https://github.com/rishabhtak/hotel/blob/main/hotel-frontend.png)
+![Project Image](https://github.com/rishabhtak/hotel/blob/main/hotel-admin.png)
 
 Features :
 
