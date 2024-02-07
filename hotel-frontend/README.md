@@ -1,8 +1,70 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Hotel Website - A Modern Fullstack Website for Room Booking
 
-## Getting Started
+- Built Frontend with the Next.js App Router & Tailwind
+- Built Admin Panel with the React.js & MaterialUI
+- Build API with the Node.js
 
-First, run the development server:
+🔥 Website URL:
+
+- Nextjs [Frontend] - https://hotel-frontend-umber.vercel.app
+- Reactjs [Admin] - https://hotel-admin-static.vercel.app
+
+Code Repositories:
+
+- Nextjs [Frontend] - https://github.com/rishabhtak/hotel/tree/main/hotel-frontend
+- Reacts [Admin] - https://github.com/rishabhtak/hotel/tree/main/hotel-admin
+- Nodejs [Backend] - https://github.com/rishabhtak/hotel/tree/main/hotel-backend
+
+![Project Image](https://github.com/rishabhtak/hotel/blob/main/hotel-frontend.png)
+![Project Image](https://github.com/rishabhtak/hotel/blob/main/hotel-admin.png)
+
+Features :
+
+- Basic Features- Room lists, Room Details, Bookingdetails, Checkout
+- Admin Panel - Show/Delete Bookings, Add/Edit/Delete Rooms, Add/Edit/Delete Room Details, Show Users
+- Sorting and Pagination queries in Admin Panel
+- Authentication with JWT
+- User Profile and user orders
+- Added Animations, Whatsapp, Counters and many more features
+
+Technical Details :
+
+- Nextjs 13 with Tailwind CSS
+- Reactjs 18 with MaterialUI
+- Redux Toolkit with Async Thunk
+- React Router v6
+- MongoDB for Database
+- REST API using Express
+- Authentication using JWT
+- API Authentication using JWT
+
+## Getting started
+
+To get started with this project, run
+
+```bash
+  git clone https://github.com/rishabhtak/hotel/tree/main/hotel-frontend.git
+  git clone https://github.com/rishabhtak/hotel/tree/main/hotel-backend.git
+  git clone https://github.com/rishabhtak/hotel/tree/main/hotel-admin.git
+
+
+```
+
+and copy the .env.example variables into a separate .env file for admin and backend and for frontend .env.local, fill them out & and that's all you need to get started!
+
+then run this command:
+
+```bash
+npm install
+# or
+yarn install
+# or
+pnpm install
+# or
+bun install
+```
+
+after, run the development server (for frontend):
 
 ```bash
 npm run dev
@@ -10,25 +72,24 @@ npm run dev
 yarn dev
 # or
 pnpm dev
+# or
+bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+run the development server (for admin):
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+```bash
+npm start
+# or
+yarn start
+# or
+pnpm start
+# or
+bun start
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+run the development server (for backend):
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+```bash
+npx nodemon index.js
+```
