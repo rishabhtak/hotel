@@ -43,13 +43,9 @@ Technical Details :
 To get started with this project, run
 
 ```bash
-  git clone https://github.com/rishabhtak/hotel/tree/main/hotel-frontend.git
-  git clone https://github.com/rishabhtak/hotel/tree/main/hotel-backend.git
-  git clone https://github.com/rishabhtak/hotel/tree/main/hotel-admin.git
-
+  git clone https://github.com/rishabhtak/hotel.git
 
 ```
-
 and copy the .env.example variables into a separate .env file for admin and backend and for frontend .env.local, fill them out & and that's all you need to get started!
 
 then run this command:
@@ -62,7 +58,7 @@ yarn install
 pnpm install
 # or
 bun install
-```
+````
 
 after, run the development server (for frontend):
 

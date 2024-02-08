@@ -43,10 +43,7 @@ Technical Details :
 To get started with this project, run
 
 ```bash
-  git clone https://github.com/rishabhtak/hotel/tree/main/hotel-frontend.git
-  git clone https://github.com/rishabhtak/hotel/tree/main/hotel-backend.git
-  git clone https://github.com/rishabhtak/hotel/tree/main/hotel-admin.git
-
+  git clone https://github.com/rishabhtak/hotel.git
 
 ```
 
