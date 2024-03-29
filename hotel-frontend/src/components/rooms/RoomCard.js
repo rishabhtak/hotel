@@ -12,6 +12,8 @@ import Image from "next/image";
 import { useDispatch, useSelector } from "react-redux";
 import { getRoomDetail } from "../../redux/features/roomdetail/roomDetailSlice";
 import Link from "next/link";
+import Loading from "@/app/loading";
+import { notFound } from "next/navigation";
 
 export default function RoomCard() {
   const roomName = {
@@ -19,7 +21,7 @@ export default function RoomCard() {
     "super deluxe": 3000,
     deluxe: 2000,
   };
-  const { roomDetail } = useSelector((state) => state.roomDetail);
+  const { roomDetail, loading } = useSelector((state) => state.roomDetail);
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -34,6 +36,12 @@ export default function RoomCard() {
       quality || 75
     }`;
   };
+
+  if (loading) {
+    return <Loading />;
+  } else if (roomDetail.length === 0) {
+    return notFound();
+  }
 
   return (
     <section className="py-16 m-4 md:m-8 flex flex-col items-center gap-5">
